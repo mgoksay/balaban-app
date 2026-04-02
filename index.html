@@ -11,6 +11,7 @@
 <meta name="application-name" content="Balaban">
 <meta name="description" content="Namaz vakitleri, kıble yönü ve günlük Kur'an ayeti">
 <title>Balaban Namaz Vakti</title>
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -302,7 +303,7 @@ const CITIES=[
 let uLa=parseFloat(localStorage.getItem('bLa'))||51.7592;
 let uLo=parseFloat(localStorage.getItem('bLo'))||19.456;
 let uCity=localStorage.getItem('bCity')||'Łódź';
-let method=parseInt(localStorage.getItem('bM'))||3;
+let method=parseInt(localStorage.getItem('bM'))||13;
 let pT={};
 let vtab='tr';
 let verse=null;
@@ -338,12 +339,29 @@ function sunP(jd){
   return{d:deg(Math.asin(Math.sin(rad(e))*Math.sin(rad(L)))),EqT:q/15-fxH(RA)};
 }
 function calcPT(date,la,lo,mth){
-  const ms={2:{f:15,i:15},3:{f:18,i:17},4:{f:18.5,i:90},5:{f:19.5,i:17.5},13:{f:18,i:17}};
-  const m=ms[mth]||ms[3],jd=jDay(date.getFullYear(),date.getMonth()+1,date.getDate());
+  // method id: 2=ISNA, 3=MWL, 4=Makkah, 5=Egypt, 13=Diyanet
+  // f=fajr angle, i=isha angle (90=fixed 90min after sunset), hanafi=true uses shadow factor 2
+  const ms={
+    2:{f:15.0,i:15.0,hanafi:false},
+    3:{f:18.0,i:17.0,hanafi:false},
+    4:{f:18.5,i:90,  hanafi:false},
+    5:{f:19.5,i:17.5,hanafi:false},
+    13:{f:18.0,i:17.0,hanafi:true}, // Diyanet — Hanefi (gölge faktörü 2x)
+  };
+  const m=ms[mth]||ms[13];
+  const jd=jDay(date.getFullYear(),date.getMonth()+1,date.getDate());
   const tz=-date.getTimezoneOffset()/60,{d,EqT}=sunP(jd),tr=12+tz-lo/15-EqT;
-  function ha(a,ccw){const v=-Math.sin(rad(a))-Math.sin(rad(la))*Math.sin(rad(d)),c=Math.cos(rad(la))*Math.cos(rad(d));if(Math.abs(v/c)>1)return ccw?0:24;const t=deg(Math.acos(v/c))/15;return ccw?tr-t:tr+t;}
+  function ha(a,ccw){
+    const v=-Math.sin(rad(a))-Math.sin(rad(la))*Math.sin(rad(d));
+    const c=Math.cos(rad(la))*Math.cos(rad(d));
+    if(Math.abs(v/c)>1)return ccw?0:24;
+    const t=deg(Math.acos(v/c))/15;
+    return ccw?tr-t:tr+t;
+  }
   const fj=ha(m.f,true),sr=ha(0.833,true),dh=tr+0.017;
-  const as=tr+deg(Math.atan2(1,1+Math.tan(rad(Math.abs(la-d)))))/15;
+  // Asr: Shafi=shadow factor 1, Hanafi=shadow factor 2
+  const shadowFactor = m.hanafi ? 2 : 1;
+  const as=tr+deg(Math.atan2(1,shadowFactor+Math.tan(rad(Math.abs(la-d)))))/15;
   const ss=ha(0.833,false),is=m.i===90?ss+1.5:ha(m.i,false);
   function fmt(h){h=fxH(h);const hh=Math.floor(h),mm=Math.round((h-hh)*60);return mm>=60?String(hh+1).padStart(2,'0')+':00':String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
   return{fajr:fmt(fj),sunrise:fmt(sr),dhuhr:fmt(dh),asr:fmt(as),maghrib:fmt(ss),isha:fmt(is)};
@@ -592,7 +610,17 @@ function setLang(l){lang=l;localStorage.setItem('bL',l);updateTxt();}
 function toggleLang(){setLang(lang==='tr'?'pl':'tr');}
 
 // ── SETTINGS ──
-function chgMethod(){method=parseInt(document.getElementById('mSel').value);localStorage.setItem('bM',method);loadAll();}
+function chgMethod(){
+  method = parseInt(document.getElementById('mSel').value);
+  localStorage.setItem('bM', method);
+  // Tüm vakitleri yeniden hesapla ve her UI bileşenini güncelle
+  pT = calcPT(new Date(), uLa, uLo, method);
+  renderPrayers();
+  updateDate();
+  updateQibla();
+  renderCal();
+  updateCD();
+}
 
 // ── SOUND SYSTEM ──
 let soundMode = localStorage.getItem('bSound') || 'azan'; // 'off' | 'beep' | 'azan'
@@ -851,7 +879,9 @@ function showPrayerFlash(name, time){
 }
 
 // ── INIT ──
-document.getElementById('mSel').value=method;
+// localStorage'da kayıtlı metod yoksa Diyanet (13) default
+if(!localStorage.getItem('bM')) localStorage.setItem('bM','13');
+document.getElementById('mSel').value = method;
 initSound();
 updateTxt();
 loadAll();
