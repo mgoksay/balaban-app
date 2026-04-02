@@ -1,0 +1,17 @@
+{
+  "name": "Balaban Namaz Vakti",
+  "short_name": "Balaban",
+  "description": "Namaz vakitleri, kıble yönü ve günlük Kur'an ayeti",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#0d1b2a",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
