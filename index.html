@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1b2a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Balaban">
+<meta name="application-name" content="Balaban">
+<meta name="description" content="Namaz vakitleri, kıble yönü ve günlük Kur'an ayeti">
+<title>Balaban Namaz Vakti</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d1b2a;--card:#162032;--surf:#1e2d42;
+  --gold:#c9a84c;--gl:#e8c97a;--teal:#4ecdc4;--td:#2a9d8f;
+  --tx:#f0ede4;--mx:#8a97aa;--br:rgba(201,168,76,0.18);
+  --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'Nunito',sans-serif;overflow-x:hidden}
+body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100vh}
+.sb{height:calc(var(--st) + 8px);background:var(--bg);flex-shrink:0}
+.hdr{background:var(--bg);padding:12px 20px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--br)}
+.aname{font-family:'Amiri',serif;font-size:20px;color:var(--gold)}
+.lbtn{background:var(--surf);border:0.5px solid var(--br);color:var(--tx);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif}
+.lbtn:active{transform:scale(0.96)}
+.sc{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(72px + var(--sb))}
+/* Hero */
+.hero{margin:16px;background:linear-gradient(145deg,#1a2744,#0f2030);border:0.5px solid var(--br);border-radius:24px;padding:24px 20px 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(201,168,76,0.07),transparent 70%);pointer-events:none}
+.hcres{position:absolute;top:16px;right:20px;font-size:26px;opacity:0.5}
+.hloc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mx);margin-bottom:7px}
+.hloc svg{width:11px;height:11px;fill:var(--teal);flex-shrink:0}
+.hloc-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hloc-c{font-size:11px;color:var(--teal);cursor:pointer;flex-shrink:0}
+.hdate{font-size:13px;color:var(--gl);margin-bottom:3px}
+.hhijri{font-family:'Amiri',serif;font-size:15px;color:var(--mx);margin-bottom:14px}
+.hnl{font-size:10px;color:var(--mx);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.hnp{font-size:26px;font-weight:700;color:var(--gl);margin-bottom:1px}
+.hcd{font-size:40px;font-weight:300;color:var(--tx);letter-spacing:2px;font-variant-numeric:tabular-nums;margin-bottom:6px}
+/* Progress */
+.prow{margin:0 16px 8px;display:flex;align-items:center;gap:10px}
+.pbar{flex:1;height:3px;background:var(--surf);border-radius:3px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:3px;transition:width 1s linear}
+.plbl{font-size:11px;color:var(--mx);min-width:80px;text-align:right}
+/* Section title */
+.stitle{font-size:10px;color:var(--mx);text-transform:uppercase;letter-spacing:1.2px;margin:18px 20px 8px;font-weight:700}
+/* Prayer grid */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 16px}
+.pcard{background:var(--card);border:0.5px solid var(--br);border-radius:18px;padding:13px 15px;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden;transition:border-color .3s}
+.pcard.act{border-color:var(--gold);background:rgba(201,168,76,0.07)}
+.pcard.past{opacity:0.5}
+.picon{font-size:17px;margin-bottom:1px}
+.pname{font-size:11px;color:var(--mx);font-weight:600}
+.ptime{font-size:21px;font-weight:700;color:var(--gl);font-variant-numeric:tabular-nums;margin-top:3px}
+.pbadge{position:absolute;top:9px;right:9px;background:var(--gold);color:#1a1200;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+/* Verse */
+.vcard{margin:10px 16px;background:var(--card);border:0.5px solid var(--br);border-radius:20px;padding:18px}
+.vhdr{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.vico{width:30px;height:30px;border-radius:50%;background:rgba(78,205,196,0.1);border:0.5px solid rgba(78,205,196,0.25);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.vlbl{font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1px;font-weight:700;flex:1}
+.vref-btn{font-size:12px;color:var(--teal);cursor:pointer;padding:2px 6px;border-radius:8px;background:rgba(78,205,196,0.08);border:0.5px solid rgba(78,205,196,0.2)}
+.varab{font-family:'Amiri',serif;font-size:21px;color:var(--gl);text-align:right;line-height:1.85;margin-bottom:10px;direction:rtl}
+.vtabs{display:flex;gap:7px;margin-bottom:9px}
+.vtab{font-size:11px;padding:4px 12px;border-radius:12px;border:0.5px solid var(--br);background:transparent;color:var(--mx);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.vtab.on{background:var(--td);color:#fff;border-color:transparent}
+.vtxt{font-size:13px;color:var(--tx);line-height:1.75}
+.vref{font-size:11px;color:var(--mx);margin-top:7px}
+.vloading{display:flex;align-items:center;gap:10px;color:var(--mx);font-size:13px;padding:10px 0}
+/* Qibla */
+.qrow{display:flex;align-items:center;justify-content:space-between}
+.qinfo{font-size:12px;color:var(--mx);margin-bottom:3px}
+.qdeg{font-size:16px;color:var(--gold);font-weight:700}
+.qcirc{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;background:var(--surf);position:relative}
+.qneedle{width:3px;height:20px;background:linear-gradient(to bottom,#e74c3c 50%,#888 50%);border-radius:2px;transform-origin:50% 100%;position:absolute;bottom:50%;left:calc(50% - 1.5px);transition:transform .6s ease}
+.qN{position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--mx);font-weight:700}
+/* Nav */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(13,27,42,0.97);backdrop-filter:blur(14px);border-top:0.5px solid var(--br);display:flex;padding:8px 0 calc(8px + var(--sb));z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 0}
+.ni-ico{font-size:20px;line-height:1}
+.ni-lbl{font-size:10px;color:var(--mx);font-weight:600;transition:color .2s}
+.ni.on .ni-lbl{color:var(--gold)}
+/* Modal */
+.movl{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.movl.open{opacity:1;pointer-events:all}
+.modal{background:var(--card);border-radius:24px 24px 0 0;padding:24px 20px calc(24px + var(--sb));width:100%;max-width:430px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.2,.64,1)}
+.movl.open .modal{transform:translateY(0)}
+.mtitle{font-size:17px;font-weight:700;color:var(--gold);margin-bottom:14px}
+.msub{font-size:12px;color:var(--mx);margin-bottom:10px}
+.minput{width:100%;background:var(--surf);border:0.5px solid var(--br);border-radius:12px;padding:12px 14px;color:var(--tx);font-size:14px;font-family:'Nunito',sans-serif;margin-bottom:8px;outline:none}
+.minput:focus{border-color:var(--gold)}
+.mrow{display:flex;gap:8px;margin-top:4px}
+.mbtn{flex:1;background:var(--gold);color:#1a1200;border:none;border-radius:14px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.mbtn:active{transform:scale(0.98)}
+.mbtn.sec{background:var(--surf);color:var(--teal);border:0.5px solid var(--br)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.chip{background:var(--surf);border:0.5px solid var(--br);border-radius:20px;padding:6px 13px;font-size:12px;cursor:pointer;color:var(--mx);font-family:'Nunito',sans-serif;transition:all .15s}
+.chip:active,.chip.sel{background:var(--gold);color:#1a1200;border-color:var(--gold)}
+.gstat{font-size:12px;color:var(--teal);min-height:18px;margin-bottom:6px}
+/* Calendar */
+.cgrid{margin:0 16px}
+.ctitle{font-size:15px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:12px}
+.drow{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1fr 1fr;gap:3px;align-items:center;padding:8px 10px;background:var(--card);border-radius:12px;margin-bottom:5px;border:0.5px solid var(--br)}
+.drow.td{border-color:rgba(201,168,76,0.45)}
+.dinfo{display:flex;flex-direction:column;gap:1px}
+.dname{font-size:11px;font-weight:700}
+.dnum{font-size:10px;color:var(--mx)}
+.dt{font-size:10px;color:var(--mx);text-align:center}
+/* Settings */
+.sgrp{margin:0 16px 10px;background:var(--card);border-radius:16px;border:0.5px solid var(--br);overflow:hidden}
+.si{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:0.5px solid var(--br)}
+.si:last-child{border-bottom:none}
+.slbl{font-size:14px;color:var(--tx)}
+.tog{width:44px;height:24px;background:var(--surf);border-radius:12px;position:relative;cursor:pointer;border:0.5px solid var(--br);transition:background .3s;flex-shrink:0}
+.tog.on{background:var(--td)}
+.tog::after{content:'';width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform .3s}
+.tog.on::after{transform:translateX(20px)}
+.sel{background:var(--surf);border:0.5px solid var(--br);border-radius:8px;padding:5px 10px;color:var(--tx);font-size:12px;font-family:'Nunito',sans-serif;outline:none}
+/* Dots */
+.dots{display:flex;gap:5px;padding:14px 0}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:bnc 1.4s infinite ease-in-out}
+.dot:nth-child(1){animation-delay:-.32s}.dot:nth-child(2){animation-delay:-.16s}
+@keyframes bnc{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+.tab{display:none}.tab.on{display:block}
+@media(max-width:360px){.hcd{font-size:34px}.ptime{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="sb"></div>
+<div class="hdr">
+  <div class="aname">☽ Balaban</div>
+  <button class="lbtn" onclick="toggleLang()">TR / PL</button>
+</div>
+<div class="sc">
+
+  <!-- HOME -->
+  <div class="tab on" id="t-home">
+    <div class="hero">
+      <div class="hcres">☽</div>
+      <div class="hloc">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span class="hloc-n" id="locName">—</span>
+        <span class="hloc-c" onclick="openModal()" id="chgTxt">Değiştir ›</span>
+      </div>
+      <div class="hdate" id="hDate">—</div>
+      <div class="hhijri" id="hHijri">—</div>
+      <div class="hnl" id="nxtLbl">Sonraki Namaz</div>
+      <div class="hnp" id="nxtName">—</div>
+      <div class="hcd" id="cd">--:--:--</div>
+    </div>
+    <div class="prow">
+      <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+      <div class="plbl" id="plbl">—</div>
+    </div>
+    <div class="stitle" id="ptTitle">Namaz Vakitleri</div>
+    <div class="pgrid" id="pgrid"><div class="dots" style="grid-column:1/-1;justify-content:center"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+
+    <div class="stitle" id="vTitle">Günün Ayeti</div>
+    <div class="vcard">
+      <div class="vhdr">
+        <div class="vico">📖</div>
+        <span class="vlbl" id="vLbl">Günün Ayeti</span>
+        <span class="vref-btn" onclick="loadVerse(true)" title="Yeni ayet">↻</span>
+      </div>
+      <div id="vBody"><div class="vloading"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span id="vLdTxt">Ayet yükleniyor...</span></div></div>
+    </div>
+
+    <div class="vcard" style="margin-top:8px">
+      <div class="vhdr">
+        <div class="vico">🧭</div>
+        <span class="vlbl" id="qLbl">Kıble Yönü</span>
+      </div>
+      <div class="qrow">
+        <div><div class="qinfo" id="qInfo">Hesaplanıyor...</div><div class="qdeg" id="qDeg">—°</div></div>
+        <div class="qcirc"><div class="qneedle" id="qNeedle"></div><span class="qN">N</span></div>
+      </div>
+    </div>
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="tab" id="t-cal">
+    <div class="stitle" id="calTitle">Bu Haftanın Vakitleri</div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="tab" id="t-set">
+    <div class="stitle" id="setTitle">Ayarlar</div>
+    <div class="sgrp">
+      <div class="si"><span class="slbl" id="mLbl">Hesap Yöntemi</span>
+        <select class="sel" id="mSel" onchange="chgMethod()">
+          <option value="2">ISNA</option><option value="3">MWL</option>
+          <option value="4">Makkah</option><option value="5">Egypt</option>
+          <option value="13">Diyanet</option>
+        </select>
+      </div>
+      <div class="si"><span class="slbl" id="nLbl">Bildirimler</span><div class="tog on" id="togNotif" onclick="toggleNotif()"></div></div>
+      <div class="si"><span class="slbl" id="aLbl">Ezan / Uyarı Sesi</span>
+        <select class="sel" id="soundSel" onchange="chgSound()">
+          <option value="off" id="sOff">Kapalı</option>
+          <option value="beep" id="sBeep">Bip Sesi</option>
+          <option value="azan" id="sAzan" selected>Ezan</option>
+        </select>
+      </div>
+      <div class="si" id="siVolume"><span class="slbl" id="volLbl">Ses Seviyesi</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:14px">🔈</span>
+          <input type="range" id="volRange" min="0" max="100" value="80" oninput="chgVol(this.value)" style="width:100px;accent-color:var(--gold)">
+          <span style="font-size:14px">🔊</span>
+        </div>
+      </div>
+      <div class="si">
+        <span class="slbl" id="testLbl">Sesi Test Et</span>
+        <div style="display:flex;gap:8px">
+          <button onclick="testBeep()" id="testBeepBtn" style="background:var(--surf);border:0.5px solid var(--br);color:var(--teal);padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">🔔 Bip</button>
+          <button onclick="testAzanToggle()" id="testAzanBtn" style="background:var(--surf);border:0.5px solid var(--br);color:var(--gold);padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">🕌 Ezan</button>
+        </div>
+      </div>
+    </div>
+    <div class="sgrp">
+      <div class="si"><span class="slbl" id="lgLbl">Dil / Język</span>
+        <div style="display:flex;gap:8px">
+          <button onclick="setLang('tr')" id="bTR" style="background:var(--gold);color:#1a1200;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">TR</button>
+          <button onclick="setLang('pl')" id="bPL" style="background:var(--surf);color:var(--tx);border:0.5px solid var(--br);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">PL</button>
+        </div>
+      </div>
+      <div class="si"><span class="slbl" id="loLbl">Konum</span><span style="font-size:13px;color:var(--teal);cursor:pointer" onclick="openModal()" id="loBtn">Değiştir ›</span></div>
+    </div>
+    <div style="text-align:center;padding:28px 20px">
+      <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti v3.0</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bnav">
+  <div class="ni on" onclick="swTab('home',this)"><span class="ni-ico">🕌</span><span class="ni-lbl" id="n0">Ana Sayfa</span></div>
+  <div class="ni" onclick="swTab('cal',this)"><span class="ni-ico">📅</span><span class="ni-lbl" id="n1">Takvim</span></div>
+  <div class="ni" onclick="swTab('set',this)"><span class="ni-ico">⚙️</span><span class="ni-lbl" id="n2">Ayarlar</span></div>
+</div>
+
+<!-- Location Modal -->
+<div class="movl" id="locMov" onclick="closeOut(event)">
+  <div class="modal">
+    <div class="mtitle" id="mTitle">Konum Seç</div>
+    <div class="msub" id="mSub1">Popüler şehirler:</div>
+    <div class="chips" id="chips"></div>
+    <div class="msub" id="mSub2">Şehir adı gir:</div>
+    <input class="minput" id="cInput" placeholder="Şehir adı..." type="text" oninput="onInput()"/>
+    <div class="gstat" id="gStat"></div>
+    <div class="mrow">
+      <button class="mbtn sec" onclick="useGPS()" id="gpsBtn">📍 GPS</button>
+      <button class="mbtn" onclick="applyLoc()" id="okBtn">Tamam</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── LANG ──
+let lang=localStorage.getItem('bL')||'tr';
+const T={
+  tr:{h:'Ana Sayfa',c:'Takvim',s:'Ayarlar',pt:'Namaz Vakitleri',vd:'Günün Ayeti',
+      qbl:'Kıble Yönü',qfr:'Kuzeyden saat yönünde',np:'Sonraki Namaz',act:'Şimdi',
+      tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler',
+      al:'Ezan / Uyarı Sesi',ll:'Dil / Język',lol:'Konum',chg:'Değiştir',
+      mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
+      ok:'Tamam',gps:'📍 GPS',ver:'Namaz Vakti v3.0',
+      sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et',
+      pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'],
+      ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      dy:['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'],
+      mo:['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+      vl:'Ayet yükleniyor...',gc:'Konum araştırılıyor...',ge:'Konum bulunamadı.'},
+  pl:{h:'Strona Główna',c:'Kalendarz',s:'Ustawienia',pt:'Czasy Modlitwy',vd:'Werset Dnia',
+      qbl:'Kierunek Kibli',qfr:'Zgodnie z ruchem wskazówek od Północy',np:'Następna Modlitwa',act:'Teraz',
+      tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
+      al:'Ezan / Dźwięk Alarmu',ll:'Język / Dil',lol:'Lokalizacja',chg:'Zmień',
+      mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy v3.0',
+      sOff:'Wyłączony',sBeep:'Sygnał Dźwiękowy',sAzan:'Ezan',
+      volLbl:'Głośność',testLbl:'Test Dźwięku',
+      pr:['Fajr','Wschód','Zuhr','Asr','Maghrib','Isza'],
+      ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      dy:['Nd','Pn','Wt','Śr','Cz','Pt','Sb'],
+      mo:['Stycznia','Lutego','Marca','Kwietnia','Maja','Czerwca','Lipca','Sierpnia','Września','Października','Listopada','Grudnia'],
+      vl:'Ładowanie wersetu...',gc:'Wyszukiwanie lokalizacji...',ge:'Nie znaleziono lokalizacji.'}
+};
+const CITIES=[
+  {n:'Łódź',la:51.7592,lo:19.456},{n:'Warszawa',la:52.2297,lo:21.0122},
+  {n:'Kraków',la:50.0647,lo:19.945},{n:'Gdańsk',la:54.352,lo:18.6466},
+  {n:'İstanbul',la:41.0082,lo:28.9784},{n:'Ankara',la:39.9334,lo:32.8597},
+  {n:'İzmir',la:38.4192,lo:27.1287},{n:'Bursa',la:40.1826,lo:29.0669},
+];
+
+// ── STATE ──
+let uLa=parseFloat(localStorage.getItem('bLa'))||51.7592;
+let uLo=parseFloat(localStorage.getItem('bLo'))||19.456;
+let uCity=localStorage.getItem('bCity')||'Łódź';
+let method=parseInt(localStorage.getItem('bM'))||3;
+let pT={};
+let vtab='tr';
+let verse=null;
+let vLoading=false;
+let pLa=null,pLo=null,pCity=null;
+let gcTimer=null;
+
+// ── HIJRI (ref: 20 Mar 2026 = 1 Şevval 1447) ──
+function hijri(date){
+  const gy=date.getFullYear(),gm=date.getMonth()+1,gd=date.getDate();
+  const a=Math.floor((14-gm)/12),y=gy+4800-a,mo=gm+12*a-3;
+  const jd=gd+Math.floor((153*mo+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;
+  const EP=1948440,lp=new Set([2,5,7,10,13,15,18,21,24,26,29]);
+  const d0=jd-EP,cy=Math.floor(d0/10631);
+  let dic=d0%10631,cum=0,yk=0;
+  for(let k=1;k<=30;k++){const l=lp.has(k)?355:354;if(dic<cum+l){yk=k;break;}cum+=l;}
+  const hY=cy*30+yk;let rem=dic-cum+1,hM=0,hD=0;
+  for(let m=1;m<=12;m++){const l=(m%2===1)?30:(m===12&&lp.has(yk)?30:29);if(rem<=l){hM=m;hD=rem;break;}rem-=l;}
+  const ar=['Muharrem','Safer','Rebiülevvel','Rebiülahir','Cümadelülâ','Cümadelühire','Recep','Şaban','Ramazan','Şevval','Zilkade','Zilhicce'];
+  const pl=['Muharram','Safar','Rabiʿ al-Awwal','Rabiʿ al-Thani','Jumada al-Ula','Jumada al-Thaniyya','Rajab','Shaaban','Ramadan','Shawwal','Dhul Qadah','Dhul Hijjah'];
+  return `${hD} ${(lang==='pl'?pl:ar)[Math.max(0,hM-1)]} ${hY} H`;
+}
+
+// ── PRAYER TIMES ──
+function rad(d){return d*Math.PI/180}function deg(r){return r*180/Math.PI}
+function jDay(y,m,d){if(m<=2){y--;m+=12;}const A=Math.floor(y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5;}
+function fxH(h){return h-24*Math.floor(h/24)}
+function sunP(jd){
+  const D=jd-2451545,g=357.529+0.9856003*D,q=280.459+0.9856474*D;
+  const L=q+1.915*Math.sin(rad(g))+0.02*Math.sin(rad(2*g));
+  const e=23.439-0.000000036*D;
+  const RA=deg(Math.atan2(Math.cos(rad(e))*Math.sin(rad(L)),Math.cos(rad(L))))/15;
+  return{d:deg(Math.asin(Math.sin(rad(e))*Math.sin(rad(L)))),EqT:q/15-fxH(RA)};
+}
+function calcPT(date,la,lo,mth){
+  const ms={2:{f:15,i:15},3:{f:18,i:17},4:{f:18.5,i:90},5:{f:19.5,i:17.5},13:{f:18,i:17}};
+  const m=ms[mth]||ms[3],jd=jDay(date.getFullYear(),date.getMonth()+1,date.getDate());
+  const tz=-date.getTimezoneOffset()/60,{d,EqT}=sunP(jd),tr=12+tz-lo/15-EqT;
+  function ha(a,ccw){const v=-Math.sin(rad(a))-Math.sin(rad(la))*Math.sin(rad(d)),c=Math.cos(rad(la))*Math.cos(rad(d));if(Math.abs(v/c)>1)return ccw?0:24;const t=deg(Math.acos(v/c))/15;return ccw?tr-t:tr+t;}
+  const fj=ha(m.f,true),sr=ha(0.833,true),dh=tr+0.017;
+  const as=tr+deg(Math.atan2(1,1+Math.tan(rad(Math.abs(la-d)))))/15;
+  const ss=ha(0.833,false),is=m.i===90?ss+1.5:ha(m.i,false);
+  function fmt(h){h=fxH(h);const hh=Math.floor(h),mm=Math.round((h-hh)*60);return mm>=60?String(hh+1).padStart(2,'0')+':00':String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
+  return{fajr:fmt(fj),sunrise:fmt(sr),dhuhr:fmt(dh),asr:fmt(as),maghrib:fmt(ss),isha:fmt(is)};
+}
+function qibla(la,lo){
+  const mL=21.4225,mO=39.8262,dL=rad(mO-lo),l1=rad(la),l2=rad(mL);
+  const y=Math.sin(dL)*Math.cos(l2),x=Math.cos(l1)*Math.sin(l2)-Math.sin(l1)*Math.cos(l2)*Math.cos(dL);
+  return(deg(Math.atan2(y,x))+360)%360;
+}
+
+// ── VERSE via Claude API ──
+// Different verse each app open (random per session), cached per day
+// Session token changes on every page load
+const SESS=Date.now()^(Math.random()*0xFFFFFF|0);
+function seededRnd(s){let x=Math.sin(s+1)*99999;return x-Math.floor(x);}
+
+async function loadVerse(force=false){
+  if(vLoading)return;
+  const dayKey='bV_'+new Date().toDateString();
+  if(!force){
+    const c=localStorage.getItem(dayKey);
+    if(c){try{verse=JSON.parse(c);renderVerse();return;}catch(e){}}
+  }
+  vLoading=true;
+  const t=T[lang];
+  document.getElementById('vBody').innerHTML=`<div class="vloading"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span id="vLdTxt">${t.vl}</span></div>`;
+  // Random number 1-365, unique each session
+  const n=Math.floor(seededRnd(SESS)*365)+1;
+  const prompt=`Sen bir İslam alimi ve çevirmensin. 365 Kur'an ayeti koleksiyonundan ${n}. ayeti seç. Aşağıdaki JSON formatında döndür, başka HİÇBİR ŞEY yazma, sadece JSON:
+{"arabic":"Arapça metin","tr":"Türkçe meal","pl":"Lehçe çeviri","ref":"Sure Adı Sure:Ayet"}
+Konu seçimi: iman, sabır, namaz, dua, şükür, rahmet, adalet, ahiret, Allah'ın isimleri ve sıfatları, cennet gibi konular. 365 farklı ayetten ${n}. tanesini seç.`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:prompt}]})
+    });
+    const d=await r.json();
+    const raw=d.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
+    // Find JSON object in response
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('no json');
+    const v=JSON.parse(match[0]);
+    if(v.arabic&&v.tr&&v.pl&&v.ref){
+      verse=v;
+      if(!force)localStorage.setItem(dayKey,JSON.stringify(v));
+      renderVerse();
+    }else throw new Error('bad');
+  }catch(e){
+    // Fallback verses array - cycle through
+    const FB=[
+      {arabic:'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ',tr:'Sabır ve namazla yardım isteyin. Şüphesiz namaz, Allah\'a saygı duyanlardan başkasına ağır gelir.',pl:'Szukajcie pomocy w cierpliwości i modlitwie. Jest to ciężkie, lecz nie dla pokornych.',ref:'Bakara 2:45'},
+      {arabic:'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا',tr:'Şüphesiz namaz, müminlere belirli vakitlerde farz kılınmıştır.',pl:'Zaprawdę modlitwa jest dla wierzących obowiązkiem wyznaczonym na określone czasy.',ref:'Nisa 4:103'},
+      {arabic:'أَقِمِ الصَّلَاةَ لِذِكْرِي',tr:'Beni anmak için namaz kıl.',pl:'Odprawiaj modlitwę dla upamiętnienia Mnie.',ref:'Taha 20:14'},
+      {arabic:'قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ',tr:'Kesinlikle kurtuluşa erdiler o müminler ki namazlarında derin bir huşu içindedirler.',pl:'Zaiste zbawieni są wierzący, którzy w swojej modlitwie są pokorni.',ref:'Müminun 23:1-2'},
+      {arabic:'وَلَذِكْرُ اللَّهِ أَكْبَرُ',tr:'Allah\'ı zikretmek elbette en büyük ibadettir.',pl:'Zaiste wspominanie Allaha jest największe.',ref:'Ankebut 29:45'},
+    ];
+    verse=FB[n%FB.length];
+    renderVerse();
+  }
+  vLoading=false;
+}
+
+function renderVerse(){
+  if(!verse)return;
+  const v=verse;
+  document.getElementById('vBody').innerHTML=`
+    <div class="varab">${v.arabic}</div>
+    <div class="vtabs">
+      <button class="vtab${vtab==='tr'?' on':''}" onclick="setVTab('tr')">Türkçe</button>
+      <button class="vtab${vtab==='pl'?' on':''}" onclick="setVTab('pl')">Polski</button>
+    </div>
+    <div class="vtxt">${vtab==='tr'?v.tr:v.pl}</div>
+    <div class="vref">${v.ref}</div>`;
+}
+function setVTab(t){vtab=t;renderVerse();}
+
+// ── GEOCODING ──
+function onInput(){
+  const v=document.getElementById('cInput').value.trim();
+  clearTimeout(gcTimer);
+  pLa=null;pLo=null;pCity=null;
+  document.getElementById('gStat').textContent='';
+  document.getElementById('gStat').style.color='var(--teal)';
+  if(v.length<3)return;
+  gcTimer=setTimeout(()=>geocode(v),600);
+}
+async function geocode(name){
+  const t=T[lang];
+  document.getElementById('gStat').textContent=t.gc;
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&addressdetails=1`,{headers:{'Accept-Language':lang==='tr'?'tr':'pl,en'}});
+    const d=await r.json();
+    if(d&&d.length>0){
+      const a=d[0].address||{};
+      pLa=parseFloat(d[0].lat);pLo=parseFloat(d[0].lon);
+      pCity=a.city||a.town||a.village||a.county||d[0].display_name.split(',')[0];
+      const ctry=a.country?', '+a.country:'';
+      document.getElementById('gStat').textContent=`✓ ${pCity}${ctry}`;
+      document.getElementById('gStat').style.color='var(--teal)';
+    }else{document.getElementById('gStat').textContent=t.ge;document.getElementById('gStat').style.color='#e74c3c';}
+  }catch(e){document.getElementById('gStat').textContent=T[lang].ge;document.getElementById('gStat').style.color='#e74c3c';}
+}
+async function reverseGeocode(la,lo){
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&format=json&addressdetails=1`,{headers:{'Accept-Language':lang==='tr'?'tr':'pl,en'}});
+    const d=await r.json();
+    const a=d.address||{};
+    return a.city||a.town||a.village||a.county||d.display_name.split(',')[0]||`${la.toFixed(2)}°N`;
+  }catch(e){return `${la.toFixed(2)}°, ${lo.toFixed(2)}°`;}
+}
+function useGPS(){
+  if(!('geolocation' in navigator)){document.getElementById('gStat').textContent=T[lang].ge;return;}
+  document.getElementById('gStat').textContent=T[lang].gc;
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    pLa=pos.coords.latitude;pLo=pos.coords.longitude;
+    pCity=await reverseGeocode(pLa,pLo);
+    document.getElementById('gStat').textContent=`✓ ${pCity}`;
+    document.getElementById('gStat').style.color='var(--teal)';
+    document.getElementById('cInput').value=pCity;
+  },()=>{document.getElementById('gStat').textContent=T[lang].ge;document.getElementById('gStat').style.color='#e74c3c';},{timeout:9000});
+}
+function applyLoc(){
+  if(pLa!==null&&pCity){uLa=pLa;uLo=pLo;uCity=pCity;}
+  else{const v=document.getElementById('cInput').value.trim();if(v)uCity=v;}
+  localStorage.setItem('bLa',uLa);localStorage.setItem('bLo',uLo);localStorage.setItem('bCity',uCity);
+  closeModal();loadAll();
+}
+
+// ── RENDER ──
+function renderPrayers(){
+  const t=T[lang],keys=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+  const now=new Date(),nm=now.getHours()*60+now.getMinutes();
+  let act=-1;
+  for(let i=keys.length-1;i>=0;i--){const ti=pT[keys[i]];if(!ti)continue;const[h,m]=ti.split(':').map(Number);if(nm>=h*60+m){act=i;break;}}
+  let nxt=-1,nxtM=Infinity;
+  for(let i=0;i<keys.length;i++){const ti=pT[keys[i]];if(!ti)continue;const[h,m]=ti.split(':').map(Number),pm=h*60+m;if(pm>nm){nxt=i;nxtM=pm;break;}}
+  let html='';
+  keys.forEach((k,i)=>{
+    const ti=pT[k]||'--:--',passed=act>i&&act!==i,isAct=act===i;
+    html+=`<div class="pcard${isAct?' act':''}${passed?' past':''}">
+      ${isAct?`<div class="pbadge">${t.act}</div>`:''}
+      <div class="picon">${t.ic[i]}</div>
+      <div class="pname">${t.pr[i]}</div>
+      <div class="ptime">${ti}</div></div>`;
+  });
+  document.getElementById('pgrid').innerHTML=html;
+  document.getElementById('nxtName').textContent=nxt>=0?t.pr[nxt]:t.pr[0];
+  if(act>=0&&nxt>=0){
+    const[sh,sm]=pT[keys[act]].split(':').map(Number),st=sh*60+sm,tot=nxtM-st,el=nm-st;
+    document.getElementById('pfill').style.width=tot>0?Math.min(100,Math.round(el/tot*100))+'%':'0%';
+    document.getElementById('plbl').textContent=t.pr[act]+' → '+t.pr[nxt];
+  }
+}
+function updateCD(){
+  const keys=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+  const now=new Date(),ns=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+  let nxt=Infinity;
+  for(const k of keys){const ti=pT[k];if(!ti)continue;const[h,m]=ti.split(':').map(Number),ps=h*3600+m*60;if(ps>ns){nxt=ps;break;}}
+  if(nxt===Infinity){const f=pT.fajr;if(f){const[h,m]=f.split(':').map(Number);nxt=h*3600+m*60+86400;}}
+  const diff=Math.max(0,nxt-ns),hh=Math.floor(diff/3600),mm=Math.floor((diff%3600)/60),ss=diff%60;
+  document.getElementById('cd').textContent=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+}
+function updateDate(){
+  const t=T[lang],now=new Date();
+  document.getElementById('hDate').textContent=now.getDate()+' '+t.mo[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('hHijri').textContent=hijri(now);
+}
+function updateQibla(){
+  const q=qibla(uLa,uLo);
+  document.getElementById('qDeg').textContent=Math.round(q)+'°';
+  document.getElementById('qInfo').textContent=T[lang].qfr;
+  document.getElementById('qNeedle').style.transform=`translateX(-50%) rotate(${q}deg)`;
+}
+function renderCal(){
+  const t=T[lang],now=new Date();
+  const keys=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+  const sn=lang==='pl'?['F','W','Z','A','M','I']:['F','G','Ö','İ','A','Y'];
+  let html=`<div class="ctitle">${now.getDate()+' '+t.mo[now.getMonth()]+' '+now.getFullYear()}</div>`;
+  for(let i=0;i<7;i++){
+    const d=new Date(now);d.setDate(now.getDate()+i);
+    const pt=calcPT(d,uLa,uLo,method),td=i===0;
+    html+=`<div class="drow${td?' td':''}">
+      <div class="dinfo"><span class="dname" style="color:${td?'var(--gold)':'var(--mx)'}">${t.dy[d.getDay()]}</span><span class="dnum">${d.getDate()}</span></div>
+      ${keys.map((k,j)=>`<div style="text-align:center"><div style="font-size:8px;color:var(--mx);margin-bottom:1px">${sn[j]}</div><div class="dt">${pt[k]||'--'}</div></div>`).join('')}
+    </div>`;
+  }
+  document.getElementById('cgrid').innerHTML=html;
+}
+function renderChips(){
+  document.getElementById('chips').innerHTML=CITIES.map(c=>`<span class="chip" onclick="selChip(${c.la},${c.lo},'${c.n}')">${c.n}</span>`).join('');
+}
+function selChip(la,lo,n){
+  pLa=la;pLo=lo;pCity=n;
+  document.getElementById('cInput').value=n;
+  document.getElementById('gStat').textContent=`✓ ${n}`;
+  document.getElementById('gStat').style.color='var(--teal)';
+}
+function updateTxt(){
+  const t=T[lang];
+  document.getElementById('n0').textContent=t.h;document.getElementById('n1').textContent=t.c;document.getElementById('n2').textContent=t.s;
+  document.getElementById('ptTitle').textContent=t.pt;document.getElementById('vTitle').textContent=t.vd;document.getElementById('vLbl').textContent=t.vd;
+  document.getElementById('qLbl').textContent=t.qbl;document.getElementById('nxtLbl').textContent=t.np;
+  document.getElementById('chgTxt').textContent=t.chg+' ›';
+  document.getElementById('calTitle').textContent=t.tw;document.getElementById('setTitle').textContent=t.st;
+  document.getElementById('mLbl').textContent=t.ml;document.getElementById('nLbl').textContent=t.nl;document.getElementById('aLbl').textContent=t.al;
+  document.getElementById('lgLbl').textContent=t.ll;document.getElementById('loLbl').textContent=t.lol;
+  document.getElementById('loBtn').innerHTML=t.chg+' ›';
+  document.getElementById('verTxt').textContent=t.ver;
+  document.getElementById('mTitle').textContent=t.mt;document.getElementById('mSub1').textContent=t.ms1;document.getElementById('mSub2').textContent=t.ms2;
+  document.getElementById('okBtn').textContent=t.ok;document.getElementById('gpsBtn').innerHTML=t.gps;
+  document.getElementById('volLbl').textContent=t.volLbl;
+  document.getElementById('testLbl').textContent=t.testLbl;
+  document.getElementById('sOff').textContent=t.sOff;
+  document.getElementById('sBeep').textContent=t.sBeep;
+  document.getElementById('sAzan').textContent=t.sAzan;
+  document.getElementById('cInput').placeholder=lang==='tr'?'Şehir adı...':'Nazwa miasta...';
+  document.getElementById('bTR').style.cssText=`background:${lang==='tr'?'var(--gold)':'var(--surf)'};color:${lang==='tr'?'#1a1200':'var(--tx)'};border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif`;
+  document.getElementById('bPL').style.cssText=`background:${lang==='pl'?'var(--gold)':'var(--surf)'};color:${lang==='pl'?'#1a1200':'var(--tx)'};border:0.5px solid var(--br);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif`;
+  document.getElementById('locName').textContent=uCity;
+  renderPrayers();updateDate();updateQibla();renderCal();renderChips();
+  if(verse)renderVerse();
+}
+function loadAll(){
+  pT=calcPT(new Date(),uLa,uLo,method);
+  document.getElementById('locName').textContent=uCity;
+  renderPrayers();updateDate();updateQibla();renderCal();
+}
+
+// ── TABS ──
+function swTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('t-'+id).classList.add('on');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  el.classList.add('on');
+  if(id==='cal')renderCal();
+}
+
+// ── MODAL ──
+function openModal(){pLa=null;pLo=null;pCity=null;document.getElementById('cInput').value='';document.getElementById('gStat').textContent='';document.getElementById('locMov').classList.add('open');}
+function closeModal(){document.getElementById('locMov').classList.remove('open');}
+function closeOut(e){if(e.target===document.getElementById('locMov'))closeModal();}
+
+// ── LANG ──
+function setLang(l){lang=l;localStorage.setItem('bL',l);updateTxt();}
+function toggleLang(){setLang(lang==='tr'?'pl':'tr');}
+
+// ── SETTINGS ──
+function chgMethod(){method=parseInt(document.getElementById('mSel').value);localStorage.setItem('bM',method);loadAll();}
+
+// ── SOUND SYSTEM ──
+let soundMode = localStorage.getItem('bSound') || 'azan'; // 'off' | 'beep' | 'azan'
+let volume = parseInt(localStorage.getItem('bVol') || '80') / 100;
+let notifOn = localStorage.getItem('bNotif') !== 'off';
+let azanAudio = null;
+let azanPlaying = false;
+let lastAlarmMinute = -1;
+
+// Ezan URL'leri — goksay.com (http çalışıyor)
+const AZAN_URLS = [
+  'http://goksay.com/Aksam1.mp3',
+  'http://goksay.com/aksam1.mp3',
+];
+
+function initSound(){
+  document.getElementById('soundSel').value = soundMode;
+  document.getElementById('volRange').value = Math.round(volume * 100);
+  document.getElementById('togNotif').classList.toggle('on', notifOn);
+}
+
+function toggleNotif(){
+  notifOn = !notifOn;
+  localStorage.setItem('bNotif', notifOn ? 'on' : 'off');
+  document.getElementById('togNotif').classList.toggle('on', notifOn);
+  if(notifOn && 'Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+function chgSound(){
+  soundMode = document.getElementById('soundSel').value;
+  localStorage.setItem('bSound', soundMode);
+  stopAzan();
+}
+
+function chgVol(v){
+  volume = v / 100;
+  localStorage.setItem('bVol', v);
+  if(azanAudio) azanAudio.volume = volume;
+}
+
+// ── BEEP SESİ (Web Audio API) ──
+let audioCtx = null;
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Resume if suspended (mobile browsers suspend AudioContext until user gesture)
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playBeep(){
+  try{
+    const ctx = getAudioCtx();
+    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.4;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(volume * 0.5, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+      osc.start(t); osc.stop(t + 1.3);
+    });
+    const bass = ctx.createOscillator();
+    const bassGain = ctx.createGain();
+    bass.connect(bassGain); bassGain.connect(ctx.destination);
+    bass.type = 'sine'; bass.frequency.value = 261.63;
+    bassGain.gain.setValueAtTime(0, ctx.currentTime);
+    bassGain.gain.linearRampToValueAtTime(volume * 0.3, ctx.currentTime + 0.05);
+    bassGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+    bass.start(ctx.currentTime); bass.stop(ctx.currentTime + 2.1);
+  }catch(e){ console.warn('Beep error:', e); }
+}
+
+// ── EZAN SESİ ──
+async function playAzan(){
+  if(azanPlaying) return;
+  stopAzan();
+  azanPlaying = true;
+
+  // AudioContext'i kullanıcı etkileşimi sonrası başlat (mobil zorunluluğu)
+  try{ getAudioCtx(); }catch(e){}
+
+  // MP3 yüklemeyi dene — crossOrigin OLMADAN (CORS sorunu yaşanmaz)
+  for(const url of AZAN_URLS){
+    try{
+      const audio = new Audio();
+      // crossOrigin KAPATILDI — sunucu CORS header vermese bile çalışır
+      audio.volume = volume;
+      audio.preload = 'auto';
+
+      const loaded = await new Promise((res, rej) => {
+        audio.addEventListener('canplaythrough', () => res(true), {once:true});
+        audio.addEventListener('error', () => rej(new Error('load error')), {once:true});
+        setTimeout(() => rej(new Error('timeout')), 8000);
+        audio.src = url;
+        audio.load();
+      });
+
+      if(loaded){
+        azanAudio = audio;
+        const playPromise = audio.play();
+        if(playPromise !== undefined){
+          await playPromise.catch(e => {
+            // Autoplay policy — kullanıcıdan onay isteyebiliriz
+            console.warn('Play blocked:', e);
+            azanPlaying = false;
+          });
+        }
+        audio.addEventListener('ended', () => { azanPlaying = false; azanAudio = null; }, {once:true});
+        return; // başarılı
+      }
+    }catch(e){
+      console.warn('Azan URL failed:', url, e);
+      continue;
+    }
+  }
+
+  // Tüm URL'ler başarısız → sentetik ezan
+  playSyntheticAzan();
+}
+
+function playSyntheticAzan(){
+  try{
+    const ctx = getAudioCtx();
+    // Ezan melodisini simüle eden frekans dizisi
+    const melody = [
+      [329.6,0.6],[369.9,0.4],[415.3,0.8],[369.9,0.4],[329.6,1.2],
+      [293.7,0.6],[329.6,0.4],[369.9,0.8],[329.6,0.4],[293.7,1.0],
+      [261.6,0.6],[293.7,0.4],[329.6,0.8],[293.7,0.4],[261.6,1.4],
+      [220.0,0.6],[246.9,0.4],[261.6,0.8],[246.9,0.4],[220.0,2.0],
+    ];
+    let t = ctx.currentTime + 0.2;
+    melody.forEach(([freq, dur]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const vib = ctx.createOscillator(); // vibrato
+      const vibGain = ctx.createGain();
+      vib.frequency.value = 5; vib.type = 'sine';
+      vibGain.gain.value = 3;
+      vib.connect(vibGain); vibGain.connect(osc.frequency);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(volume * 0.45, t + 0.08);
+      gain.gain.setValueAtTime(volume * 0.45, t + dur - 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      vib.start(t); vib.stop(t + dur);
+      osc.start(t); osc.stop(t + dur);
+      t += dur + 0.05;
+    });
+    setTimeout(() => { azanPlaying = false; }, t * 1000 + 500);
+  }catch(e){ azanPlaying = false; }
+}
+
+function stopAzan(){
+  if(azanAudio){ azanAudio.pause(); azanAudio.currentTime = 0; azanAudio = null; }
+  azanPlaying = false;
+  setAzanBtnState(false);
+}
+
+function testBeep(){
+  try{ getAudioCtx(); }catch(e){}
+  playBeep();
+}
+
+function testAzanToggle(){
+  try{ getAudioCtx(); }catch(e){}
+  const btn = document.getElementById('testAzanBtn');
+  if(azanPlaying){
+    stopAzan();
+    setAzanBtnState(false);
+  } else {
+    testAzan();
+  }
+}
+
+function testAzan(){
+  try{ getAudioCtx(); }catch(e){}
+  setAzanBtnState(true);
+  playAzan().then(() => {
+    // playAzan zaten azanPlaying'i yönetiyor,
+    // bitince butonu sıfırla
+  });
+  // Ezan bitince butonu normale döndür
+  const checkEnd = setInterval(() => {
+    if(!azanPlaying){ setAzanBtnState(false); clearInterval(checkEnd); }
+  }, 500);
+}
+
+function setAzanBtnState(playing){
+  const btn = document.getElementById('testAzanBtn');
+  if(!btn) return;
+  if(playing){
+    btn.textContent = '⏹ Durdur';
+    btn.style.background = 'rgba(201,168,76,0.15)';
+    btn.style.color = '#e74c3c';
+    btn.style.borderColor = '#e74c3c';
+  } else {
+    btn.textContent = '🕌 Ezan';
+    btn.style.background = 'var(--surf)';
+    btn.style.color = 'var(--gold)';
+    btn.style.borderColor = 'var(--br)';
+  }
+}
+
+// ── PRAYER ALARM CHECK ──
+function checkPrayerAlarm(){
+  if(soundMode === 'off' && !notifOn) return;
+  const keys = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+  const now = new Date();
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const nowSec = now.getSeconds();
+  if(nowSec > 30 || nowSec < 0) return; // only trigger in first 30s of the minute
+  if(nowMin === lastAlarmMinute) return;
+
+  const t = T[lang];
+  for(let i = 0; i < keys.length; i++){
+    const ti = pT[keys[i]]; if(!ti) continue;
+    const [h, m] = ti.split(':').map(Number);
+    if(h * 60 + m === nowMin){
+      lastAlarmMinute = nowMin;
+      // Sound
+      if(soundMode === 'beep') playBeep();
+      else if(soundMode === 'azan') playAzan();
+      // Notification
+      if(notifOn && 'Notification' in window && Notification.permission === 'granted'){
+        new Notification('🕌 ' + t.pr[i] + ' vakti', {
+          body: ti + ' — Balaban Namaz Vakti',
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230d1b2a"/><text x="32" y="46" font-size="36" text-anchor="middle">☽</text></svg>',
+          tag: 'prayer-' + keys[i],
+          vibrate: [200, 100, 200]
+        });
+      }
+      // Visual flash on prayer card
+      showPrayerFlash(t.pr[i], ti);
+      break;
+    }
+  }
+}
+
+function showPrayerFlash(name, time){
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(135deg,#1a2744,#0f2030);border-bottom:2px solid var(--gold);padding:16px 20px;z-index:400;display:flex;align-items:center;gap:12px;animation:slideDown 0.4s ease';
+  flash.innerHTML = `<div style="font-size:28px">🕌</div><div><div style="font-size:16px;font-weight:700;color:var(--gold)">${name} Vakti</div><div style="font-size:13px;color:var(--tx)">${time}</div></div><button onclick="stopAzan();this.parentElement.remove()" style="margin-left:auto;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">Durdur</button>`;
+  const style = document.createElement('style');
+  style.textContent = '@keyframes slideDown{from{transform:translateX(-50%) translateY(-100%)}to{transform:translateX(-50%) translateY(0)}}';
+  document.head.appendChild(style);
+  document.body.appendChild(flash);
+  setTimeout(() => { if(flash.parentElement) flash.remove(); }, 60000);
+}
+
+// ── INIT ──
+document.getElementById('mSel').value=method;
+initSound();
+updateTxt();
+loadAll();
+loadVerse(false);
+// Request notification permission
+if(notifOn && 'Notification' in window && Notification.permission === 'default'){
+  Notification.requestPermission();
+}
+
+// Auto GPS on first launch
+if(!localStorage.getItem('bLa')&&'geolocation' in navigator){
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    uLa=pos.coords.latitude;uLo=pos.coords.longitude;
+    uCity=await reverseGeocode(uLa,uLo);
+    localStorage.setItem('bLa',uLa);localStorage.setItem('bLo',uLo);localStorage.setItem('bCity',uCity);
+    loadAll();document.getElementById('locName').textContent=uCity;
+  },()=>{},{timeout:8000});
+}
+
+// Timer
+setInterval(()=>{
+  updateCD();
+  checkPrayerAlarm();
+  if(new Date().getSeconds()===0) renderPrayers();
+},1000);
+updateCD();
+
+// ── SERVICE WORKER (offline support) ──
+if('serviceWorker' in navigator){
+  const swCode=`
+const CACHE='balaban-v1';
+const ASSETS=[location.href];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+`;
+  const blob=new Blob([swCode],{type:'application/javascript'});
+  const swURL=URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
+}
+
+// ── INSTALL PROMPT (Android) ──
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  // Show a subtle install banner
+  const banner=document.createElement('div');
+  banner.id='installBanner';
+  banner.style.cssText='position:fixed;top:calc(var(--st,0px)+56px);left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:#1e2d42;border:0.5px solid rgba(201,168,76,0.4);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:300;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.4)';
+  banner.innerHTML=`<div style="font-size:13px;color:#f0ede4;line-height:1.4"><span style="font-size:16px">☽</span> <strong>Balaban</strong>'ı ana ekrana ekle</div><div style="display:flex;gap:8px;flex-shrink:0"><button onclick="document.getElementById('installBanner').remove()" style="background:transparent;border:0.5px solid rgba(201,168,76,0.3);color:#8a97aa;padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">Kapat</button><button id="installBtn" style="background:#c9a84c;color:#1a1200;border:none;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">Yükle</button></div>`;
+  document.body.appendChild(banner);
+  document.getElementById('installBtn').onclick=async()=>{
+    banner.remove();
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null;
+  };
+  setTimeout(()=>{const b=document.getElementById('installBanner');if(b)b.remove();},12000);
+});
+</script>
+</body>
+</html>
