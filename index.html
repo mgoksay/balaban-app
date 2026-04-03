@@ -119,7 +119,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .tog.on{background:var(--td)}
 .tog::after{content:'';width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform .3s}
 .tog.on::after{transform:translateX(20px)}
-.sel{background:var(--surf);border:0.5px solid var(--br);border-radius:8px;padding:5px 10px;color:var(--tx);font-size:12px;font-family:'Nunito',sans-serif;outline:none}
+.sel{background:var(--surf);border:0.5px solid var(--br);border-radius:8px;padding:5px 10px;color:var(--tx);font-size:12px;font-family:'Nunito',sans-serif;outline:none;max-width:140px;}
+.tbtn{background:var(--surf);border:0.5px solid var(--br);color:var(--gold);padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.tbtn.beep{color:var(--teal);}
 /* Dots */
 .dots{display:flex;gap:5px;padding:14px 0}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:bnc 1.4s infinite ease-in-out}
@@ -206,9 +208,11 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
       </div>
       <div class="si">
         <span class="slbl" id="testLbl">Sesi Test Et</span>
-        <div style="display:flex;gap:8px">
-          <button onclick="testBeep()" id="testBeepBtn" style="background:var(--surf);border:0.5px solid var(--br);color:var(--teal);padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">🔔 Bip</button>
-          <button onclick="testAzanToggle()" id="testAzanBtn" style="background:var(--surf);border:0.5px solid var(--br);color:var(--gold);padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">🕌 Ezan</button>
+        <div style="display:flex;gap:4px">
+          <button onclick="testBeep()" id="testBeepBtn" class="tbtn beep">🔔</button>
+          <button onclick="testAzanToggle('azan1')" id="testAzan1Btn" class="tbtn">🕌 1</button>
+          <button onclick="testAzanToggle('azan2')" id="testAzan2Btn" class="tbtn">🕌 2</button>
+          <button onclick="testAzanToggle('azan3')" id="testAzan3Btn" class="tbtn">🕌 3</button>
         </div>
       </div>
     </div>
@@ -264,7 +268,7 @@ const T={
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir',
       mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
       ok:'Tamam',gps:'📍 GPS',ver:'Namaz Vakti v3.0',
-      pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip',sAzan:'Ezan',
+      pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et',
       pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'],
       ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
@@ -670,23 +674,32 @@ let volume = parseInt(localStorage.getItem('bVol') || '80') / 100;
 let notifOn = localStorage.getItem('bNotif') !== 'off';
 
 // Eski sistemden yeni sisteme akıllı aktarım
-let oldGlobalSound = localStorage.getItem('bSound'); // 'off' | 'beep' | 'azan'
-let defaultPrefs = {fajr:'azan', sunrise:'off', dhuhr:'azan', asr:'azan', maghrib:'azan', isha:'azan'};
+let oldGlobalSound = localStorage.getItem('bSound'); 
+let defaultPrefs = {fajr:'azan1', sunrise:'off', dhuhr:'azan1', asr:'azan1', maghrib:'azan1', isha:'azan1'};
 
 if (oldGlobalSound && !localStorage.getItem('bSoundPrefs')) {
-  let s = oldGlobalSound;
-  defaultPrefs = {fajr:s, sunrise:(s==='azan'?'off':s), dhuhr:s, asr:s, maghrib:s, isha:s};
+  let s = oldGlobalSound === 'azan' ? 'azan1' : oldGlobalSound;
+  defaultPrefs = {fajr:s, sunrise:(s.startsWith('azan')?'off':s), dhuhr:s, asr:s, maghrib:s, isha:s};
 }
 
 let soundPrefs = JSON.parse(localStorage.getItem('bSoundPrefs')) || defaultPrefs;
+
+// Mevcut ayarı 'azan' olanları 'azan1' e dönüştürme (Migration)
+for(let k in soundPrefs){
+  if(soundPrefs[k] === 'azan') soundPrefs[k] = 'azan1';
+}
+
 let azanAudio = null;
 let azanPlaying = false;
+let currentTestAzan = null;
 let lastAlarmMinute = -1;
 
-const AZAN_URLS = [
-  'http://goksay.com/Aksam1.mp3',
-  'http://goksay.com/aksam1.mp3',
-];
+// Ezan 2 ve Ezan 3 için kendi mp3 dosyalarınızın adreslerini buraya ekleyebilirsiniz
+const AZAN_URLS = {
+  'azan1': ['http://goksay.com/Aksam1.mp3', 'http://goksay.com/aksam1.mp3'],
+  'azan2': ['http://goksay.com/Ezan2.mp3', 'https://www.islamcan.com/audio/adhan/azan2.mp3'], // Örnek URL
+  'azan3': ['http://goksay.com/Ezan3.mp3', 'https://www.islamcan.com/audio/adhan/azan3.mp3']  // Örnek URL
+};
 
 function initSound(){
   document.getElementById('volRange').value = Math.round(volume * 100);
@@ -703,7 +716,9 @@ function renderAlarmsUI() {
       <select class="sel" onchange="chgSoundPref('${k}', this.value)">
         <option value="off" ${soundPrefs[k]==='off'?'selected':''}>${t.sOff}</option>
         <option value="beep" ${soundPrefs[k]==='beep'?'selected':''}>${t.sBeep}</option>
-        <option value="azan" ${soundPrefs[k]==='azan'?'selected':''}>${t.sAzan}</option>
+        <option value="azan1" ${soundPrefs[k]==='azan1'?'selected':''}>${t.sAzan} 1</option>
+        <option value="azan2" ${soundPrefs[k]==='azan2'?'selected':''}>${t.sAzan} 2</option>
+        <option value="azan3" ${soundPrefs[k]==='azan3'?'selected':''}>${t.sAzan} 3</option>
       </select>
     </div>`;
   });
@@ -767,14 +782,16 @@ function playBeep(){
 }
 
 // ── EZAN SESİ ──
-async function playAzan(){
+async function playAzan(type = 'azan1'){
   if(azanPlaying) return;
   stopAzan();
   azanPlaying = true;
 
   try{ getAudioCtx(); }catch(e){}
 
-  for(const url of AZAN_URLS){
+  const urls = AZAN_URLS[type] || AZAN_URLS['azan1'];
+
+  for(const url of urls){
     try{
       const audio = new Audio();
       audio.volume = volume;
@@ -797,7 +814,7 @@ async function playAzan(){
             azanPlaying = false;
           });
         }
-        audio.addEventListener('ended', () => { azanPlaying = false; azanAudio = null; }, {once:true});
+        audio.addEventListener('ended', () => { azanPlaying = false; azanAudio = null; setAzanBtnState(null, false); }, {once:true});
         return; 
       }
     }catch(e){
@@ -837,14 +854,14 @@ function playSyntheticAzan(){
       osc.start(t); osc.stop(t + dur);
       t += dur + 0.05;
     });
-    setTimeout(() => { azanPlaying = false; }, t * 1000 + 500);
-  }catch(e){ azanPlaying = false; }
+    setTimeout(() => { azanPlaying = false; setAzanBtnState(null, false); }, t * 1000 + 500);
+  }catch(e){ azanPlaying = false; setAzanBtnState(null, false); }
 }
 
 function stopAzan(){
   if(azanAudio){ azanAudio.pause(); azanAudio.currentTime = 0; azanAudio = null; }
   azanPlaying = false;
-  setAzanBtnState(false);
+  setAzanBtnState(null, false);
 }
 
 function testBeep(){
@@ -852,38 +869,44 @@ function testBeep(){
   playBeep();
 }
 
-function testAzanToggle(){
+function testAzanToggle(type){
   try{ getAudioCtx(); }catch(e){}
-  if(azanPlaying){
+  if(azanPlaying && currentTestAzan === type){
     stopAzan();
-    setAzanBtnState(false);
   } else {
-    testAzan();
+    testAzan(type);
   }
 }
 
-function testAzan(){
-  try{ getAudioCtx(); }catch(e){}
-  setAzanBtnState(true);
-  playAzan().then(() => {});
+function testAzan(type){
+  if(azanPlaying) stopAzan(); 
+  currentTestAzan = type;
+  setAzanBtnState(type, true);
+  playAzan(type).then(() => {});
   const checkEnd = setInterval(() => {
-    if(!azanPlaying){ setAzanBtnState(false); clearInterval(checkEnd); }
+    if(!azanPlaying){ setAzanBtnState(null, false); clearInterval(checkEnd); }
   }, 500);
 }
 
-function setAzanBtnState(playing){
-  const btn = document.getElementById('testAzanBtn');
-  if(!btn) return;
-  if(playing){
-    btn.textContent = '⏹ Stop';
-    btn.style.background = 'rgba(201,168,76,0.15)';
-    btn.style.color = '#e74c3c';
-    btn.style.borderColor = '#e74c3c';
-  } else {
-    btn.textContent = '🕌 ' + T[lang].sAzan;
+function setAzanBtnState(type, playing){
+  [1, 2, 3].forEach(num => {
+    const btn = document.getElementById('testAzan' + num + 'Btn');
+    if(!btn) return;
+    btn.textContent = '🕌 ' + num;
     btn.style.background = 'var(--surf)';
     btn.style.color = 'var(--gold)';
     btn.style.borderColor = 'var(--br)';
+  });
+
+  if(playing && type){
+    const btnId = type.replace('azan', 'testAzan') + 'Btn';
+    const activeBtn = document.getElementById(btnId);
+    if(activeBtn){
+      activeBtn.textContent = '⏹';
+      activeBtn.style.background = 'rgba(201,168,76,0.15)';
+      activeBtn.style.color = '#e74c3c';
+      activeBtn.style.borderColor = '#e74c3c';
+    }
   }
 }
 
@@ -907,7 +930,7 @@ function checkPrayerAlarm(){
       const pref = soundPrefs[keys[i]];
       
       if(pref === 'beep') playBeep();
-      else if(pref === 'azan') playAzan();
+      else if(pref.startsWith('azan')) playAzan(pref);
       
       if(notifOn && 'Notification' in window && Notification.permission === 'granted'){
         new Notification('🕌 ' + t.pr[i], {
@@ -918,7 +941,6 @@ function checkPrayerAlarm(){
         });
       }
       
-      // Bildirim açıksa veya ses ayarı 'kapalı' değilse ekranda görsel uyarı ver
       if(pref !== 'off' || notifOn){
          showPrayerFlash(t.pr[i], ti);
       }
