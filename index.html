@@ -65,7 +65,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .vlbl{font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1px;font-weight:700;flex:1}
 .vref-btn{font-size:12px;color:var(--teal);cursor:pointer;padding:2px 6px;border-radius:8px;background:rgba(78,205,196,0.08);border:0.5px solid rgba(78,205,196,0.2)}
 .varab{font-family:'Amiri',serif;font-size:21px;color:var(--gl);text-align:right;line-height:1.85;margin-bottom:10px;direction:rtl}
-.vtabs{display:flex;gap:7px;margin-bottom:9px}
+.vtabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:9px}
 .vtab{font-size:11px;padding:4px 12px;border-radius:12px;border:0.5px solid var(--br);background:transparent;color:var(--mx);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
 .vtab.on{background:var(--td);color:#fff;border-color:transparent}
 .vtxt{font-size:13px;color:var(--tx);line-height:1.75}
@@ -133,7 +133,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 <div class="sb"></div>
 <div class="hdr">
   <div class="aname">☽ Balaban</div>
-  <button class="lbtn" onclick="toggleLang()">TR / PL</button>
+  <button class="lbtn" onclick="toggleLang()" id="hdrLangBtn">TR / PL / EN</button>
 </div>
 <div class="sc">
 
@@ -197,13 +197,6 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
         </select>
       </div>
       <div class="si"><span class="slbl" id="nLbl">Bildirimler</span><div class="tog on" id="togNotif" onclick="toggleNotif()"></div></div>
-      <div class="si"><span class="slbl" id="aLbl">Ezan / Uyarı Sesi</span>
-        <select class="sel" id="soundSel" onchange="chgSound()">
-          <option value="off" id="sOff">Kapalı</option>
-          <option value="beep" id="sBeep">Bip Sesi</option>
-          <option value="azan" id="sAzan" selected>Ezan</option>
-        </select>
-      </div>
       <div class="si" id="siVolume"><span class="slbl" id="volLbl">Ses Seviyesi</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:14px">🔈</span>
@@ -219,11 +212,16 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
         </div>
       </div>
     </div>
+    
+    <div class="stitle" id="stAlarms">Vakit Uyarıları</div>
+    <div class="sgrp" id="alarmsContainer"></div>
+
     <div class="sgrp">
-      <div class="si"><span class="slbl" id="lgLbl">Dil / Język</span>
+      <div class="si"><span class="slbl" id="lgLbl">Dil / Lang</span>
         <div style="display:flex;gap:8px">
-          <button onclick="setLang('tr')" id="bTR" style="background:var(--gold);color:#1a1200;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">TR</button>
-          <button onclick="setLang('pl')" id="bPL" style="background:var(--surf);color:var(--tx);border:0.5px solid var(--br);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">PL</button>
+          <button onclick="setLang('tr')" id="bTR">TR</button>
+          <button onclick="setLang('pl')" id="bPL">PL</button>
+          <button onclick="setLang('en')" id="bEN">EN</button>
         </div>
       </div>
       <div class="si"><span class="slbl" id="loLbl">Konum</span><span style="font-size:13px;color:var(--teal);cursor:pointer" onclick="openModal()" id="loBtn">Değiştir ›</span></div>
@@ -263,10 +261,10 @@ const T={
   tr:{h:'Ana Sayfa',c:'Takvim',s:'Ayarlar',pt:'Namaz Vakitleri',vd:'Günün Ayeti',
       qbl:'Kıble Yönü',qfr:'Kuzeyden saat yönünde',np:'Sonraki Namaz',act:'Şimdi',
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler',
-      al:'Ezan / Uyarı Sesi',ll:'Dil / Język',lol:'Konum',chg:'Değiştir',
+      ll:'Dil / Language',lol:'Konum',chg:'Değiştir',
       mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
       ok:'Tamam',gps:'📍 GPS',ver:'Namaz Vakti v3.0',
-      sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip',sAzan:'Ezan',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et',
       pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'],
       ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
@@ -276,16 +274,29 @@ const T={
   pl:{h:'Strona Główna',c:'Kalendarz',s:'Ustawienia',pt:'Czasy Modlitwy',vd:'Werset Dnia',
       qbl:'Kierunek Kibli',qfr:'Zgodnie z ruchem wskazówek od Północy',np:'Następna Modlitwa',act:'Teraz',
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
-      al:'Ezan / Dźwięk Alarmu',ll:'Język / Dil',lol:'Lokalizacja',chg:'Zmień',
+      ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień',
       mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
       ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy v3.0',
-      sOff:'Wyłączony',sBeep:'Sygnał Dźwiękowy',sAzan:'Ezan',
+      pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       volLbl:'Głośność',testLbl:'Test Dźwięku',
       pr:['Fajr','Wschód','Zuhr','Asr','Maghrib','Isza'],
       ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
       dy:['Nd','Pn','Wt','Śr','Cz','Pt','Sb'],
       mo:['Stycznia','Lutego','Marca','Kwietnia','Maja','Czerwca','Lipca','Sierpnia','Września','Października','Listopada','Grudnia'],
-      vl:'Ładowanie wersetu...',gc:'Wyszukiwanie lokalizacji...',ge:'Nie znaleziono lokalizacji.'}
+      vl:'Ładowanie wersetu...',gc:'Wyszukiwanie lokalizacji...',ge:'Nie znaleziono lokalizacji.'},
+  en:{h:'Home',c:'Calendar',s:'Settings',pt:'Prayer Times',vd:'Verse of the Day',
+      qbl:'Qibla Direction',qfr:'Clockwise from North',np:'Next Prayer',act:'Now',
+      tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
+      ll:'Language / Dil',lol:'Location',chg:'Change',
+      mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times v3.0',
+      pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
+      volLbl:'Volume',testLbl:'Test Sound',
+      pr:['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'],
+      ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      dy:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      mo:['January','February','March','April','May','June','July','August','September','October','November','December'],
+      vl:'Loading verse...',gc:'Searching location...',ge:'Location not found.'}
 };
 const CITIES=[
   {n:'Łódź',la:51.7592,lo:19.456},{n:'Warszawa',la:52.2297,lo:21.0122},
@@ -300,7 +311,7 @@ let uLo=parseFloat(localStorage.getItem('bLo'))||19.456;
 let uCity=localStorage.getItem('bCity')||'Łódź';
 let method=parseInt(localStorage.getItem('bM'))||3;
 let pT={};
-let vtab='tr';
+let vtab=lang; 
 let verse=null;
 let vLoading=false;
 let pLa=null,pLo=null,pCity=null;
@@ -319,7 +330,8 @@ function hijri(date){
   for(let m=1;m<=12;m++){const l=(m%2===1)?30:(m===12&&lp.has(yk)?30:29);if(rem<=l){hM=m;hD=rem;break;}rem-=l;}
   const ar=['Muharrem','Safer','Rebiülevvel','Rebiülahir','Cümadelülâ','Cümadelühire','Recep','Şaban','Ramazan','Şevval','Zilkade','Zilhicce'];
   const pl=['Muharram','Safar','Rabiʿ al-Awwal','Rabiʿ al-Thani','Jumada al-Ula','Jumada al-Thaniyya','Rajab','Shaaban','Ramadan','Shawwal','Dhul Qadah','Dhul Hijjah'];
-  return `${hD} ${(lang==='pl'?pl:ar)[Math.max(0,hM-1)]} ${hY} H`;
+  const en=['Muharram','Safar','Rabiʿ al-Awwal','Rabiʿ al-Thani','Jumada al-Ula','Jumada al-Thaniyya','Rajab','Shaaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
+  return `${hD} ${(lang==='pl'?pl:(lang==='en'?en:ar))[Math.max(0,hM-1)]} ${hY} H`;
 }
 
 // ── PRAYER TIMES ──
@@ -338,22 +350,19 @@ function sunP(jd){
   let RA = deg(Math.atan2(Math.cos(rad(e)) * Math.sin(rad(L)), Math.cos(rad(L)))) / 15;
   RA = fxH(RA);
   let EqT = q/15 - RA;
-  // Hatalı saat kaymalarını önlemek için EqT sabitlenir
   if (EqT > 12) EqT -= 24;
   if (EqT < -12) EqT += 24;
   return { d: deg(Math.asin(Math.sin(rad(e)) * Math.sin(rad(L)))), EqT: EqT };
 }
 
 function calcPT(date, la, lo, mth) {
-  // t: Diyanet için özel temkin dakikaları [İmsak, Güneş, Öğle, İkindi, Akşam, Yatsı]
   const ms = {
     2:  { f: 15, i: 15, t: [0, 0, 0, 0, 0, 0] },
     3:  { f: 18, i: 17, t: [0, 0, 0, 0, 0, 0] },
     4:  { f: 18.5, i: 90, t: [0, 0, 0, 0, 0, 0] },
     5:  { f: 19.5, i: 17.5, t: [0, 0, 0, 0, 0, 0] },
-    13: { f: 18, i: 17, t: [-1, -5, 5, 4, 7, 0] } // Diyanet Temkinleri
+    13: { f: 18, i: 17, t: [-1, -5, 5, 4, 7, 0] } 
   };
-  
   const m = ms[mth] || ms[3];
   const offsets = m.t || [0, 0, 0, 0, 0, 0];
   const tz = -date.getTimezoneOffset() / 60;
@@ -362,7 +371,6 @@ function calcPT(date, la, lo, mth) {
   const { d, EqT } = sunP(jd);
   const tr = 12 + tz - (lo / 15) - EqT;
   
-  // Açıdan saate çeviren ana fonksiyon
   function ha(alt, ccw) {
     const v = Math.sin(rad(alt)) - Math.sin(rad(la)) * Math.sin(rad(d));
     const c = Math.cos(rad(la)) * Math.cos(rad(d));
@@ -371,21 +379,16 @@ function calcPT(date, la, lo, mth) {
     return ccw ? tr - t : tr + t;
   }
   
-  // Eksi (-) değerler ufkun altını, artı (+) değerler ufkun üstünü ifade eder
   const fj = ha(-m.f, true);
   const sr = ha(-0.833, true);
   const dh = tr;
-  
-  // İkindi hesaplaması gerçek gölge formülü ile (Shadow = 1 Asr-ı Evvel)
   const shadow = 1; 
   const A = Math.abs(la - d);
   const asrAlt = deg(Math.atan(1 / (shadow + Math.tan(rad(A)))));
   const as = ha(asrAlt, false);
-  
   const ss = ha(-0.833, false);
   const is = m.i === 90 ? ss + 1.5 : ha(-m.i, false);
   
-  // Temkin dakikalarını uygulayan formatlayıcı
   function fmt(h, offsetMinutes) {
     let totalHours = h + (offsetMinutes / 60);
     totalHours = fxH(totalHours);
@@ -395,14 +398,7 @@ function calcPT(date, la, lo, mth) {
     return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
   }
   
-  return {
-    fajr: fmt(fj, offsets[0]),
-    sunrise: fmt(sr, offsets[1]),
-    dhuhr: fmt(dh, offsets[2]),
-    asr: fmt(as, offsets[3]),
-    maghrib: fmt(ss, offsets[4]),
-    isha: fmt(is, offsets[5])
-  };
+  return {fajr: fmt(fj, offsets[0]), sunrise: fmt(sr, offsets[1]), dhuhr: fmt(dh, offsets[2]), asr: fmt(as, offsets[3]), maghrib: fmt(ss, offsets[4]), isha: fmt(is, offsets[5])};
 }
 
 function qibla(la,lo){
@@ -412,8 +408,6 @@ function qibla(la,lo){
 }
 
 // ── VERSE via Claude API ──
-// Different verse each app open (random per session), cached per day
-// Session token changes on every page load
 const SESS=Date.now()^(Math.random()*0xFFFFFF|0);
 function seededRnd(s){let x=Math.sin(s+1)*99999;return x-Math.floor(x);}
 
@@ -427,10 +421,9 @@ async function loadVerse(force=false){
   vLoading=true;
   const t=T[lang];
   document.getElementById('vBody').innerHTML=`<div class="vloading"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span id="vLdTxt">${t.vl}</span></div>`;
-  // Random number 1-365, unique each session
   const n=Math.floor(seededRnd(SESS)*365)+1;
   const prompt=`Sen bir İslam alimi ve çevirmensin. 365 Kur'an ayeti koleksiyonundan ${n}. ayeti seç. Aşağıdaki JSON formatında döndür, başka HİÇBİR ŞEY yazma, sadece JSON:
-{"arabic":"Arapça metin","tr":"Türkçe meal","pl":"Lehçe çeviri","ref":"Sure Adı Sure:Ayet"}
+{"arabic":"Arapça metin","tr":"Türkçe meal","pl":"Lehçe çeviri","en":"İngilizce çeviri","ref":"Sure Adı Sure:Ayet"}
 Konu seçimi: iman, sabır, namaz, dua, şükür, rahmet, adalet, ahiret, Allah'ın isimleri ve sıfatları, cennet gibi konular. 365 farklı ayetten ${n}. tanesini seç.`;
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{
@@ -440,23 +433,21 @@ Konu seçimi: iman, sabır, namaz, dua, şükür, rahmet, adalet, ahiret, Allah'
     });
     const d=await r.json();
     const raw=d.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
-    // Find JSON object in response
     const match=raw.match(/\{[\s\S]*\}/);
     if(!match)throw new Error('no json');
     const v=JSON.parse(match[0]);
-    if(v.arabic&&v.tr&&v.pl&&v.ref){
+    if(v.arabic&&v.tr&&v.pl&&v.en&&v.ref){
       verse=v;
       if(!force)localStorage.setItem(dayKey,JSON.stringify(v));
       renderVerse();
     }else throw new Error('bad');
   }catch(e){
-    // Fallback verses array - cycle through
     const FB=[
-      {arabic:'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ',tr:'Sabır ve namazla yardım isteyin. Şüphesiz namaz, Allah\'a saygı duyanlardan başkasına ağır gelir.',pl:'Szukajcie pomocy w cierpliwości i modlitwie. Jest to ciężkie, lecz nie dla pokornych.',ref:'Bakara 2:45'},
-      {arabic:'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا',tr:'Şüphesiz namaz, müminlere belirli vakitlerde farz kılınmıştır.',pl:'Zaprawdę modlitwa jest dla wierzących obowiązkiem wyznaczonym na określone czasy.',ref:'Nisa 4:103'},
-      {arabic:'أَقِمِ الصَّلَاةَ لِذِكْرِي',tr:'Beni anmak için namaz kıl.',pl:'Odprawiaj modlitwę dla upamiętnienia Mnie.',ref:'Taha 20:14'},
-      {arabic:'قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ',tr:'Kesinlikle kurtuluşa erdiler o müminler ki namazlarında derin bir huşu içindedirler.',pl:'Zaiste zbawieni są wierzący, którzy w swojej modlitwie są pokorni.',ref:'Müminun 23:1-2'},
-      {arabic:'وَلَذِكْرُ اللَّهِ أَكْبَرُ',tr:'Allah\'ı zikretmek elbette en büyük ibadettir.',pl:'Zaiste wspominanie Allaha jest największe.',ref:'Ankebut 29:45'},
+      {arabic:'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ',tr:'Sabır ve namazla yardım isteyin. Şüphesiz namaz, Allah\'a saygı duyanlardan başkasına ağır gelir.',pl:'Szukajcie pomocy w cierpliwości i modlitwie. Jest to ciężkie, lecz nie dla pokornych.',en:'Seek help through patience and prayer. Indeed, it is difficult except for the humbly submissive.',ref:'Bakara 2:45'},
+      {arabic:'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا',tr:'Şüphesiz namaz, müminlere belirli vakitlerde farz kılınmıştır.',pl:'Zaprawdę modlitwa jest dla wierzących obowiązkiem wyznaczonym na określone czasy.',en:'Indeed, prayer has been decreed upon the believers a decree of specified times.',ref:'Nisa 4:103'},
+      {arabic:'أَقِمِ الصَّلَاةَ لِذِكْرِي',tr:'Beni anmak için namaz kıl.',pl:'Odprawiaj modlitwę dla upamiętnienia Mnie.',en:'Establish prayer for My remembrance.',ref:'Taha 20:14'},
+      {arabic:'قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ',tr:'Kesinlikle kurtuluşa erdiler o müminler ki namazlarında derin bir huşu içindedirler.',pl:'Zaiste zbawieni są wierzący, którzy w swojej modlitwie są pokorni.',en:'Certainly will the believers have succeeded. They who are during their prayer humbly submissive.',ref:'Müminun 23:1-2'},
+      {arabic:'وَلَذِكْرُ اللَّهِ أَكْبَرُ',tr:'Allah\'ı zikretmek elbette en büyük ibadettir.',pl:'Zaiste wspominanie Allaha jest największe.',en:'And the remembrance of Allah is greater.',ref:'Ankebut 29:45'},
     ];
     verse=FB[n%FB.length];
     renderVerse();
@@ -472,8 +463,9 @@ function renderVerse(){
     <div class="vtabs">
       <button class="vtab${vtab==='tr'?' on':''}" onclick="setVTab('tr')">Türkçe</button>
       <button class="vtab${vtab==='pl'?' on':''}" onclick="setVTab('pl')">Polski</button>
+      <button class="vtab${vtab==='en'?' on':''}" onclick="setVTab('en')">English</button>
     </div>
-    <div class="vtxt">${vtab==='tr'?v.tr:v.pl}</div>
+    <div class="vtxt">${vtab==='tr'?v.tr:(vtab==='pl'?v.pl:v.en)}</div>
     <div class="vref">${v.ref}</div>`;
 }
 function setVTab(t){vtab=t;renderVerse();}
@@ -492,7 +484,8 @@ async function geocode(name){
   const t=T[lang];
   document.getElementById('gStat').textContent=t.gc;
   try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&addressdetails=1`,{headers:{'Accept-Language':lang==='tr'?'tr':'pl,en'}});
+    const reqLang = lang==='tr' ? 'tr' : (lang==='pl' ? 'pl' : 'en');
+    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&addressdetails=1`,{headers:{'Accept-Language':reqLang}});
     const d=await r.json();
     if(d&&d.length>0){
       const a=d[0].address||{};
@@ -506,7 +499,8 @@ async function geocode(name){
 }
 async function reverseGeocode(la,lo){
   try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&format=json&addressdetails=1`,{headers:{'Accept-Language':lang==='tr'?'tr':'pl,en'}});
+    const reqLang = lang==='tr' ? 'tr' : (lang==='pl' ? 'pl' : 'en');
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&format=json&addressdetails=1`,{headers:{'Accept-Language':reqLang}});
     const d=await r.json();
     const a=d.address||{};
     return a.city||a.town||a.village||a.county||d.display_name.split(',')[0]||`${la.toFixed(2)}°N`;
@@ -578,7 +572,11 @@ function updateQibla(){
 function renderCal(){
   const t=T[lang],now=new Date();
   const keys=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
-  const sn=lang==='pl'?['F','W','Z','A','M','I']:['F','G','Ö','İ','A','Y'];
+  const sn_tr=['F','G','Ö','İ','A','Y'];
+  const sn_pl=['F','W','Z','A','M','I'];
+  const sn_en=['F','S','D','A','M','I'];
+  const sn = lang==='pl' ? sn_pl : (lang==='en' ? sn_en : sn_tr);
+  
   let html=`<div class="ctitle">${now.getDate()+' '+t.mo[now.getMonth()]+' '+now.getFullYear()}</div>`;
   for(let i=0;i<7;i++){
     const d=new Date(now);d.setDate(now.getDate()+i);
@@ -599,6 +597,9 @@ function selChip(la,lo,n){
   document.getElementById('gStat').textContent=`✓ ${n}`;
   document.getElementById('gStat').style.color='var(--teal)';
 }
+function getBtnStyle(l){
+  return `background:${lang===l?'var(--gold)':'var(--surf)'};color:${lang===l?'#1a1200':'var(--tx)'};border:${lang===l?'none':'0.5px solid var(--br)'};padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif`;
+}
 function updateTxt(){
   const t=T[lang];
   document.getElementById('n0').textContent=t.h;document.getElementById('n1').textContent=t.c;document.getElementById('n2').textContent=t.s;
@@ -606,7 +607,7 @@ function updateTxt(){
   document.getElementById('qLbl').textContent=t.qbl;document.getElementById('nxtLbl').textContent=t.np;
   document.getElementById('chgTxt').textContent=t.chg+' ›';
   document.getElementById('calTitle').textContent=t.tw;document.getElementById('setTitle').textContent=t.st;
-  document.getElementById('mLbl').textContent=t.ml;document.getElementById('nLbl').textContent=t.nl;document.getElementById('aLbl').textContent=t.al;
+  document.getElementById('mLbl').textContent=t.ml;document.getElementById('nLbl').textContent=t.nl;
   document.getElementById('lgLbl').textContent=t.ll;document.getElementById('loLbl').textContent=t.lol;
   document.getElementById('loBtn').innerHTML=t.chg+' ›';
   document.getElementById('verTxt').textContent=t.ver;
@@ -614,13 +615,17 @@ function updateTxt(){
   document.getElementById('okBtn').textContent=t.ok;document.getElementById('gpsBtn').innerHTML=t.gps;
   document.getElementById('volLbl').textContent=t.volLbl;
   document.getElementById('testLbl').textContent=t.testLbl;
-  document.getElementById('sOff').textContent=t.sOff;
-  document.getElementById('sBeep').textContent=t.sBeep;
-  document.getElementById('sAzan').textContent=t.sAzan;
-  document.getElementById('cInput').placeholder=lang==='tr'?'Şehir adı...':'Nazwa miasta...';
-  document.getElementById('bTR').style.cssText=`background:${lang==='tr'?'var(--gold)':'var(--surf)'};color:${lang==='tr'?'#1a1200':'var(--tx)'};border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif`;
-  document.getElementById('bPL').style.cssText=`background:${lang==='pl'?'var(--gold)':'var(--surf)'};color:${lang==='pl'?'#1a1200':'var(--tx)'};border:0.5px solid var(--br);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif`;
+  document.getElementById('stAlarms').textContent=t.pa;
+  
+  const placeholders = {tr: 'Şehir adı...', pl: 'Nazwa miasta...', en: 'City name...'};
+  document.getElementById('cInput').placeholder = placeholders[lang];
+  
+  document.getElementById('bTR').style.cssText = getBtnStyle('tr');
+  document.getElementById('bPL').style.cssText = getBtnStyle('pl');
+  document.getElementById('bEN').style.cssText = getBtnStyle('en');
+  
   document.getElementById('locName').textContent=uCity;
+  renderAlarmsUI();
   renderPrayers();updateDate();updateQibla();renderCal();renderChips();
   if(verse)renderVerse();
 }
@@ -645,30 +650,70 @@ function closeModal(){document.getElementById('locMov').classList.remove('open')
 function closeOut(e){if(e.target===document.getElementById('locMov'))closeModal();}
 
 // ── LANG ──
-function setLang(l){lang=l;localStorage.setItem('bL',l);updateTxt();}
-function toggleLang(){setLang(lang==='tr'?'pl':'tr');}
+function setLang(l){
+  lang=l;
+  localStorage.setItem('bL',l);
+  vtab=l; 
+  updateTxt();
+}
+function toggleLang(){
+  const langs = ['tr', 'pl', 'en'];
+  const next = langs[(langs.indexOf(lang) + 1) % 3];
+  setLang(next);
+}
 
 // ── SETTINGS ──
 function chgMethod(){method=parseInt(document.getElementById('mSel').value);localStorage.setItem('bM',method);loadAll();}
 
-// ── SOUND SYSTEM ──
-let soundMode = localStorage.getItem('bSound') || 'azan'; // 'off' | 'beep' | 'azan'
+// ── SOUND & ALARMS SYSTEM ──
 let volume = parseInt(localStorage.getItem('bVol') || '80') / 100;
 let notifOn = localStorage.getItem('bNotif') !== 'off';
+
+// Eski sistemden yeni sisteme akıllı aktarım
+let oldGlobalSound = localStorage.getItem('bSound'); // 'off' | 'beep' | 'azan'
+let defaultPrefs = {fajr:'azan', sunrise:'off', dhuhr:'azan', asr:'azan', maghrib:'azan', isha:'azan'};
+
+if (oldGlobalSound && !localStorage.getItem('bSoundPrefs')) {
+  let s = oldGlobalSound;
+  defaultPrefs = {fajr:s, sunrise:(s==='azan'?'off':s), dhuhr:s, asr:s, maghrib:s, isha:s};
+}
+
+let soundPrefs = JSON.parse(localStorage.getItem('bSoundPrefs')) || defaultPrefs;
 let azanAudio = null;
 let azanPlaying = false;
 let lastAlarmMinute = -1;
 
-// Ezan URL'leri — goksay.com (http çalışıyor)
 const AZAN_URLS = [
   'http://goksay.com/Aksam1.mp3',
   'http://goksay.com/aksam1.mp3',
 ];
 
 function initSound(){
-  document.getElementById('soundSel').value = soundMode;
   document.getElementById('volRange').value = Math.round(volume * 100);
   document.getElementById('togNotif').classList.toggle('on', notifOn);
+}
+
+function renderAlarmsUI() {
+  const t = T[lang];
+  const keys = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+  let html = '';
+  keys.forEach((k, i) => {
+    html += `<div class="si">
+      <span class="slbl" style="display:flex;align-items:center;gap:6px"><span style="font-size:16px">${t.ic[i]}</span> ${t.pr[i]}</span>
+      <select class="sel" onchange="chgSoundPref('${k}', this.value)">
+        <option value="off" ${soundPrefs[k]==='off'?'selected':''}>${t.sOff}</option>
+        <option value="beep" ${soundPrefs[k]==='beep'?'selected':''}>${t.sBeep}</option>
+        <option value="azan" ${soundPrefs[k]==='azan'?'selected':''}>${t.sAzan}</option>
+      </select>
+    </div>`;
+  });
+  document.getElementById('alarmsContainer').innerHTML = html;
+}
+
+function chgSoundPref(key, val) {
+  soundPrefs[key] = val;
+  localStorage.setItem('bSoundPrefs', JSON.stringify(soundPrefs));
+  stopAzan();
 }
 
 function toggleNotif(){
@@ -680,23 +725,16 @@ function toggleNotif(){
   }
 }
 
-function chgSound(){
-  soundMode = document.getElementById('soundSel').value;
-  localStorage.setItem('bSound', soundMode);
-  stopAzan();
-}
-
 function chgVol(v){
   volume = v / 100;
   localStorage.setItem('bVol', v);
   if(azanAudio) azanAudio.volume = volume;
 }
 
-// ── BEEP SESİ (Web Audio API) ──
+// ── BEEP SESİ ──
 let audioCtx = null;
 function getAudioCtx(){
   if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  // Resume if suspended (mobile browsers suspend AudioContext until user gesture)
   if(audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
@@ -704,7 +742,7 @@ function getAudioCtx(){
 function playBeep(){
   try{
     const ctx = getAudioCtx();
-    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+    const notes = [523.25, 659.25, 783.99]; 
     notes.forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -734,14 +772,11 @@ async function playAzan(){
   stopAzan();
   azanPlaying = true;
 
-  // AudioContext'i kullanıcı etkileşimi sonrası başlat (mobil zorunluluğu)
   try{ getAudioCtx(); }catch(e){}
 
-  // MP3 yüklemeyi dene — crossOrigin OLMADAN (CORS sorunu yaşanmaz)
   for(const url of AZAN_URLS){
     try{
       const audio = new Audio();
-      // crossOrigin KAPATILDI — sunucu CORS header vermese bile çalışır
       audio.volume = volume;
       audio.preload = 'auto';
 
@@ -758,28 +793,24 @@ async function playAzan(){
         const playPromise = audio.play();
         if(playPromise !== undefined){
           await playPromise.catch(e => {
-            // Autoplay policy — kullanıcıdan onay isteyebiliriz
             console.warn('Play blocked:', e);
             azanPlaying = false;
           });
         }
         audio.addEventListener('ended', () => { azanPlaying = false; azanAudio = null; }, {once:true});
-        return; // başarılı
+        return; 
       }
     }catch(e){
       console.warn('Azan URL failed:', url, e);
       continue;
     }
   }
-
-  // Tüm URL'ler başarısız → sentetik ezan
   playSyntheticAzan();
 }
 
 function playSyntheticAzan(){
   try{
     const ctx = getAudioCtx();
-    // Ezan melodisini simüle eden frekans dizisi
     const melody = [
       [329.6,0.6],[369.9,0.4],[415.3,0.8],[369.9,0.4],[329.6,1.2],
       [293.7,0.6],[329.6,0.4],[369.9,0.8],[329.6,0.4],[293.7,1.0],
@@ -790,7 +821,7 @@ function playSyntheticAzan(){
     melody.forEach(([freq, dur]) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      const vib = ctx.createOscillator(); // vibrato
+      const vib = ctx.createOscillator();
       const vibGain = ctx.createGain();
       vib.frequency.value = 5; vib.type = 'sine';
       vibGain.gain.value = 3;
@@ -823,7 +854,6 @@ function testBeep(){
 
 function testAzanToggle(){
   try{ getAudioCtx(); }catch(e){}
-  const btn = document.getElementById('testAzanBtn');
   if(azanPlaying){
     stopAzan();
     setAzanBtnState(false);
@@ -835,11 +865,7 @@ function testAzanToggle(){
 function testAzan(){
   try{ getAudioCtx(); }catch(e){}
   setAzanBtnState(true);
-  playAzan().then(() => {
-    // playAzan zaten azanPlaying'i yönetiyor,
-    // bitince butonu sıfırla
-  });
-  // Ezan bitince butonu normale döndür
+  playAzan().then(() => {});
   const checkEnd = setInterval(() => {
     if(!azanPlaying){ setAzanBtnState(false); clearInterval(checkEnd); }
   }, 500);
@@ -849,12 +875,12 @@ function setAzanBtnState(playing){
   const btn = document.getElementById('testAzanBtn');
   if(!btn) return;
   if(playing){
-    btn.textContent = '⏹ Durdur';
+    btn.textContent = '⏹ Stop';
     btn.style.background = 'rgba(201,168,76,0.15)';
     btn.style.color = '#e74c3c';
     btn.style.borderColor = '#e74c3c';
   } else {
-    btn.textContent = '🕌 Ezan';
+    btn.textContent = '🕌 ' + T[lang].sAzan;
     btn.style.background = 'var(--surf)';
     btn.style.color = 'var(--gold)';
     btn.style.borderColor = 'var(--br)';
@@ -863,34 +889,39 @@ function setAzanBtnState(playing){
 
 // ── PRAYER ALARM CHECK ──
 function checkPrayerAlarm(){
-  if(soundMode === 'off' && !notifOn) return;
   const keys = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
   const nowSec = now.getSeconds();
-  if(nowSec > 30 || nowSec < 0) return; // only trigger in first 30s of the minute
+  
+  if(nowSec > 30 || nowSec < 0) return; 
   if(nowMin === lastAlarmMinute) return;
 
   const t = T[lang];
   for(let i = 0; i < keys.length; i++){
     const ti = pT[keys[i]]; if(!ti) continue;
     const [h, m] = ti.split(':').map(Number);
+    
     if(h * 60 + m === nowMin){
       lastAlarmMinute = nowMin;
-      // Sound
-      if(soundMode === 'beep') playBeep();
-      else if(soundMode === 'azan') playAzan();
-      // Notification
+      const pref = soundPrefs[keys[i]];
+      
+      if(pref === 'beep') playBeep();
+      else if(pref === 'azan') playAzan();
+      
       if(notifOn && 'Notification' in window && Notification.permission === 'granted'){
-        new Notification('🕌 ' + t.pr[i] + ' vakti', {
-          body: ti + ' — Balaban Namaz Vakti',
+        new Notification('🕌 ' + t.pr[i], {
+          body: ti + ' — Balaban',
           icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230d1b2a"/><text x="32" y="46" font-size="36" text-anchor="middle">☽</text></svg>',
           tag: 'prayer-' + keys[i],
           vibrate: [200, 100, 200]
         });
       }
-      // Visual flash on prayer card
-      showPrayerFlash(t.pr[i], ti);
+      
+      // Bildirim açıksa veya ses ayarı 'kapalı' değilse ekranda görsel uyarı ver
+      if(pref !== 'off' || notifOn){
+         showPrayerFlash(t.pr[i], ti);
+      }
       break;
     }
   }
@@ -899,7 +930,7 @@ function checkPrayerAlarm(){
 function showPrayerFlash(name, time){
   const flash = document.createElement('div');
   flash.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(135deg,#1a2744,#0f2030);border-bottom:2px solid var(--gold);padding:16px 20px;z-index:400;display:flex;align-items:center;gap:12px;animation:slideDown 0.4s ease';
-  flash.innerHTML = `<div style="font-size:28px">🕌</div><div><div style="font-size:16px;font-weight:700;color:var(--gold)">${name} Vakti</div><div style="font-size:13px;color:var(--tx)">${time}</div></div><button onclick="stopAzan();this.parentElement.remove()" style="margin-left:auto;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">Durdur</button>`;
+  flash.innerHTML = `<div style="font-size:28px">🕌</div><div><div style="font-size:16px;font-weight:700;color:var(--gold)">${name}</div><div style="font-size:13px;color:var(--tx)">${time}</div></div><button onclick="stopAzan();this.parentElement.remove()" style="margin-left:auto;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">Stop</button>`;
   const style = document.createElement('style');
   style.textContent = '@keyframes slideDown{from{transform:translateX(-50%) translateY(-100%)}to{transform:translateX(-50%) translateY(0)}}';
   document.head.appendChild(style);
@@ -913,12 +944,11 @@ initSound();
 updateTxt();
 loadAll();
 loadVerse(false);
-// Request notification permission
+
 if(notifOn && 'Notification' in window && Notification.permission === 'default'){
   Notification.requestPermission();
 }
 
-// Auto GPS on first launch
 if(!localStorage.getItem('bLa')&&'geolocation' in navigator){
   navigator.geolocation.getCurrentPosition(async pos=>{
     uLa=pos.coords.latitude;uLo=pos.coords.longitude;
@@ -928,7 +958,6 @@ if(!localStorage.getItem('bLa')&&'geolocation' in navigator){
   },()=>{},{timeout:8000});
 }
 
-// Timer
 setInterval(()=>{
   updateCD();
   checkPrayerAlarm();
@@ -936,7 +965,7 @@ setInterval(()=>{
 },1000);
 updateCD();
 
-// ── SERVICE WORKER (offline support) ──
+// ── SERVICE WORKER ──
 if('serviceWorker' in navigator){
   const swCode=`
 const CACHE='balaban-v1';
@@ -949,15 +978,14 @@ self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r
   navigator.serviceWorker.register(swURL).catch(()=>{});
 }
 
-// ── INSTALL PROMPT (Android) ──
+// ── INSTALL PROMPT ──
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();deferredPrompt=e;
-  // Show a subtle install banner
   const banner=document.createElement('div');
   banner.id='installBanner';
   banner.style.cssText='position:fixed;top:calc(var(--st,0px)+56px);left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:#1e2d42;border:0.5px solid rgba(201,168,76,0.4);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:300;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.4)';
-  banner.innerHTML=`<div style="font-size:13px;color:#f0ede4;line-height:1.4"><span style="font-size:16px">☽</span> <strong>Balaban</strong>'ı ana ekrana ekle</div><div style="display:flex;gap:8px;flex-shrink:0"><button onclick="document.getElementById('installBanner').remove()" style="background:transparent;border:0.5px solid rgba(201,168,76,0.3);color:#8a97aa;padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">Kapat</button><button id="installBtn" style="background:#c9a84c;color:#1a1200;border:none;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">Yükle</button></div>`;
+  banner.innerHTML=`<div style="font-size:13px;color:#f0ede4;line-height:1.4"><span style="font-size:16px">☽</span> <strong>Balaban</strong></div><div style="display:flex;gap:8px;flex-shrink:0"><button onclick="document.getElementById('installBanner').remove()" style="background:transparent;border:0.5px solid rgba(201,168,76,0.3);color:#8a97aa;padding:6px 12px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif">X</button><button id="installBtn" style="background:#c9a84c;color:#1a1200;border:none;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">Install</button></div>`;
   document.body.appendChild(banner);
   document.getElementById('installBtn').onclick=async()=>{
     banner.remove();
