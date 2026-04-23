@@ -33,7 +33,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .hero{margin:16px;background:linear-gradient(145deg,#1a2744,#0f2030);border:0.5px solid var(--br);border-radius:24px;padding:24px 20px 20px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(201,168,76,0.07),transparent 70%);pointer-events:none}
 .hcres{position:absolute;top:16px;right:20px;font-size:26px;opacity:0.5}
-.hloc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mx);margin-bottom:7px}
+.hloc{display:flex;align-items:center;gap:5px;font-weight:900;font-size:20px;color:var(--teal);margin-bottom:7px}
 .hloc svg{width:11px;height:11px;fill:var(--teal);flex-shrink:0}
 .hloc-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hloc-c{font-size:11px;color:var(--teal);cursor:pointer;flex-shrink:0}
@@ -317,10 +317,23 @@ const T={
       vl:'Vers wird geladen...',gc:'Standort wird gesucht...',ge:'Standort nicht gefunden.'}
 };
 const CITIES=[
-  {n:'Warszawa',la:52.2297,lo:21.0122},{n:'Kraków',la:50.0647,lo:19.945},
-  {n:'Łódź',la:51.7592,lo:19.456},{n:'Gdańsk',la:54.352,lo:18.6466},
-  {n:'İstanbul',la:41.0082,lo:28.9784},{n:'Ankara',la:39.9334,lo:32.8597},
-  {n:'Bursa',la:40.1826,lo:29.0669},{n:'İzmir',la:38.4192,lo:27.1287},
+  {n:'Warszawa',la:52.2297,lo:21.0122},
+{n:'Kraków',la:50.0647,lo:19.945},
+  {n:'Łódź',la:51.7592,lo:19.456},
+{n:'Gdańsk',la:54.352,lo:18.6466},
+  {n:'İstanbul',la:41.0082,lo:28.9784},
+{n:'Ankara',la:39.9334,lo:32.8597},
+  {n:'Bursa',la:40.1826,lo:29.0669},
+{n:'İzmir',la:38.4192,lo:27.1287},
+ {n:'Hamburg', la:53.5511, lo:9.9937, did:20002},
+ {n:'Münih', la:48.1351, lo:11.5820, did:20003},
+ {n:'Köln', la:50.9375, lo:6.9603, did:20004},
+ {n:'Frankfurt', la:50.1109, lo:8.6821, did:20005},
+ {n:'Stuttgart', la:48.7758, lo:9.1829, did:20006},
+ {n:'Düsseldorf', la:51.2277, lo:6.7735, did:20007},
+ {n:'Dortmund', la:51.5136, lo:7.4653, did:20008},
+ {n:'Duisburg', la:51.4344, lo:6.7623, did:20015}
+
 ];
 
 // ── STATE ──
