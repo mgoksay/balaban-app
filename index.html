@@ -11,12 +11,11 @@
 <meta name="application-name" content="Balaban">
 <meta name="description" content="Namaz vakitleri, kıble yönü ve günlük Kur'an ayeti">
 <title>Balaban Namaz Vakti</title>
-<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0d1b2a;--card:#162032;--surf:#1e2d42;
+  --bg:#0d1b2a;--card:#162032;--surf:#1e2d42;--red:#008000;
   --gold:#c9a84c;--gl:#e8c97a;--teal:#4ecdc4;--td:#2a9d8f;
   --tx:#f0ede4;--mx:#8a97aa;--br:rgba(201,168,76,0.18);
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
@@ -33,7 +32,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .hero{margin:16px;background:linear-gradient(145deg,#1a2744,#0f2030);border:0.5px solid var(--br);border-radius:24px;padding:24px 20px 20px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(201,168,76,0.07),transparent 70%);pointer-events:none}
 .hcres{position:absolute;top:16px;right:20px;font-size:26px;opacity:0.5}
-.hloc{display:flex;align-items:center;gap:5px;font-weight:900;font-size:20px;color:var(--teal);margin-bottom:7px}
+.hloc{display:flex;align-items:center;gap:5px;font-weight:900;font-size:20px;color:var(--red);margin-bottom:7px}
 .hloc svg{width:11px;height:11px;fill:var(--teal);flex-shrink:0}
 .hloc-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hloc-c{font-size:11px;color:var(--teal);cursor:pointer;flex-shrink:0}
@@ -233,7 +232,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
     </div>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
-      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti v3.0</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti v11.0</div>
     </div>
   </div>
 </div>
@@ -268,7 +267,7 @@ const T={
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler',
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir',
       mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
-      ok:'Tamam',gps:'📍 GPS',ver:'Namaz Vakti v3.0',
+      ok:'Tamam',gps:'📍 GPS',ver:'Namaz Vakti v11.0',
       pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et',
       pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'],
@@ -281,7 +280,7 @@ const T={
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień',
       mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
-      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy v3.0',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy v11.0',
       pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       volLbl:'Głośność',testLbl:'Test Dźwięku',
       pr:['Fajr','Wschód','Zuhr','Asr','Maghrib','Isza'],
@@ -294,7 +293,7 @@ const T={
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       ll:'Language / Dil',lol:'Location',chg:'Change',
       mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
-      ok:'OK',gps:'📍 GPS',ver:'Prayer Times v3.0',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times v11.0',
       pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
       volLbl:'Volume',testLbl:'Test Sound',
       pr:['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'],
@@ -307,7 +306,7 @@ const T={
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       ll:'Sprache',lol:'Standort',chg:'Ändern',
       mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
-      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit v3.0',
+      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit v11.0',
       pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
       volLbl:'Lautstärke',testLbl:'Ton testen',
       pr:['Fadschr','Sonnenaufgang','Dhuhr','Asr','Maghrib','Ischa'],
@@ -316,31 +315,61 @@ const T={
       mo:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
       vl:'Vers wird geladen...',gc:'Standort wird gesucht...',ge:'Standort nicht gefunden.'}
 };
-const CITIES=[
-  {n:'Warszawa',la:52.2297,lo:21.0122},
-{n:'Kraków',la:50.0647,lo:19.945},
-  {n:'Łódź',la:51.7592,lo:19.456},
-{n:'Gdańsk',la:54.352,lo:18.6466},
-  {n:'İstanbul',la:41.0082,lo:28.9784},
-{n:'Ankara',la:39.9334,lo:32.8597},
-  {n:'Bursa',la:40.1826,lo:29.0669},
-{n:'İzmir',la:38.4192,lo:27.1287},
- {n:'Hamburg', la:53.5511, lo:9.9937, did:20002},
- {n:'Münih', la:48.1351, lo:11.5820, did:20003},
- {n:'Köln', la:50.9375, lo:6.9603, did:20004},
- {n:'Frankfurt', la:50.1109, lo:8.6821, did:20005},
- {n:'Stuttgart', la:48.7758, lo:9.1829, did:20006},
- {n:'Düsseldorf', la:51.2277, lo:6.7735, did:20007},
- {n:'Dortmund', la:51.5136, lo:7.4653, did:20008},
- {n:'Duisburg', la:51.4344, lo:6.7623, did:20015}
 
+// ── DİYANET MERKEZLERİ & KOORDİNATLARI ──
+const diyanetCenters = [
+  { n: 'Warszawa', la: 52.2297, lo: 21.0122, did: 15884 },
+  { n: 'Kraków', la: 50.0647, lo: 19.945, did: 15845 },
+  { n: 'Łódź', la: 51.7592, lo: 19.456, did: 15843 },
+  { n: 'Gdańsk', la: 54.352, lo: 18.6466, did: 15880 },
+  { n: 'Białystok', la: 53.1275, lo: 23.074, did: 15883 },
+  { n: 'Kielce', la: 50.8541, lo: 20.5301, did: 15859 },
+  { n: 'Poznan', la: 52.4005, lo: 16.7368, did: 15846 },
+  { n: 'Radom', la: 51.4168, lo: 20.8607, did: 15866 },
+  { n: 'Viyana', la: 48.2201, lo: 16.2148, did: 11618 },
+  { n: 'Graz', la: 47.0731, lo: 15.3595, did: 11600 },
+  { n: 'Slazburg', la: 47.8027, lo: 12.9741, did: 11617 },
+  { n: 'Berlin', la: 52.5064, lo: 13.0951, did: 11002 },
+  { n: 'Hamburg', la: 53.5511, lo: 9.9937, did: 11012 },
+  { n: 'Münih', la: 48.1351, lo: 11.5820, did: 11022 },
+  { n: 'Köln', la: 50.9375, lo: 6.9603, did: 11019 },
+  { n: 'Frankfurt', la: 50.1109, lo: 8.6821, did: 11010 },
+  { n: 'Stuttgart', la: 48.7758, lo: 9.1829, did: 11027 },
+  { n: 'Düsseldorf', la: 51.2277, lo: 6.7735, did: 11008 },
+  { n: 'Dortmund', la: 51.5136, lo: 7.4653, did: 11006 },
+  { n: 'Duisburg', la: 51.4344, lo: 6.7623, did: 11007 },
+  { n: 'İstanbul', la: 41.0082, lo: 28.9784, did: 9541 },
+  { n: 'Ankara', la: 39.9334, lo: 32.8597, did: 9206 },
+  { n: 'Bursa', la: 40.1826, lo: 29.0669, did: 9335 },
+  { n: 'İzmir', la: 38.4192, lo: 27.1287, did: 9560 },
+  { n: 'Antalya', la: 36.8978, lo: 30.5532, did: 9225 },
+  { n: 'Malatya', la: 38.4192, lo: 27.1287, did: 9703 },
+  { n: 'Arapgir', la: 39.0394, lo: 38.4685, did: 9695 },
+  { n: 'Trabzon', la: 40.9929, lo: 39.6488, did: 9905 },
+  { n: 'Kayseri', la: 38.7219, lo: 34.8792, did: 9620 },
+  { n: 'Paris', la: 48.8566, lo: 2.3522, did: 13382 },
+  { n: 'Strazburg', la: 48.5687, lo: 7.4667, did: 13384 },
+  { n: 'Lyon', la: 45.7640, lo: 4.8357, did: 13381 },
+  { n: 'Marseille', la: 43.2965, lo: 5.3698, did: 13383 },
+  { n: 'Amsterdam', la: 52.3676, lo: 4.9041, did: 13976 },
+  { n: 'Rotterdam', la: 51.9244, lo: 4.4777, did: 13980 },
+  { n: 'Eindhoven', la: 51.4484, lo: 5.3691, did: 13978 },
+{ n: 'Bruksel', la: 50.8503, lo: 4.3517, did: 11915 },
+{ n: 'Antwerp', la: 51.2194, lo: 4.4025, did: 11914 },
+{ n: 'Gent', la: 51.0840, lo: 3.5497, did: 11916 },
+{ n: 'Zurich', la: 47.3769, lo: 8.5417, did: 14547 },
+{ n: 'Basel', la: 47.5596, lo: 7.5886, did: 14525 },
+{ n: 'Londra', la: 51.5072, lo: -0.1276, did: 14096 }
 ];
+
+// Modal'daki butonlar için sade şehir listesi
+const CITIES = diyanetCenters.map(c => ({n: c.n, la: c.la, lo: c.lo}));
 
 // ── STATE ──
 let uLa=parseFloat(localStorage.getItem('bLa'))||52.2297;
 let uLo=parseFloat(localStorage.getItem('bLo'))||21.0122;
 let uCity=localStorage.getItem('bCity')||'Warszawa';
-let method=parseInt(localStorage.getItem('bM'))||13; // Diyanet default
+let method=parseInt(localStorage.getItem('bM'))||13;
 let pT={};
 let vtab=lang; 
 let verse=null;
@@ -430,32 +459,86 @@ function calcPTLocal(date, la, lo, mth) {
   return {fajr: fmt(fj), sunrise: fmt(sr), dhuhr: fmt(dh), asr: fmt(as), maghrib: fmt(ss), isha: fmt(is)};
 }
 
-async function fetchDiyanetTimes(date, la, lo){
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const yyyy = date.getFullYear();
+async function fetchDiyanetTimes(date, la, lo) {
+  // Akıllı Mesafe Yakalama: Önce ada göre ara
+  let targetCenter = diyanetCenters.find(c => c.n === uCity);
+
+  // Ada göre bulamadıysak koordinatlara göre en yakın merkezi bul (Örn: Walendów -> Warszawa)
+  if (!targetCenter) {
+    let minDist = Infinity;
+    for (let c of diyanetCenters) {
+      let dist = Math.pow(la - c.la, 2) + Math.pow(lo - c.lo, 2);
+      if (dist < minDist) {
+        minDist = dist;
+        targetCenter = c;
+      }
+    }
+    // Eğer en yakın Diyanet merkezi 150km'den daha uzaksa GPS hatalı veya alakasız bir ülkededir, iptal et.
+    if (minDist > 2.0) {
+      targetCenter = null;
+    }
+  }
+
+  if (targetCenter) {
+    const did = targetCenter.did;
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const todayStr = `${dd}.${mm}.${yyyy}`;
+    
+    try {
+      console.log(`📡 ${uCity} için en yakın merkez (${targetCenter.n}, ID: ${did}) baz alınıyor...`);
+      
+      const targetUrl = `https://ezanvakti.emushaf.net/vakitler/${did}`;
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+      
+      const res = await fetch(proxyUrl);
+      if (res.ok) {
+        const proxyData = await res.json();
+        const data = JSON.parse(proxyData.contents); 
+        
+        const bugunVakit = data.find(d => d.MiladiTarihKisa === todayStr);
+        if (bugunVakit) {
+          console.log(`✅ ${todayStr} Diyanet takvimi (${targetCenter.n} üzerinden) başarıyla çekildi.`);
+          return {
+            fajr: bugunVakit.Imsak, sunrise: bugunVakit.Gunes, dhuhr: bugunVakit.Ogle, 
+            asr: bugunVakit.Ikindi, maghrib: bugunVakit.Aksam, isha: bugunVakit.Yatsi      
+          };
+        }
+      }
+    } catch(e) {
+      console.warn('⚠️ AllOrigins Proxy başarısız:', e.message);
+      try {
+        const proxy2Url = `https://api.codetabs.com/v1/proxy?quest=https://ezanvakti.emushaf.net/vakitler/${did}`;
+        const res2 = await fetch(proxy2Url);
+        if (res2.ok) {
+          const data = await res2.json();
+          const bugunVakit = data.find(d => d.MiladiTarihKisa === todayStr);
+          if (bugunVakit) {
+             return { fajr: bugunVakit.Imsak, sunrise: bugunVakit.Gunes, dhuhr: bugunVakit.Ogle, asr: bugunVakit.Ikindi, maghrib: bugunVakit.Aksam, isha: bugunVakit.Yatsi };
+          }
+        }
+      } catch(e2) {
+         console.warn('⚠️ CodeTabs Proxy de başarısız:', e2.message);
+      }
+    }
+  }
+
+  console.log(`❌ ${uCity} çevresinde Diyanet merkezi bulunamadı, Aladhan hesap kullanılıyor.`);
+  const ddA = String(date.getDate()).padStart(2, '0');
+  const mmA = String(date.getMonth() + 1).padStart(2, '0');
+  const yyyyA = date.getFullYear();
   
-  const url = `https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${la}&longitude=${lo}&method=13`;
-  
-  const response = await fetch(url);
+  const aladhanUrl = `https://api.aladhan.com/v1/timings/${ddA}-${mmA}-${yyyyA}?latitude=${la}&longitude=${lo}&method=13`;
+  const response = await fetch(aladhanUrl);
   const data = await response.json();
-  
-  if (data.code !== 200) throw new Error('API yanıt vermedi');
-  
   const t = data.data.timings;
-  return {
-    fajr: t.Fajr,
-    sunrise: t.Sunrise,
-    dhuhr: t.Dhuhr,
-    asr: t.Asr,
-    maghrib: t.Maghrib,
-    isha: t.Isha
-  };
+  return { fajr: t.Fajr, sunrise: t.Sunrise, dhuhr: t.Dhuhr, asr: t.Asr, maghrib: t.Maghrib, isha: t.Isha };
 }
 
 async function calcPT(date, la, lo, mth){
   if(mth === 13){
-    const cacheKey=`bPT_${date.toDateString()}_${la.toFixed(2)}_${lo.toFixed(2)}_13`;
+    const cacheKey=`bPT_v11_${date.toDateString()}_${la.toFixed(2)}_${lo.toFixed(2)}_13`;
     const cached=sessionStorage.getItem(cacheKey);
     if(cached) try{ return JSON.parse(cached); }catch(e){}
     try{
@@ -463,7 +546,7 @@ async function calcPT(date, la, lo, mth){
       sessionStorage.setItem(cacheKey, JSON.stringify(times));
       return times;
     }catch(e){
-      console.warn('API fetch başarısız, lokal fallback:', e.message);
+      console.warn('API fetch başarısız:', e.message);
       return calcPTLocal(date, la, lo, 3);
     }
   }
@@ -476,11 +559,8 @@ function qibla(la,lo){
   return(deg(Math.atan2(y,x))+360)%360;
 }
 
-// ── VERSE via Claude API ──
-const SESS=Date.now()^(Math.random()*0xFFFFFF|0);
-function seededRnd(s){let x=Math.sin(s+1)*99999;return x-Math.floor(x);}
-
-async function loadVerse(force=false){
+// ── VERSE (Çevrimdışı Sistem) ──
+function loadVerse(force=false){
   if(vLoading)return;
   const dayKey='bV_'+new Date().toDateString();
   if(!force){
@@ -490,59 +570,42 @@ async function loadVerse(force=false){
   vLoading=true;
   const t=T[lang];
   document.getElementById('vBody').innerHTML=`<div class="vloading"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span id="vLdTxt">${t.vl}</span></div>`;
-  const n=Math.floor(seededRnd(SESS)*365)+1;
-  const prompt=`Sen bir İslam alimi ve çevirmensin. 365 Kur'an ayeti koleksiyonundan ${n}. ayeti seç. Aşağıdaki JSON formatında döndür, başka HİÇBİR ŞEY yazma, sadece JSON:
-{"arabic":"Arapça metin","tr":"Türkçe meal","pl":"Lehçe çeviri","en":"İngilizce çeviri","de":"Almanca çeviri","ref":"Sure Adı Sure:Ayet"}
-Konu seçimi: iman, sabır, namaz, dua, şükür, rahmet, adalet, ahiret, Allah'ın isimleri ve sıfatları, cennet gibi konular. 365 farklı ayetten ${n}. tanesini seç.`;
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:prompt}]})
-    });
-    const d=await r.json();
-    const raw=d.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
-    const match=raw.match(/\{[\s\S]*\}/);
-    if(!match)throw new Error('no json');
-    const v=JSON.parse(match[0]);
-    if(v.arabic&&v.tr&&v.pl&&v.en&&v.ref){
-      verse=v;
-      if(!force)localStorage.setItem(dayKey,JSON.stringify(v));
-      renderVerse();
-    }else throw new Error('bad');
-  }catch(e){
-    const FB=[
-{arabic:'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ', tr:'Sabır ve namazla yardım isteyin. Şüphesiz namaz, Allah\'a saygı duyanlardan başkasına ağır gelir.', pl:'Szukajcie pomocy w cierpliwości i modlitwie. Jest to ciężkie, lecz nie dla pokornych.', en:'And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive.', de:'Sucht Hilfe in der Standhaftigkeit und im Gebet! Das ist freilich schwer, nur nicht für die Demütigen.', ref:'Bakara 2:45'},
-{arabic:'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا', tr:'Şüphesiz namaz, müminlere belirli vakitlerde farz kılınmıştır.', pl:'Zaprawdę modlitwa jest dla wierzących obowiązkiem wyznaczonym na określone czasy.', en:'Indeed, prayer has been decreed upon the believers a decree of specified times.', de:'Das Gebet ist für die Gläubigen eine Pflicht zu bestimmten Zeiten.', ref:'Nisa 4:103'},
-{arabic:'أَقِمِ الصَّلَاةَ لِذِكْرِي', tr:'Beni anmak için namaz kıl.', pl:'Odprawiaj modlitwę dla upamiętnienia Mnie.', en:'Establish prayer for My remembrance.', de:'Verrichte das Gebet zu Meinem Gedenken.', ref:'Taha 20:14'},
-{arabic:'قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ', tr:'Kesinlikle kurtuluşa erdiler o müminler ki namazlarında derin bir huşu içindedirler.', pl:'Zaiste zbawieni są wierzący, którzy w swojej modlitwie są pokorni.', en:'Certainly will the believers have succeeded: They who are during their prayer humbly submissive.', de:'Den Gläubigen wird es ergehen, die in ihrem Gebet demütig sind.', ref:'Müminun 23:1-2'},
-{arabic:'وَلَذِكْرُ اللَّهِ أَكْبَرُ', tr:'Allah\'ı zikretmek elbette en büyük ibadettir.', pl:'Zaiste wspominanie Allaha jest największe.', en:'And the remembrance of Allah is greater.', de:'Und das Gedenken Allahs ist gewiss am größten.', ref:'Ankebut 29:45'},
-{arabic:'إِنَّ مَعَ الْعُسْرِ يُسْرًا', tr:'Şüphesiz her zorlukla beraber bir kolaylık vardır.', pl:'Zaprawdę z trudnością przychodzi ułatwienie.', en:'Indeed, with hardship [will be] ease.', de:'Gewiss, mit der Erschwernis ist Erleichterung.', ref:'İnşirah 94:6'},
-{arabic:'وَقُولُوا لِلنَّاسِ حُسْنًا', tr:'İnsanlara güzel söz söyleyin.', pl:'Mówcie do ludzi piękne słowa.', en:'And speak to people good [words].', de:'Und sprecht zu den Menschen Gutes.', ref:'Bakara 2:83'},
-{arabic:'لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ', tr:'Eğer şükrederseniz, elbette size (nimetimi) artırırım.', pl:'Jeśli będziecie wdzięczni, Ja z pewnością pomnożę wam Moje dobrodziejstwa.', en:'If you are grateful, I will surely increase you [in favor].', de:'Wenn ihr dankbar seid, werde Ich euch ganz gewiss noch mehr geben.', ref:'İbrahim 14:7'},
-{arabic:'فَاصْبِرْ صَبْرًا جَمِيلًا', tr:'Şimdi sen güzelce sabret.', pl:'Bądź więc cierpliwy cierpliwością piękną.', en:'So be patient with gracious patience.', de:'So sei standhaft mit schöner Standhaftigkeit.', ref:'Mearic 70:5'},
-{arabic:'ادْعُونِي أَسْتَجِبْ لَكُمْ', tr:'Bana dua edin, size icabet edeyim.', pl:'Wzywajcie Mnie, a Ja wam odpowiem.', en:'Call upon Me; I will respond to you.', de:'Ruft Mich an, so erhöre Ich euch.', ref:'Mü’min 40:60'},
-{arabic:'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', tr:'Şüphesiz Allah sabredenlerle beraberdir.', pl:'Zaprawdę Allah jest z cierpliwymi.', en:'Indeed, Allah is with the patient.', de:'Gewiss, Allah ist mit den Standhaften.', ref:'Bakara 2:153'},
-{arabic:'وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ', tr:'Azık edinin; kuşkusuz azığın en hayırlısı takvadır.', pl:'Bierzcie ze sobą zapasy, a najlepszym zapasem jest bogobojność.', en:'And take provisions, but indeed, the best provision is fear of Allah.', de:'Und versorgt euch mit Reisevorrat, doch der beste Vorrat ist die Gottesfurcht.', ref:'Bakara 2:197'},
-{arabic:'وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ', tr:'Kendiniz için önceden ne iyilik gönderirseniz, onu Allah katında bulursunuz.', pl:'Cokolwiek poślecie przodem z dobra dla was samych, znajdziecie to u Allaha.', en:'And whatever good you put forward for yourselves - you will find it with Allah.', de:'Und was ihr für euch selbst an Gutem vorausschickt, werdet ihr bei Allah wiederfinden.', ref:'Bakara 2:110'},
-{arabic:'إِنَّ اللَّهَ يُحِبُّ الْمُحْسِنِينَ', tr:'Şüphesiz Allah, iyilik yapanları sever.', pl:'Zaprawdę Allah miłuje tych, którzy czynią dobro.', en:'Indeed, Allah loves the doers of good.', de:'Gewiss, Allah liebt die Gutes Tuenden.', ref:'Bakara 2:195'},
-{arabic:'وَلَا تَمْشِ فِي الْأَرْضِ مَرَحًا', tr:'Yeryüzünde böbürlenerek yürüme.', pl:'Nie chodź po ziemi z dumą i wyniosłością.', en:'And do not walk upon the earth exultantly.', de:'Und wandle nicht hochmütig auf der Erde.', ref:'İsra 17:37'},
-{arabic:'قُلِ اللَّهُ خَالِقُ كُلِّ شَيْءٍ', tr:'De ki: Her şeyin yaratıcısı Allah’tır.', pl:'Powiedz: Allah jest Stwórcą wszystkiego.', en:'Say, "Allah is the Creator of all things."', de:'Sag: Allah ist der Schöpfer von allem.', ref:'Rad 13:16'},
-{arabic:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', tr:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver.', pl:'Panie nasz! Daj nam dobro na tym świecie i dobro w życiu ostatecznym.', en:'Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good.', de:'Unser Herr, gib uns im Diesseits Gutes und im Jenseits Gutes.', ref:'Bakara 2:201'},
-{arabic:'إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ', tr:'Şüphesiz Allah, adaleti ve iyiliği emreder.', pl:'Zaprawdę Allah nakazuje sprawiedliwość i czynienie dobra.', en:'Indeed, Allah orders justice and good conduct.', de:'Allah gebietet Gerechtigkeit und gütiges Handeln.', ref:'Nahl 16:90'},
-{arabic:'فَاسْتَبِقُوا الْخَيْرَاتِ', tr:'Hayırlı işlerde birbirinizle yarışın.', pl:'Ścigajcie się w czynieniu dobrych dzieł.', en:'So race to [all that is] good.', de:'So wettet um die guten Dinge.', ref:'Bakara 2:148'},
-{arabic:'وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ', tr:'Nerede olursanız olun, O sizinle beraberdir.', pl:'On jest z wami, gdziekolwiek byście byli.', en:'And He is with you wherever you are.', de:'Und Er ist mit euch, wo immer ihr auch seid.', ref:'Hadid 57:4'},
-{arabic:'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', tr:'Kim Allah’a tevekkül ederse, O kendisine yeter.', pl:'Kto ufa Allahowi, temu On wystarczy.', en:'And whoever relies upon Allah - then He is sufficient for him.', de:'Und wer auf Allah vertraut, dem ist Er Genüge.', ref:'Talak 65:3'},
-{arabic:'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', tr:'Allah kimseye gücünün yettiğinden fazlasını yüklemez.', pl:'Allah nie nakłada na duszę niczego więcej niż to, co ona może udźwignąć.', en:'Allah does not charge a soul except [with that within] its capacity.', de:'Allah erlegt keiner Seele mehr auf, als sie zu leisten vermag.', ref:'Bakara 2:286'},
-{arabic:'فَاذْكُرُونِي أَذْكُرْكُمْ', tr:'Öyleyse beni anın ki, ben de sizi anayım.', pl:'Pamiętajcie więc o Mnie, a Ja będę pamiętał o was.', en:'So remember Me; I will remember you.', de:'So gedenkt Meiner, damit Ich eurer gedenke.', ref:'Bakara 2:152'},
-{arabic:'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', tr:'Bilesiniz ki kalpler ancak Allah’ı anmakla huzur bulur.', pl:'Zaprawdę tylko w wspominaniu Allaha serca znajdują spokój.', en:'Unquestionably, by the remembrance of Allah hearts are assured.', de:'Aber ja, im Gedenken Allahs finden die Herzen Ruhe.', ref:'Rad 13:28'},
-{arabic:'إِنَّ اللَّهَ بَصِيرٌ بِالْعِبَادِ', tr:'Şüphesiz Allah, kullarını hakkıyla görendir.', pl:'Zaprawdę Allah widzi doskonale Swoje sługi.', en:'Indeed, Allah is Seeing of [His] servants.', de:'Gewiss, Allah sieht die Diener wohl.', ref:'Mü’min 40:44'},    
-
-    ];
-    verse=FB[n%FB.length];
+  
+  const FB=[
+    {arabic:'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ', tr:'Sabır ve namazla yardım isteyin. Şüphesiz namaz, Allah\'a saygı duyanlardan başkasına ağır gelir.', pl:'Szukajcie pomocy w cierpliwości i modlitwie. Jest to ciężkie, lecz nie dla pokornych.', en:'And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive.', de:'Sucht Hilfe in der Standhaftigkeit und im Gebet! Das ist freilich schwer, nur nicht für die Demütigen.', ref:'Bakara 2:45'},
+    {arabic:'إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا', tr:'Şüphesiz namaz, müminlere belirli vakitlerde farz kılınmıştır.', pl:'Zaprawdę modlitwa jest dla wierzących obowiązkiem wyznaczonym na określone czasy.', en:'Indeed, prayer has been decreed upon the believers a decree of specified times.', de:'Das Gebet ist für die Gläubigen eine Pflicht zu bestimmten Zeiten.', ref:'Nisa 4:103'},
+    {arabic:'أَقِمِ الصَّلَاةَ لِذِكْرِي', tr:'Beni anmak için namaz kıl.', pl:'Odprawiaj modlitwę dla upamiętnienia Mnie.', en:'Establish prayer for My remembrance.', de:'Verrichte das Gebet zu Meinem Gedenken.', ref:'Taha 20:14'},
+    {arabic:'قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ', tr:'Kesinlikle kurtuluşa erdiler o müminler ki namazlarında derin bir huşu içindedirler.', pl:'Zaiste zbawieni są wierzący, którzy w swojej modlitwie są pokorni.', en:'Certainly will the believers have succeeded: They who are during their prayer humbly submissive.', de:'Den Gläubigen wird es ergehen, die in ihrem Gebet demütig sind.', ref:'Müminun 23:1-2'},
+    {arabic:'وَلَذِكْرُ اللَّهِ أَكْبَرُ', tr:'Allah\'ı zikretmek elbette en büyük ibadettir.', pl:'Zaiste wspominanie Allaha jest największe.', en:'And the remembrance of Allah is greater.', de:'Und das Gedenken Allahs ist gewiss am größten.', ref:'Ankebut 29:45'},
+    {arabic:'إِنَّ مَعَ الْعُسْرِ يُسْرًا', tr:'Şüphesiz her zorlukla beraber bir kolaylık vardır.', pl:'Zaprawdę z trudnością przychodzi ułatwienie.', en:'Indeed, with hardship [will be] ease.', de:'Gewiss, mit der Erschwernis ist Erleichterung.', ref:'İnşirah 94:6'},
+    {arabic:'وَقُولُوا لِلنَّاسِ حُسْنًا', tr:'İnsanlara güzel söz söyleyin.', pl:'Mówcie do ludzi piękne słowa.', en:'And speak to people good [words].', de:'Und sprecht zu den Menschen Gutes.', ref:'Bakara 2:83'},
+    {arabic:'لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ', tr:'Eğer şükrederseniz, elbette size (nimetimi) artırırım.', pl:'Jeśli będziecie wdzięczni, Ja z pewnością pomnożę wam Moje dobrodziejstwa.', en:'If you are grateful, I will surely increase you [in favor].', de:'Wenn ihr dankbar seid, werde Ich euch ganz gewiss noch mehr geben.', ref:'İbrahim 14:7'},
+    {arabic:'فَاصْبِرْ صَبْرًا جَمِيلًا', tr:'Şimdi sen güzelce sabret.', pl:'Bądź więc cierpliwy cierpliwością piękną.', en:'So be patient with gracious patience.', de:'So sei standhaft mit schöner Standhaftigkeit.', ref:'Mearic 70:5'},
+    {arabic:'ادْعُونِي أَسْتَجِبْ لَكُمْ', tr:'Bana dua edin, size icabet edeyim.', pl:'Wzywajcie Mnie, a Ja wam odpowiem.', en:'Call upon Me; I will respond to you.', de:'Ruft Mich an, so erhöre Ich euch.', ref:'Mü’min 40:60'},
+    {arabic:'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', tr:'Şüphesiz Allah sabredenlerle beraberdir.', pl:'Zaprawdę Allah jest z cierpliwymi.', en:'Indeed, Allah is with the patient.', de:'Gewiss, Allah ist mit den Standhaften.', ref:'Bakara 2:153'},
+    {arabic:'وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ', tr:'Azık edinin; kuşkusuz azığın en hayırlısı takvadır.', pl:'Bierzcie ze sobą zapasy, a najlepszym zapasem jest bogobojność.', en:'And take provisions, but indeed, the best provision is fear of Allah.', de:'Und versorgt euch mit Reisevorrat, doch der beste Vorrat ist die Gottesfurcht.', ref:'Bakara 2:197'},
+    {arabic:'وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ', tr:'Kendiniz için önceden ne iyilik gönderirseniz, onu Allah katında bulursunuz.', pl:'Cokolwiek poślecie przodem z dobra dla was samych, znajdziecie to u Allaha.', en:'And whatever good you put forward for yourselves - you will find it with Allah.', de:'Und was ihr für euch selbst an Gutem vorausschickt, werdet ihr bei Allah wiederfinden.', ref:'Bakara 2:110'},
+    {arabic:'إِنَّ اللَّهَ يُحِبُّ الْمُحْسِنِينَ', tr:'Şüphesiz Allah, iyilik yapanları sever.', pl:'Zaprawdę Allah miłuje tych, którzy czynią dobro.', en:'Indeed, Allah loves the doers of good.', de:'Gewiss, Allah liebt die Gutes Tuenden.', ref:'Bakara 2:195'},
+    {arabic:'وَلَا تَمْشِ فِي الْأَرْضِ مَرَحًا', tr:'Yeryüzünde böbürlenerek yürüme.', pl:'Nie chodź po ziemi z dumą i wyniosłością.', en:'And do not walk upon the earth exultantly.', de:'Und wandle nicht hochmütig auf der Erde.', ref:'İsra 17:37'},
+    {arabic:'قُلِ اللَّهُ خَالِقُ كُلِّ شَيْءٍ', tr:'De ki: Her şeyin yaratıcısı Allah’tır.', pl:'Powiedz: Allah jest Stwórcą wszystkiego.', en:'Say, "Allah is the Creator of all things."', de:'Sag: Allah ist der Schöpfer von allem.', ref:'Rad 13:16'},
+    {arabic:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', tr:'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver.', pl:'Panie nasz! Daj nam dobro na tym świecie i dobro w życiu ostatecznym.', en:'Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good.', de:'Unser Herr, gib uns im Diesseits Gutes und im Jenseits Gutes.', ref:'Bakara 2:201'},
+    {arabic:'إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ', tr:'Şüphesiz Allah, adaleti ve iyiliği emreder.', pl:'Zaprawdę Allah nakazuje sprawiedliwość i czynienie dobra.', en:'Indeed, Allah orders justice and good conduct.', de:'Allah gebietet Gerechtigkeit und gütiges Handeln.', ref:'Nahl 16:90'},
+    {arabic:'فَاسْتَبِقُوا الْخَيْرَاتِ', tr:'Hayırlı işlerde birbirinizle yarışın.', pl:'Ścigajcie się w czynieniu dobrych dzieł.', en:'So race to [all that is] good.', de:'So wettet um die guten Dinge.', ref:'Bakara 2:148'},
+    {arabic:'وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ', tr:'Nerede olursanız olun, O sizinle beraberdir.', pl:'On jest z wami, gdziekolwiek byście byli.', en:'And He is with you wherever you are.', de:'Und Er ist mit euch, wo immer ihr auch seid.', ref:'Hadid 57:4'},
+    {arabic:'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', tr:'Kim Allah’a tevekkül ederse, O kendisine yeter.', pl:'Kto ufa Allahowi, temu On wystarczy.', en:'And whoever relies upon Allah - then He is sufficient for him.', de:'Und wer auf Allah vertraut, dem ist Er Genüge.', ref:'Talak 65:3'},
+    {arabic:'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', tr:'Allah kimseye gücünün yettiğinden fazlasını yüklemez.', pl:'Allah nie nakłada na duszę niczego więcej niż to, co ona może udźwignąć.', en:'Allah does not charge a soul except [with that within] its capacity.', de:'Allah erlegt keiner Seele mehr auf, als sie zu leisten vermag.', ref:'Bakara 2:286'},
+    {arabic:'فَاذْكُرُونِي أَذْكُرْكُمْ', tr:'Öyleyse beni anın ki, ben de sizi anayım.', pl:'Pamiętajcie więc o Mnie, a Ja będę pamiętał o was.', en:'So remember Me; I will remember you.', de:'So gedenkt Meiner, damit Ich eurer gedenke.', ref:'Bakara 2:152'},
+    {arabic:'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', tr:'Bilesiniz ki kalpler ancak Allah’ı anmakla huzur bulur.', pl:'Zaprawdę tylko w wspominaniu Allaha serca znajdują spokój.', en:'Unquestionably, by the remembrance of Allah hearts are assured.', de:'Aber ja, im Gedenken Allahs finden die Herzen Ruhe.', ref:'Rad 13:28'},
+    {arabic:'إِنَّ اللَّهَ بَصِيرٌ بِالْعِبَادِ', tr:'Şüphesiz Allah, kullarını hakkıyla görendir.', pl:'Zaprawdę Allah widzi doskonale Swoje sługi.', en:'Indeed, Allah is Seeing of [His] servants.', de:'Gewiss, Allah sieht die Diener wohl.', ref:'Mü’min 40:44'}    
+  ];
+  
+  setTimeout(() => {
+    const n = Math.floor(Math.random() * FB.length);
+    verse = FB[n];
+    if(!force) localStorage.setItem(dayKey,JSON.stringify(verse));
     renderVerse();
-  }
-  vLoading=false;
+    vLoading=false;
+  }, 400);
 }
 
 function renderVerse(){
