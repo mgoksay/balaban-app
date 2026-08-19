@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#0d1b2a">
 <title>Balaban Namaz Vakti</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- AÇIK KAYNAK HARİTA KODLARI BURAYA (STYLE ETİKETİNİN ÜZERİNE) GELECEK -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -247,22 +251,78 @@ select option {
 .m-share { margin-top:28px; background:#1a2744; color:var(--gold); border:1px solid var(--gold); padding:10px 30px; border-radius:20px; font-weight:800; font-size:13px; letter-spacing:1px; font-family:'Nunito', sans-serif; cursor:pointer; transition:transform 0.2s; z-index:2; }
 .m-share:active { transform:scale(0.95); }
 
-/* CANLI PUSULA VE AR EKRANI CSS KODLARI */
+/* CANLI PUSULA VE HARİTA EKRANI CSS KODLARI */
 .c-movl { position:fixed; inset:0; background:rgba(13,27,42,0.85); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); z-index:400; display:flex; flex-direction:column; align-items:center; opacity:0; pointer-events:none; transition:opacity .3s; padding:calc(var(--st) + 20px) 20px 20px; overflow:hidden; }
 .c-movl.open { opacity:1; pointer-events:all; }
-#arVideo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0; transition:opacity 0.5s ease; pointer-events:none; }
-.c-movl.ar-on #arVideo { opacity:1; }
-.c-movl.ar-on { background:#000; }
+
+/* Harita Arka Planı (Sabit, Tam Ekran) */
+#qiblaMapBg { 
+    position: absolute; 
+    top: -50%; left: -50%; 
+    width: 200%; height: 200%; 
+    z-index: 0; opacity: 0; 
+    transition: opacity 0.5s ease;
+    transform-origin: center center;
+}
+
+/* Harita açıkken uyarı yazısını daha görünür yap */
+.c-movl.map-on .c-warn { 
+    color: #f5e505; 
+    font-weight: 800; 
+    text-shadow: 0px 1px 4px rgba(0,0,0,1), 0px 0px 8px rgba(0,0,0,1); 
+}
+
+.c-movl.map-on .c-dial-wrap {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.c-info.qibla-success {
+    background: #e8f5e9 !important;
+    border-color: #2e7d32 !important;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+.qibla-success .c-info-val, .qibla-success .c-turn, .qibla-success .c-info-lbl {
+    color: #2e7d32 !important;
+}
+.qibla-success .c-turn {
+    text-shadow: none;
+    font-size: 22px;
+}
+.c-movl.map-on #qiblaMapBg { opacity:1; }
+.c-movl.map-on { background:#000; }
+
 .c-hdr, .c-turn, .c-warn, .c-dial-wrap, .c-info { z-index:2; position:relative; }
 .c-hdr { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 .c-back { font-size:24px; color:var(--gold); cursor:pointer; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:var(--surf); border-radius:50%; border:0.5px solid var(--br); transition:all 0.3s;}
-.c-movl.ar-on .c-back { background:rgba(22,32,50,0.6); backdrop-filter:blur(5px); }
 .c-title { font-family:'Amiri',serif; font-size:22px; color:var(--gold); font-weight:700;}
-.ar-btn { background:var(--surf); border:0.5px solid var(--br); color:var(--tx); font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; border-radius:14px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s; }
-.c-movl.ar-on .ar-btn { background:var(--gold); color:#000; border-color:var(--gold); }
+.ar-btn { 
+    background: rgba(201, 168, 76, 0.15); 
+    border: 1px solid var(--gold); 
+    color: var(--gold); 
+    font-family: 'Nunito', sans-serif; 
+    font-weight: 800; 
+    font-size: 14px; 
+    border-radius: 14px; 
+    width: 44px; 
+    height: 44px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    box-shadow: 0 0 10px rgba(201, 168, 76, 0.3); /* Butonun etrafına altın sarısı bir parlama ekler */
+}
+
+/* Harita Açıldığında Pusula Arayüzünün Tamamen Şeffaflaşması (SENİN KODUN) */
+.c-movl.map-on .c-back { background:rgba(22,32,50,0.8); border:none; }
+.c-movl.map-on .ar-btn { background:var(--gold); color:#000; border:none; }
+.c-movl.map-on .c-dial { background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; border-color:transparent; box-shadow:none; pointer-events:none; }
+.c-movl.map-on .c-info { background:rgba(13,27,42,0.8); backdrop-filter:blur(8px); border:none; }
+.c-movl.map-on .c-e, .c-movl.map-on .c-s, .c-movl.map-on .c-w, .c-movl.map-on .c-tick { text-shadow: 0 0 4px #000, 0 0 8px #000; }
+
 .c-dial-wrap { width:280px; height:280px; position:relative; margin:20px 0 40px; }
 .c-dial { width:100%; height:100%; border:3px solid var(--surf); border-radius:50%; position:absolute; box-shadow:0 10px 30px rgba(0,0,0,0.5); background:radial-gradient(circle, var(--card) 0%, rgba(13,27,42,0.5) 100%); transition:background 0.5s ease, border-color 0.5s ease;}
-.c-movl.ar-on .c-dial { background:rgba(22,32,50,0.25); backdrop-filter:blur(4px); border-color:rgba(201,168,76,0.5); }
 .c-tick { position:absolute; top:10px; left:50%; transform:translateX(-50%); color:#e74c3c; font-weight:900; font-size:20px;}
 .c-e { top:50%; right:15px; transform:translateY(-50%); color:var(--mx); font-weight:700; position:absolute;}
 .c-s { bottom:10px; left:50%; transform:translateX(-50%); color:var(--mx); font-weight:700; position:absolute;}
@@ -271,7 +331,6 @@ select option {
 .c-k-line { position:absolute; bottom:50%; left:50%; width:2px; height:45%; background:linear-gradient(to top, transparent, var(--gold)); transform:translateX(-50%); transform-origin:bottom center; }
 .c-kaaba { font-size:34px; position:absolute; top:-35px; left:-17px; filter:drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
 .c-info { background:var(--card); border:0.5px solid var(--br); padding:16px 24px; border-radius:20px; width:100%; text-align:center; display:flex; justify-content:space-between; margin-top:auto; transition:all 0.5s ease;}
-.c-movl.ar-on .c-info { background:rgba(22,32,50,0.6); backdrop-filter:blur(8px); }
 .c-info-box { display:flex; flex-direction:column; gap:4px; }
 .c-info-lbl { font-size:10px; color:var(--mx); text-transform:uppercase; letter-spacing:1px;}
 .c-info-val { font-size:20px; color:var(--tx); font-weight:700; font-variant-numeric:tabular-nums;}
@@ -436,16 +495,20 @@ select option {
             <option id="tOptA1" value="alert1">Uyarı 1</option>
             <option id="tOptA2" value="alert2">Uyarı 2</option>
             <option id="tOptA3" value="alert3">Uyarı 3</option>
+            <option id="tOptA4" value="alert4">Uyarı 4</option>
           </select>
           <button id="testAlertBtn" onclick="testAzanToggle(document.getElementById('testAlertSel').value, 'testAlertBtn')" style="background:var(--surf); color:var(--gl); border:none; border-left:0.5px solid var(--br); padding:8px 15px; cursor:pointer; font-size:12px; font-weight:700;">▶</button>
         </div>
 
         <div style="display:flex; align-items:center; background:var(--surf); border:0.5px solid var(--br); border-radius:10px; overflow:hidden;">
           <span style="padding-left:10px; font-size:14px;">🕌</span>
-          <select id="testAzanSel" class="sel" style="border:none; background:transparent; padding:8px 5px; outline:none; color:var(--gl); font-weight:700;">
+<select id="testAzanSel" class="sel" style="border:none; background:transparent; padding:8px 5px; outline:none; color:var(--gl); font-weight:700;">
             <option id="tOptZ1" value="azan1">Ezan 1</option>
-            <option id="tOptZ2" value="azan2">Ezan 2</option>
-            <option id="tOptZ3" value="azan3">Ezan 3</option>
+            <option id="tOptSabah" value="sabah">Sabah Ezanı</option>
+            <option id="tOptOgle" value="ogle">Öğle Ezanı</option>
+            <option id="tOptIkindi" value="ikindi">İkindi Ezanı</option>
+            <option id="tOptAksam" value="aksam">Akşam Ezanı</option>
+            <option id="tOptYatsi" value="yatsi">Yatsı Ezanı</option>
           </select>
 <button id="testAzanBtn" onclick="testAzanToggle(document.getElementById('testAzanSel').value, 'testAzanBtn')" style="background:var(--surf); color:var(--gl); border:none; border-left:0.5px solid var(--br); padding:8px 15px; cursor:pointer; font-size:12px; font-weight:700;">▶</button>
         </div>
@@ -467,7 +530,7 @@ select option {
     </div>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
-      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.4.4</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.5.0</div>
     </div>
   </div>
 </div>
@@ -497,12 +560,14 @@ select option {
 </div>
 
 <div class="c-movl" id="compassMov">
-  <video id="arVideo" autoplay playsinline></video>
+  <!-- Kamera yerine Harita arka planı eklendi -->
+  <div id="qiblaMapBg"></div>
   
   <div class="c-hdr">
     <div class="c-back" onclick="closeCompass()">✕</div>
     <div class="c-title" id="cTitle">Kıble Pusulası</div>
-    <div class="ar-btn" onclick="toggleAR()" id="arBtn" title="AR Modu">AR</div>
+    <!-- AR butonu Harita butonuna çevrildi -->
+    <div class="ar-btn" onclick="toggleMap()" id="arBtn" title="Harita Modu" style="font-size: 11px;">Harita</div>
   </div>
   
   <div class="c-turn" id="cTurn">--</div>
@@ -520,14 +585,19 @@ select option {
     </div>
   </div>
 
-  <div class="c-info">
+<div class="c-info" id="cInfoBox">
     <div class="c-info-box" style="text-align:left;">
-      <div class="c-info-lbl" id="cLblQA">Kıble Yönü</div>
-      <div class="c-info-val" id="cQA">--°</div>
+      <div class="c-info-lbl" id="cLblQA">Kıbleye</div>
+      <div class="c-info-val" id="cQA" style="font-size: 16px;">--° sola</div>
     </div>
+    
+    <div class="c-info-box" style="text-align:center; justify-content:center;">
+        <div class="c-turn" id="cTurn" style="margin: 0;">--</div>
+    </div>
+
     <div class="c-info-box" style="text-align:right">
-      <div class="c-info-lbl" id="cLblHA">Şu anki Yön</div>
-      <div class="c-info-val" id="cHA">--°</div>
+      <div class="c-info-lbl" id="cLblHA">Kâbe'ye</div>
+      <div class="c-info-val" id="cHA">-- km</div>
     </div>
   </div>
 </div>
@@ -1609,7 +1679,7 @@ const T={
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler (Arka Plan)',
       thL:'Ayet/Hadis Teması (Koyu)',stPreAlarms: 'Vakitlerden Önce Uyarılar', minsBefore: 'dk. önce', sysSound: 'Sistem Sesi',      
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir', mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
-      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.4.4', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.5.0', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et', ns:'Yeni konum aranacak...', sg:'Öneri: ',
       cp:'Kıble Pusulası', tl:'← Sola dönün', tr:'Sağa dönün →', tp:'🕋 Harika! Kıbleye döndünüz', ch:'Şu anki Yön', cw:'Telefonu yere paralel tutun. Yön hatalıysa cihazınızla havada 8 çizin.',
@@ -1627,7 +1697,7 @@ const T={
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       thL:'Motyw Wersetu (Ciemny)',stPreAlarms: 'Alerty Przed Czasem', minsBefore: 'min przed', sysSound: 'Dźwięk Systemu',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień', mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
-      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.4.4', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.5.0', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',
       volLbl:'Głośność',testLbl:'Test Dźwięku', ns:'Wyszuka nową lokalizację...', sg:'Sugestia: ',
       cp:'Kompas Qibla', tl:'← Skręć w lewo', tr:'Skręć w prawo →', tp:'🕋 Jesteś na Qibli!', ch:'Obecny kierunek', cw:'Trzymaj telefon płasko. Jeśli kierunek jest błędny, zrób ósemkę w powietrzu.',
@@ -1645,7 +1715,7 @@ const T={
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       thL:'Verse Theme (Dark)',stPreAlarms: 'Pre-Prayer Alerts', minsBefore: 'mins before', sysSound: 'System Sound',
       ll:'Language / Dil',lol:'Location',chg:'Change', mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
-      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.4.4', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.5.0', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
       sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',
       volLbl:'Volume',testLbl:'Test Sound', ns:'Will search new location...', sg:'Suggestion: ',
       cp:'Qibla Compass', tl:'← Turn Left', tr:'Turn Right →', tp:'🕋 You are on Qibla!', ch:'Current Heading', cw:'Hold phone flat. If direction is wrong, draw an 8 in the air.',
@@ -1663,7 +1733,7 @@ const T={
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       thL:'Vers-Design (Dunkel)',stPreAlarms: 'Vorab-Warnungen', minsBefore: 'Min. vorher', sysSound: 'Systemton',
       ll:'Sprache',lol:'Standort',chg:'Ändern', mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
-      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.4.4', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.5.0', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
       sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',
       volLbl:'Lautstärke',testLbl:'Ton testen', ns:'Neuer Standort wird gesucht...', sg:'Vorschlag: ',
       cp:'Qibla Kompass', tl:'← Nach links drehen', tr:'Nach rechts drehen →', tp:'🕋 Sie sind auf Qibla!', ch:'Aktuelle Richtung', cw:'Halten Sie das Telefon flach. Wenn die Richtung falsch ist, zeichnen Sie eine 8.',
@@ -1681,7 +1751,7 @@ const T={
       tw:'Время на эту неделю',st:'Настройки',ml:'Метод расчета',nl:'Уведомления',
       thL:'Тема Аята (Темная)',stPreAlarms: 'Предварительные оповещения', minsBefore: 'мин до', sysSound: 'Системный звук',
       ll:'Язык / Language',lol:'Местоположение',chg:'Изменить', mt:'Выберите место',ms1:'Популярных городов:',ms2:'Введите название города:',
-      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.4.4', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
+      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.5.0', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
       sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',
       volLbl:'Громкость',testLbl:'Проверка звука', ns:'Будет найден новый адрес...', sg:'Предложение: ',
       cp:'Компас Киблы', tl:'← Поверните налево', tr:'Поверните направо →', tp:'🕋 Вы на Кибле!', ch:'Текущее направление', cw:'Держите телефон ровно. Если направление неверное, нарисуйте в воздухе 8.',
@@ -1699,7 +1769,7 @@ const T={
       tw:'أوقات هذا الأسبوع',st:'الإعدادات',ml:'طريقة الحساب',nl:'الإشعارات (الخلفية)',
       thL:'الآية (داكن)',stPreAlarms: 'تنبيهات قبل الوقت', minsBefore: 'دقيقة قبل', sysSound: 'صوت النظام',
       ll:'اللغة / Language',lol:'الموقع',chg:'تغيير', mt:'اختر الموقع',ms1:'المدن الشهيرة:',ms2:'أدخل اسم المدينة:',
-      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.4.4', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
+      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.5.0', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
       sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',
       volLbl:'مستوى الصوت',testLbl:'اختبار الصوت', ns:'سيتم البحث عن موقع جديد...', sg:'اقتراح: ',
       cp:'بوصلة القبلة', tl:'← اتجه يساراً', tr:'اتجه يميناً →', tp:'🕋 أنت في اتجاه القبلة!', ch:'الاتجاه الحالي', cw:'احمل الهاتف بشكل مسطح. إذا كان الاتجاه خاطئًا، ارسم رقم 8 في الهواء.',
@@ -1824,7 +1894,7 @@ let globalDid = null;
 let isDiyanetDown = false; 
 setInterval(() => { isDiyanetDown = false; globalMonthData = null; }, 3600000);
 
-let defaultPrefs = {fajr:'off', sunrise:'alert1', dhuhr:'alert2', asr:'alert3', maghrib:'azan1', isha:'azan2'};
+let defaultPrefs = {fajr:'off', sunrise:'alert4', dhuhr:'ogle', asr:'ikindi', maghrib:'aksam', isha:'yatsi'};
 let preSoundPrefs = {
     fajr: { on: false, min: 15, snd: 'alert1' },
     sunrise: { on: false, min: 15, snd: 'alert1' },
@@ -1977,11 +2047,14 @@ if (isNative && LocalNotifications) {
             try {
                 await LocalNotifications.requestPermissions();
                 await LocalNotifications.createChannel({ id: 'kanal_azan1_v3', name: 'Ezan 1', sound: 'azan1.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_azan2_v3', name: 'Ezan 2', sound: 'azan2.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_azan3_v3', name: 'Ezan 3', sound: 'azan3.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_sabah_v3', name: 'Sabah Ezanı', sound: 'sabah.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ogle_v3', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v3', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_aksam_v3', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v3', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert2_v3', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert3_v3', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert4_v3', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_beep_v3', name: 'Bip Sesi', sound: 'beep.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_system_v3', name: 'Sistem Sesi', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_vibrate_v3', name: 'Sadece Titreşim', sound: 'sessiz.mp3', importance: 5, visibility: 1, vibration: true });
@@ -2361,11 +2434,15 @@ async function scheduleAndroidNotifications(times) {
 
         let cId = 'kanal_beep_v3';
         if (pref === 'azan1') cId = 'kanal_azan1_v3';
-        else if (pref === 'azan2') cId = 'kanal_azan2_v3';
-        else if (pref === 'azan3') cId = 'kanal_azan3_v3';
+        else if (pref === 'sabah') cId = 'kanal_sabah_v3';
+        else if (pref === 'ogle') cId = 'kanal_ogle_v3';
+        else if (pref === 'ikindi') cId = 'kanal_ikindi_v3';
+        else if (pref === 'aksam') cId = 'kanal_aksam_v3';
+        else if (pref === 'yatsi') cId = 'kanal_yatsi_v3';
         else if (pref === 'alert1') cId = 'kanal_alert1_v3'; 
         else if (pref === 'alert2') cId = 'kanal_alert2_v3'; 
-        else if (pref === 'alert3') cId = 'kanal_alert3_v3'; 
+        else if (pref === 'alert3') cId = 'kanal_alert3_v3';
+        else if (pref === 'alert4') cId = 'kanal_alert4_v3'; 
         else if (pref === 'system') cId = 'kanal_system_v3';
         else if (pref === 'vibrate') cId = 'kanal_vibrate_v3'; 
 
@@ -2395,10 +2472,14 @@ async function scheduleAndroidNotifications(times) {
             else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v3';
             else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v3';
             else if (prePref.snd === 'system') cId = 'kanal_system_v3'; 
-            else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v3'; 
+            else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v3';
+            else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v3'; 
             else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v3'; 
-            else if (prePref.snd === 'azan2') cId = 'kanal_azan2_v3'; 
-            else if (prePref.snd === 'azan3') cId = 'kanal_azan3_v3'; 
+            else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v3'; 
+            else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v3'; 
+            else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v3'; 
+            else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v3'; 
+            else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v3';
             
             scheduled.push({ id: i + 10, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId });
         }
@@ -2455,9 +2536,13 @@ renderPreAlarmsUI(); // Dil değiştiğinde içeriklerin de çevrilmesi için ye
   if(document.getElementById('tOptA1')) document.getElementById('tOptA1').textContent = t.sA1;
   if(document.getElementById('tOptA2')) document.getElementById('tOptA2').textContent = t.sA2;
   if(document.getElementById('tOptA3')) document.getElementById('tOptA3').textContent = t.sA3;
-  if(document.getElementById('tOptZ1')) document.getElementById('tOptZ1').textContent = t.sAzan + ' 1';
-  if(document.getElementById('tOptZ2')) document.getElementById('tOptZ2').textContent = t.sAzan + ' 2';
-  if(document.getElementById('tOptZ3')) document.getElementById('tOptZ3').textContent = t.sAzan + ' 3';
+if(document.getElementById('tOptA4')) document.getElementById('tOptA4').textContent = (lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4')))));
+if(document.getElementById('tOptZ1')) document.getElementById('tOptZ1').textContent = t.sAzan + ' 1';
+  if(document.getElementById('tOptSabah')) document.getElementById('tOptSabah').textContent = (lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':'أذان الفجر')))));
+  if(document.getElementById('tOptOgle')) document.getElementById('tOptOgle').textContent = (lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':'أذان الظهر')))));
+  if(document.getElementById('tOptIkindi')) document.getElementById('tOptIkindi').textContent = (lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':'أذان العصر')))));
+  if(document.getElementById('tOptAksam')) document.getElementById('tOptAksam').textContent = (lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':'أذان المغرب')))));
+  if(document.getElementById('tOptYatsi')) document.getElementById('tOptYatsi').textContent = (lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':'أذان العشاء')))));
   
   // Temkin bölümü çevirileri
   if(document.getElementById('tmkMainLbl')) {
@@ -2867,27 +2952,35 @@ function updateDate(){
 
 function updateQibla(){
   try {
-let safeLa = parseFloat(uLa) || 41.0082;
-let safeLo = parseFloat(uLo) || 28.9784;
+      let safeLa = parseFloat(uLa) || 41.0082;
+      let safeLo = parseFloat(uLo) || 28.9784;
       const q = qibla(safeLa, safeLo);
       const t = T[lang] || T['tr'];
-      
+
       qiblaAngle = q;
-      
+
       document.getElementById('qDeg').textContent = Math.round(q) + '°';
       document.getElementById('qInfo').textContent = t.qfr;
       document.getElementById('qNeedle').style.transform = `translateX(-50%) rotate(${q}deg)`;
       
-      document.getElementById('cQA').textContent = Math.round(q) + '°';
-      document.getElementById('cKContainer').style.transform = `rotate(${q}deg)`;
+      // Kabe'ye Uzaklık Hesaplama (Haversine Formülü - Her an çalışır)
+      const KAABA_LAT = 21.4225;
+      const KAABA_LON = 39.8262;
+      const R = 6371; // Dünya Yarıçapı (km)
+      const dLat = rad(KAABA_LAT - safeLa);
+      const dLon = rad(KAABA_LON - safeLo);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(safeLa)) * Math.cos(rad(KAABA_LAT)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distKm = (R * c).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
       
-  } catch (e) { console.warn("Kıble Hatası:", e); }
-}
+      const chaEl = document.getElementById('cHA');
+      if(chaEl) chaEl.textContent = distKm + " km"; // KM anında arayüze yazılır
 
-let calOffsetDays = 0;
-function chgCalWeek(dir) {
-    calOffsetDays += (dir * 7);
-    renderCal();
+      const qaEl = document.getElementById('cQA');
+      if(qaEl) qaEl.textContent = "--°"; 
+
+      document.getElementById('cKContainer').style.transform = `rotate(${q}deg)`;
+  } catch (e) { console.warn("Kıble Hatası:", e); }
 }
 
 async function renderCal(){
@@ -3023,10 +3116,13 @@ function renderAlarmsUI() {
         <option value="alert1" ${soundPrefs[k]==='alert1'?'selected':''}>${t.sA1}</option>
         <option value="alert2" ${soundPrefs[k]==='alert2'?'selected':''}>${t.sA2}</option>
         <option value="alert3" ${soundPrefs[k]==='alert3'?'selected':''}>${t.sA3}</option>
-        <option value="azan1" ${soundPrefs[k]==='azan1'?'selected':''}>${t.sAzan} 1</option>
-        <option value="azan2" ${soundPrefs[k]==='azan2'?'selected':''}>${t.sAzan} 2</option>
-        <option value="azan3" ${soundPrefs[k]==='azan3'?'selected':''}>${t.sAzan} 3</option>
-      </select>
+<option value="alert4" ${soundPrefs[k]==='alert4'?'selected':''}>${(lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4')))))}</option>
+<option value="azan1" ${soundPrefs[k]==='azan1'?'selected':''}>${t.sAzan} 1</option>
+        <option value="sabah" ${soundPrefs[k]==='sabah'?'selected':''}>${(lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':'أذان الفجر')))))}</option>
+        <option value="ogle" ${soundPrefs[k]==='ogle'?'selected':''}>${(lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':'أذان الظهر')))))}</option>
+        <option value="ikindi" ${soundPrefs[k]==='ikindi'?'selected':''}>${(lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':'أذان العصر')))))}</option>
+        <option value="aksam" ${soundPrefs[k]==='aksam'?'selected':''}>${(lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':'أذان المغرب')))))}</option>
+        <option value="yatsi" ${soundPrefs[k]==='yatsi'?'selected':''}>${(lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':'أذان العشاء')))))}</option>      </select>
     </div>`;
   });
   document.getElementById('alarmsContainer').innerHTML = html;
@@ -3059,6 +3155,7 @@ function renderPreAlarmsUI() {
                     <option value="alert1" ${pref.snd === 'alert1' ? 'selected' : ''}>${t.sA1}</option>
                     <option value="alert2" ${pref.snd === 'alert2' ? 'selected' : ''}>${t.sA2}</option>
                     <option value="alert3" ${pref.snd === 'alert3' ? 'selected' : ''}>${t.sA3}</option>
+<option value="alert4" ${pref.snd === 'alert4' ? 'selected' : ''}>${(lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4')))))}</option>
                     <option value="system" ${pref.snd === 'system' ? 'selected' : ''}>${t.sysSound}</option>
                 </select>
             </div>
@@ -3172,8 +3269,6 @@ let smoothedRotation = 0;
 let compassAnimFrame = null;
 let usingAbsoluteHeading = false; 
 
-let arStream = null;
-let isAR = false;
 
 async function toggleManeviTheme() {
     isDarkTheme = !isDarkTheme;
@@ -3192,27 +3287,133 @@ function applyThemeUI() {
     }
 }
 
-async function toggleAR() {
-    const video = document.getElementById('arVideo');
-    const movl = document.getElementById('compassMov');
+let isMapMode = false;
+let qMap = null;
+let qMarker = null;
+let qLine = null;
+let qSunLine = null;
+let qSunMarker = null;
+let globalSunAzimuth = 0;
+let globalSunAltitude = -1;
+let wasAligned = false;
 
-    if (isAR) {
-        if (arStream) {
-            arStream.getTracks().forEach(track => track.stop());
-            arStream = null;
-        }
-        video.srcObject = null;
-        movl.classList.remove('ar-on');
-        isAR = false;
+// Harita Modunu Açıp Kapatan Buton
+function toggleMap() {
+    const movl = document.getElementById('compassMov');
+    const btn = document.getElementById('arBtn');
+    
+    isMapMode = !isMapMode;
+    if (isMapMode) {
+        movl.classList.add('map-on');
+        btn.innerHTML = '<span style="font-size:18px;">✕</span>';
+        initQiblaMapBg();
     } else {
-        try {
-            arStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            video.srcObject = arStream;
-            movl.classList.add('ar-on');
-            isAR = true;
-        } catch (err) {
-            alert("Kamera izni alınamadı veya cihaz desteklemiyor.");
+        movl.classList.remove('map-on');
+        btn.textContent = "Harita";
+    }
+}
+
+// O ANKİ GERÇEK GÜNEŞ AÇISINI HESAPLAYAN FONKSİYON
+function updateSunPosition() {
+    try {
+        const now = new Date();
+        const tz = -now.getTimezoneOffset() / 60;
+        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));
+        
+        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+        const tst = h + EqT + (uLo / 15) - tz;
+        const ha = (tst - 12) * 15;
+        
+        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));
+        const alt = deg(Math.asin(sinAlt));
+        
+        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));
+        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));
+        
+        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } 
+        
+        globalSunAzimuth = az;
+        globalSunAltitude = alt;
+        
+        const sunCont = document.getElementById('cSunContainer');
+        const sunIco = document.getElementById('cSun');
+        
+        if(sunCont && sunIco) {
+            sunCont.style.transform = `rotate(${az}deg)`;
+            sunIco.style.opacity = alt > -1 ? '1' : '0'; 
         }
+    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
+}
+
+// Açık Kaynak Uydu Haritasını Çizen Fonksiyon
+function initQiblaMapBg() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                let cLat = pos.coords.latitude;
+                let cLng = pos.coords.longitude;
+                
+                const KAABA_LAT = 21.4225;
+                const KAABA_LON = 39.8262;
+
+                if (typeof updateSunPosition === 'function') updateSunPosition();
+
+                // Kıble Çizgisi
+                let cAngle = qibla(cLat, cLng);
+                let d = 0.02; 
+                let cLat2 = cLat + d * Math.cos(rad(cAngle));
+                let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
+
+                // Güneşin Gerçek Azimut Açısıyla Haritada Konumlandırılması
+                let az = globalSunAzimuth || 0;
+                let sunDist = 0.00035; 
+                let sLat = cLat + sunDist * Math.cos(rad(az));
+                let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
+
+                if (!qMap) {
+                    qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
+                    
+                    // 1. Güneş İkonu
+                    const sunIconHTML = L.divIcon({ 
+                        className: '', 
+                        html: '<div style="font-size:26px; text-shadow: 0px 0px 8px rgba(241,196,15,1);">☀️</div>', 
+                        iconSize: [30, 30], 
+                        iconAnchor: [15, 15] 
+                    });
+                    qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML, zIndexOffset: 1000 }).addTo(qMap);
+
+                    // 2. Kıble Çizgisi
+                    qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '5, 8' }).addTo(qMap);
+                    
+                    // 3. Kullanıcı Konumu
+                    qMarker = L.circleMarker([cLat, cLng], { radius: 8, fillColor: "#4285F4", color: "#fff", weight: 3, opacity: 1, fillOpacity: 1 }).addTo(qMap);
+                } else {
+                    qMap.setView([cLat, cLng], 18);
+                    qMarker.setLatLng([cLat, cLng]);
+                    qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
+                    qSunMarker.setLatLng([sLat, sLng]);
+                }
+
+                if (globalSunAltitude > -5) {
+                    qSunMarker.setOpacity(1);
+                } else {
+                    qSunMarker.setOpacity(0);
+                }
+
+                let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
+                let distKm = (distMeters / 1000).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                let haEl = document.getElementById('cHA');
+                if(haEl) haEl.textContent = distKm + " km";
+
+                setTimeout(() => qMap.invalidateSize(), 300);
+            },
+            (err) => {
+                alert("📍 GPS kapalı veya konum izni verilmedi.");
+                if (isMapMode) toggleMap(); 
+            }, 
+            { enableHighAccuracy: true, timeout: 6000 }
+        );
     }
 }
 
@@ -3252,34 +3453,68 @@ function handleHeading(e) {
 }
 
 function animateCompass() {
-    smoothedRotation += (targetRotation - smoothedRotation) * 0.03;
+    smoothedRotation += (targetRotation - smoothedRotation) * 0.05; 
 
+    // Pusula kadranı normal döner
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
+    
+    // Haritanın döndürülmesi: Haritanın dik bakması için pusula açısına Kıble açısını (qiblaAngle) ekliyoruz
+    if (isMapMode && qMap) {
+        let mapRotation = -smoothedRotation + qiblaAngle;
+        document.getElementById('qiblaMapBg').style.transform = `rotate(${-smoothedRotation}deg)`;
+    }
 
     let displayHeading = Math.round(smoothedRotation) % 360;
     if (displayHeading < 0) displayHeading += 360;
-    document.getElementById('cHA').textContent = displayHeading + '°';
 
     let diff = qiblaAngle - displayHeading;
     diff = (diff + 540) % 360 - 180; 
 
-    let t = T[lang] || T['tr'];
     let turn = document.getElementById('cTurn');
+    let infoBox = document.getElementById('cInfoBox');
+    let dirVal = document.getElementById('cQA');
 
-    if (Math.abs(diff) < 3) {
-        turn.textContent = t.tp;
-        turn.style.color = "var(--gold)";
-        if(navigator.vibrate && Math.random() < 0.05) navigator.vibrate(5);
-    } else if (diff > 0) {
-        turn.textContent = t.tr;
-        turn.style.color = "var(--teal)";
+    let absDiff = Math.round(Math.abs(diff));
+    let isAligned = absDiff < 3; 
+
+    if (isAligned) {
+        if (!wasAligned) { 
+            if (turn) turn.innerHTML = `✓ Hizada`;
+            if (dirVal) dirVal.textContent = "0°";
+            if (infoBox) infoBox.classList.add('qibla-success');
+            
+            if (qMarker) qMarker.setStyle({ fillColor: '#2e7d32' }); 
+            if (qLine) qLine.setStyle({ color: '#2e7d32', dashArray: null, weight: 6 });
+            
+            if(navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]); 
+            }
+            
+            wasAligned = true;
+        }
     } else {
-        turn.textContent = t.tl;
-        turn.style.color = "var(--teal)";
+        if (wasAligned) {
+            if (infoBox) infoBox.classList.remove('qibla-success');
+            if (turn) turn.innerHTML = ''; 
+            
+            if (qMarker) qMarker.setStyle({ fillColor: '#4285F4' });
+            if (qLine) qLine.setStyle({ color: '#4285F4', dashArray: '5, 8', weight: 4 });
+            
+            wasAligned = false;
+        }
+        
+        if (dirVal) {
+            if (diff > 0) {
+                dirVal.textContent = `${absDiff}° sağa`;
+            } else {
+                dirVal.textContent = `${absDiff}° sola`;
+            }
+        }
     }
 
     compassAnimFrame = requestAnimationFrame(animateCompass);
 }
+
 
 // O ANKİ GERÇEK GÜNEŞ AÇISINI HESAPLAYAN FONKSİYON
 function updateSunPosition() {
@@ -3288,27 +3523,26 @@ function updateSunPosition() {
         const tz = -now.getTimezoneOffset() / 60;
         const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));
         
-        // Gerçek Güneş Zamanı ve Saat Açısı
         const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
         const tst = h + EqT + (uLo / 15) - tz;
         const ha = (tst - 12) * 15;
         
-        // Güneşin Yüksekliği (Ufkun altında mı üstünde mi?)
         const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));
         const alt = deg(Math.asin(sinAlt));
         
-        // Güneşin Pusula Yönü (Azimuth)
         const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));
         let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));
         
-        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } // Öğleden sonraysa açıyı ters çevir
+        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } 
+        
+        globalSunAzimuth = az;
+        globalSunAltitude = alt;
         
         const sunCont = document.getElementById('cSunContainer');
         const sunIco = document.getElementById('cSun');
         
         if(sunCont && sunIco) {
             sunCont.style.transform = `rotate(${az}deg)`;
-            // Eğer güneş ufkun altındaysa (gece) ikonu gizle, üstündeyse göster
             sunIco.style.opacity = alt > -1 ? '1' : '0'; 
         }
     } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
@@ -3366,7 +3600,7 @@ function closeCompass() {
     usingAbsoluteHeading = false;
     targetRotation = 0; smoothedRotation = 0;
     
-    if(isAR) toggleAR();
+    if(isMapMode) toggleMap();
     releaseWakeLock(); // Ekran kilidini serbest bırak 
 }
 
@@ -3389,11 +3623,15 @@ function playBeep(){
 
 const AZAN_URLS = {
   'azan1': ['sounds/azan1.mp3', 'https://goksay.com/Aksam1.mp3', 'https://www.islamcan.com/audio/adhan/azan1.mp3'],
-  'azan2': ['sounds/azan2.mp3', 'https://goksay.com/Ezan2.mp3', 'https://www.islamcan.com/audio/adhan/azan2.mp3'],
-  'azan3': ['sounds/azan3.mp3', 'https://goksay.com/Ezan3.mp3', 'https://www.islamcan.com/audio/adhan/azan3.mp3'],
+  'sabah': ['sounds/sabah.mp3', 'https://goksay.com/sabah.mp3'],
+  'ogle': ['sounds/ogle.mp3', 'https://goksay.com/ogle.mp3'],
+  'ikindi': ['sounds/ikindi.mp3', 'https://goksay.com/ikindi.mp3'],
+  'aksam': ['sounds/aksam.mp3', 'https://goksay.com/aksam.mp3'],
+  'yatsi': ['sounds/yatsi.mp3', 'https://goksay.com/yatsi.mp3'],
   'alert1': ['sounds/kus.mp3', 'https://goksay.com/kus.mp3'],
   'alert2': ['sounds/ucgenzil.mp3', 'https://goksay.com/ucgenzil.mp3'],
-  'alert3': ['sounds/piano.mp3', 'https://goksay.com/piano.mp3']
+  'alert3': ['sounds/piano.mp3', 'https://goksay.com/piano.mp3'],
+  'alert4': ['sounds/ft.mp3', 'https://goksay.com/ft.mp3']
 };
 
 async function playAzan(type = 'azan1'){
