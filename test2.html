@@ -3226,35 +3226,45 @@ function toggleMap() {
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
-    const KAABA = [21.422487, 39.826206];
-    
-    // İstanbul'da başlamasını engellemek için hafızadaki son konumu (Örn: Varşova) al
-    let lat = parseFloat(uLa); if (isNaN(lat)) lat = 21.4224;
-    let lng = parseFloat(uLo); if (isNaN(lng)) lng = 39.8262;
-
-    if (!qMap) {
-        // HATA DÜZELTİLDİ: Tüm kısıtlamalar kaldırıldı, parmakla kaydırma ve zoom aktif!
-        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([lat, lng], 18);
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
-        qMarker = L.circleMarker([lat, lng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
-        qLine = L.polyline([[lat, lng], KAABA], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
-    }
-
-    // Harita yüklendikten sonra GERÇEK sokağını yüksek hassasiyetle bul
+    // Uygulama haritayı çizmek için sadece ve sadece GERÇEK GPS verisini bekleyecek
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            let cLat = pos.coords.latitude;
-            let cLng = pos.coords.longitude;
-            
-            // HATA DÜZELTİLDİ: Zıplamak yerine kamerayı sokağına yumuşakça kaydırır
-            qMap.flyTo([cLat, cLng], 18, { animate: true, duration: 1.5 }); 
-            qMarker.setLatLng([cLat, cLng]);
-            qLine.setLatLngs([[cLat, cLng], KAABA]);
-            
-        }, null, { enableHighAccuracy: true });
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                let cLat = pos.coords.latitude;
+                let cLng = pos.coords.longitude;
+                
+                // Mavi çizginin pusulayla kusursuz hizalanması için sanal düz çizgi açısı
+                let cAngle = qibla(cLat, cLng);
+                let d = 0.02; // Çizgi uzunluğu
+                let cLat2 = cLat + d * Math.cos(rad(cAngle));
+                let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
+
+                if (!qMap) {
+                    // Harita özgür bırakıldı: parmakla gezilebilir ve yakınlaştırılabilir
+                    qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
+                    qMarker = L.circleMarker([cLat, cLng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
+                    qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
+                } else {
+                    qMap.setView([cLat, cLng], 18);
+                    qMarker.setLatLng([cLat, cLng]);
+                    qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
+                }
+                setTimeout(() => qMap.invalidateSize(), 300);
+            },
+            (err) => {
+                // İŞTE BURASI: Eğer GPS kapalıysa veya konum izni reddedilirse uyduruk yer GÖSTERME!
+                alert("📍 GPS kapalı veya konum izni verilmedi. Haritayı görmek için lütfen cihazınızın konum özelliğini açın.");
+                
+                // Haritayı açmaktan vazgeç ve siyah arka planlı pusulaya geri dön
+                if (isMapMode) toggleMap(); 
+            }, 
+            { enableHighAccuracy: true, timeout: 6000 }
+        );
+    } else {
+        alert("Cihazınızda GPS özelliği bulunamadı.");
+        if (isMapMode) toggleMap();
     }
-    
-    setTimeout(() => qMap.invalidateSize(), 300);
 }
 
 function handleHeading(e) {
