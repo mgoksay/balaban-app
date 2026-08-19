@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Açık Kaynak Kıble Haritası</title>
+    <!-- Leaflet CSS & JS (Açık Kaynak Harita Motoru) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; background: #121212; color: #fff; font-family: sans-serif; overflow: hidden; }
+        
+        /* Haritanın tam ekran olması için */
+        #map { height: 100vh; width: 100vw; z-index: 1; }
+        
+        /* Alt kısımdaki bilgi kartı (Videodaki gibi) */
+        .ui-panel { 
+            position: absolute; bottom: 30px; left: 5%; width: 80%; 
+            background: white; color: black; border-radius: 20px; 
+            padding: 20px; z-index: 999; box-shadow: 0 4px 20px rgba(0,0,0,0.4); 
+            text-align: center; 
+        }
+        
+        .btn { 
+            background: #1a237e; color: white; border: none; padding: 12px 20px; 
+            border-radius: 12px; cursor: pointer; margin-top: 15px; width: 100%; 
+            font-size: 16px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+    
+    <div class="ui-panel">
+        <h3 style="margin: 0 0 5px 0;">Kıble Haritası</h3>
+        <p id="infoText" style="margin: 0; font-size: 14px; color: #666;">Haritayı ve çizgiyi görmek için başlatın.</p>
+        <button class="btn" onclick="baslat()">📍 Konum Bul ve Başlat</button>
+    </div>
+
+    <script>
+        let map, userMarker, qiblaLine;
+        const kaabaCoords = [21.422487, 39.826206]; // Kabe'nin Koordinatları
+
+        function initMap(lat, lng) {
+            // 1. Haritayı Oluştur ve Konumuna Zoomla
+            map = L.map('map', {zoomControl: false}).setView([lat, lng], 18);
+
+            // 2. Uydu Katmanını Ekle (API KEY İSTEMEYEN ÜCRETSİZ ESRI UYDU KATMANI)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Tiles &copy; Esri'
+            }).addTo(map);
+
+            // 3. Kullanıcının Bulunduğu Noktaya Mavi İşaretçi Koy
+            userMarker = L.circleMarker([lat, lng], {
+                radius: 8, fillColor: "#4285F4", color: "#ffffff", weight: 3, opacity: 1, fillOpacity: 1
+            }).addTo(map);
+
+            // 4. Bulunduğun Noktadan Kabe'ye Sanal Çizgi Çek
+            qiblaLine = L.polyline([[lat, lng], kaabaCoords], {
+                color: '#4285F4', weight: 4, opacity: 0.8, dashArray: '10, 10'
+            }).addTo(map);
+        }
+
+        function baslat() {
+            document.getElementById('infoText').innerText = "GPS aranıyor...";
+            
+            // Kullanıcının GPS koordinatlarını al
+            navigator.geolocation.getCurrentPosition(pos => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                
+                document.getElementById('infoText').innerText = "Konum bulundu! Kabe'ye giden çizgi haritada çizildi.";
+                
+                // Harita daha önce çizilmediyse çiz, çizildiyse konumu güncelle
+                if(!map) {
+                    initMap(lat, lng);
+                } else {
+                    map.setView([lat, lng], 18);
+                    userMarker.setLatLng([lat, lng]);
+                    qiblaLine.setLatLngs([[lat, lng], kaabaCoords]);
+                }
+            }, err => { 
+                alert("Konum izni verilmedi veya GPS kapalı."); 
+                document.getElementById('infoText').innerText = "Hata: Konum bulunamadı.";
+            }, {enableHighAccuracy: true});
+        }
+    </script>
+</body>
+</html>
