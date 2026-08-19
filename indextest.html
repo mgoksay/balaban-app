@@ -255,7 +255,7 @@ select option {
 .c-movl { position:fixed; inset:0; background:rgba(13,27,42,0.85); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); z-index:400; display:flex; flex-direction:column; align-items:center; opacity:0; pointer-events:none; transition:opacity .3s; padding:calc(var(--st) + 20px) 20px 20px; overflow:hidden; }
 .c-movl.open { opacity:1; pointer-events:all; }
 
-/* YENİ: Harita Arka Planı (AR Video Yerine) */
+/* Harita Arka Planı (Sabit, Tam Ekran) */
 #qiblaMapBg { position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:0; transition:opacity 0.5s ease; }
 .c-movl.map-on #qiblaMapBg { opacity:1; }
 .c-movl.map-on { background:#000; }
@@ -266,13 +266,11 @@ select option {
 .c-title { font-family:'Amiri',serif; font-size:22px; color:var(--gold); font-weight:700;}
 .ar-btn { background:var(--surf); border:0.5px solid var(--br); color:var(--tx); font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; border-radius:14px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s; }
 
-/* Harita Açıldığında Pusula Arayüzünün Tamamen Şeffaflaşması */
+/* Harita Açıldığında Pusula Arayüzünün Tamamen Şeffaflaşması (SENİN KODUN) */
 .c-movl.map-on .c-back { background:rgba(22,32,50,0.8); border:none; }
 .c-movl.map-on .ar-btn { background:var(--gold); color:#000; border:none; }
-/* İŞTE BURASI: Harita modunda pusula dairesini tamamen görünmez yapıp sadece ikonları bırakır */
 .c-movl.map-on .c-dial { background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; border-color:transparent; box-shadow:none; }
 .c-movl.map-on .c-info { background:rgba(13,27,42,0.8); backdrop-filter:blur(8px); border:none; }
-/* Harita açıkken N, S, E, W harflerine gölge ver ki harita üstünde okunsun */
 .c-movl.map-on .c-e, .c-movl.map-on .c-s, .c-movl.map-on .c-w, .c-movl.map-on .c-tick { text-shadow: 0 0 4px #000, 0 0 8px #000; }
 
 .c-dial-wrap { width:280px; height:280px; position:relative; margin:20px 0 40px; }
@@ -3228,34 +3226,47 @@ function toggleMap() {
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
-    const KAABA = [21.422487, 39.826206];
+    // 1. İstanbul zıplamasını önlemek için cihazın o anki hafızasındaki konumu kullanıyoruz
+    let lat = parseFloat(uLa); if (isNaN(lat)) lat = 41.0082;
+    let lng = parseFloat(uLo); if (isNaN(lng)) lng = 28.9784;
+    
+    // 2. ÇİZGİ KAYMASINI ÇÖZEN FORMÜL:
+    // Haritadaki çizgiyi Kabe'ye bağlamak yerine, pusulayla birebir aynı açıda düz bir sanal çizgi çiziyoruz
+    let qAngle = qibla(lat, lng);
+    let d = 0.02; // Çizginin uzunluğu
+    let lat2 = lat + d * Math.cos(rad(qAngle));
+    let lng2 = lng + (d * Math.sin(rad(qAngle))) / Math.cos(rad(lat));
 
-    // Harita zaten açıksa tekrar oluşturma
     if (!qMap) {
-        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([41.0082, 28.9784], 18);
+        // Haritayı parmakla kaydırmaya kapatıyoruz (Tamamen rakibin uygulamasındaki mantık)
+        qMap = L.map('qiblaMapBg', { 
+            zoomControl: false, attributionControl: false,
+            dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false
+        }).setView([lat, lng], 18);
+        
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
-        qMarker = L.circleMarker([41.0082, 28.9784], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
-        qLine = L.polyline([[41.0082, 28.9784], KAABA], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
+        qMarker = L.circleMarker([lat, lng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
+        qLine = L.polyline([[lat, lng], [lat2, lng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
+    } else {
+        qMap.setView([lat, lng], 18);
+        qMarker.setLatLng([lat, lng]);
+        qLine.setLatLngs([[lat, lng], [lat2, lng2]]);
     }
 
-    // Telefonun GERÇEK GPS Konumunu al ve haritayı oraya odakla
+    // 3. Harita açıldıktan sonra arka planda anlık GPS'i kontrol et ve en hassas noktaya git
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
-            let lat = pos.coords.latitude;
-            let lng = pos.coords.longitude;
-            qMap.setView([lat, lng], 18);
-            qMarker.setLatLng([lat, lng]);
-            qLine.setLatLngs([[lat, lng], KAABA]);
+            let cLat = pos.coords.latitude;
+            let cLng = pos.coords.longitude;
+            let cAngle = qibla(cLat, cLng);
+            let cLat2 = cLat + d * Math.cos(rad(cAngle));
+            let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
+            
+            qMap.setView([cLat, cLng], 18);
+            qMarker.setLatLng([cLat, cLng]);
+            qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
             setTimeout(() => qMap.invalidateSize(), 300);
-        }, (err) => {
-            // Eğer kullanıcı GPS'e izin vermezse hafızadaki son konumu kullan
-            let lat = uLa || 41.0082; 
-            let lng = uLo || 28.9784;
-            qMap.setView([lat, lng], 18);
-            qMarker.setLatLng([lat, lng]);
-            qLine.setLatLngs([[lat, lng], KAABA]);
-            setTimeout(() => qMap.invalidateSize(), 300);
-        }, { enableHighAccuracy: true });
+        }, () => { setTimeout(() => qMap.invalidateSize(), 300); }, { enableHighAccuracy: true });
     }
 }
 
