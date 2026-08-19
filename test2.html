@@ -3328,7 +3328,7 @@ function initQiblaMapBg() {
 
                 // Güneş ikonu konumu (Mavi noktanın altında kalmasın diye mesafeyi 0.0004 yaptık)
                 let az = globalSunAzimuth || 0;
-                let sunDist = 0.00025;
+                let sunDist = 0.00030;
                 let sLat = cLat + sunDist * Math.cos(rad(az));
                 let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
@@ -3419,10 +3419,13 @@ function handleHeading(e) {
 function animateCompass() {
     smoothedRotation += (targetRotation - smoothedRotation) * 0.05; 
 
+    // Pusula kadranı normal döner
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
     
+    // Haritanın döndürülmesi: Haritanın dik bakması için pusula açısına Kıble açısını (qiblaAngle) ekliyoruz
     if (isMapMode && qMap) {
-document.getElementById('qiblaMapBg').style.transform = `rotate(${mapRotation}deg)`;
+        let mapRotation = -smoothedRotation + qiblaAngle;
+        document.getElementById('qiblaMapBg').style.transform = `rotate(${-smoothedRotation}deg)`;
     }
 
     let displayHeading = Math.round(smoothedRotation) % 360;
@@ -3447,7 +3450,6 @@ document.getElementById('qiblaMapBg').style.transform = `rotate(${mapRotation}de
             if (qMarker) qMarker.setStyle({ fillColor: '#2e7d32' }); 
             if (qLine) qLine.setStyle({ color: '#2e7d32', dashArray: null, weight: 6 });
             
-            // HATA BURADAYDI DÜZELTİLDİ: Hedefi bulduğunda ardışık 2 güçlü titreşim verir
             if(navigator.vibrate) {
                 navigator.vibrate([200, 100, 200]); 
             }
@@ -3476,6 +3478,7 @@ document.getElementById('qiblaMapBg').style.transform = `rotate(${mapRotation}de
 
     compassAnimFrame = requestAnimationFrame(animateCompass);
 }
+
 
 // O ANKİ GERÇEK GÜNEŞ AÇISINI HESAPLAYAN FONKSİYON
 function updateSunPosition() {
