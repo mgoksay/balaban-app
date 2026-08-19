@@ -3226,19 +3226,18 @@ function toggleMap() {
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
-    // 1. İstanbul zıplamasını önlemek için cihazın o anki hafızasındaki konumu kullanıyoruz
+    // 1. Doğrudan uygulamanın ana konumunu alıyoruz (Gizli GPS araması ve zıplama YOK)
     let lat = parseFloat(uLa); if (isNaN(lat)) lat = 41.0082;
     let lng = parseFloat(uLo); if (isNaN(lng)) lng = 28.9784;
     
-    // 2. ÇİZGİ KAYMASINI ÇÖZEN FORMÜL:
-    // Haritadaki çizgiyi Kabe'ye bağlamak yerine, pusulayla birebir aynı açıda düz bir sanal çizgi çiziyoruz
+    // 2. Pusulayla birebir aynı açıda düz bir sanal çizgi çiziyoruz
     let qAngle = qibla(lat, lng);
     let d = 0.02; // Çizginin uzunluğu
     let lat2 = lat + d * Math.cos(rad(qAngle));
     let lng2 = lng + (d * Math.sin(rad(qAngle))) / Math.cos(rad(lat));
 
     if (!qMap) {
-        // Haritayı parmakla kaydırmaya kapatıyoruz (Tamamen rakibin uygulamasındaki mantık)
+        // Haritayı parmakla kaydırmaya kapatıyoruz
         qMap = L.map('qiblaMapBg', { 
             zoomControl: false, attributionControl: false,
             dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false
@@ -3252,24 +3251,9 @@ function initQiblaMapBg() {
         qMarker.setLatLng([lat, lng]);
         qLine.setLatLngs([[lat, lng], [lat2, lng2]]);
     }
-
-    // 3. Harita açıldıktan sonra arka planda anlık GPS'i kontrol et ve en hassas noktaya git
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            let cLat = pos.coords.latitude;
-            let cLng = pos.coords.longitude;
-            let cAngle = qibla(cLat, cLng);
-            let cLat2 = cLat + d * Math.cos(rad(cAngle));
-            let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
-            
-            qMap.setView([cLat, cLng], 18);
-            qMarker.setLatLng([cLat, cLng]);
-            qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
-            setTimeout(() => qMap.invalidateSize(), 300);
-        }, () => { setTimeout(() => qMap.invalidateSize(), 300); }, { enableHighAccuracy: true });
-    }
+    
+    setTimeout(() => qMap.invalidateSize(), 300);
 }
-
 function handleHeading(e) {
     // Eğer kesin yön event'i tetiklendiyse ve flag henüz kalkmadıysa
     if (e.type === 'deviceorientationabsolute' && e.absolute && !usingAbsoluteHeading) {
