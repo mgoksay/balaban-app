@@ -3227,8 +3227,8 @@ function toggleMap() {
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
     // 1. Doğrudan uygulamanın ana konumunu alıyoruz (Gizli GPS araması ve zıplama YOK)
-    let lat = parseFloat(uLa); if (isNaN(lat)) lat = 41.0082;
-    let lng = parseFloat(uLo); if (isNaN(lng)) lng = 28.9784;
+    let lat = parseFloat(uLa);
+    let lng = parseFloat(uLo);
     
     // 2. Pusulayla birebir aynı açıda düz bir sanal çizgi çiziyoruz
     let qAngle = qibla(lat, lng);
