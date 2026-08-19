@@ -2910,27 +2910,35 @@ function updateDate(){
 
 function updateQibla(){
   try {
-let safeLa = parseFloat(uLa) || 41.0082;
-let safeLo = parseFloat(uLo) || 28.9784;
+      let safeLa = parseFloat(uLa) || 41.0082;
+      let safeLo = parseFloat(uLo) || 28.9784;
       const q = qibla(safeLa, safeLo);
       const t = T[lang] || T['tr'];
-      
+
       qiblaAngle = q;
-      
+
       document.getElementById('qDeg').textContent = Math.round(q) + '°';
       document.getElementById('qInfo').textContent = t.qfr;
       document.getElementById('qNeedle').style.transform = `translateX(-50%) rotate(${q}deg)`;
       
-      document.getElementById('cQA').textContent = Math.round(q) + '°';
-      document.getElementById('cKContainer').style.transform = `rotate(${q}deg)`;
+      // Kabe'ye Uzaklık Hesaplama (Haversine Formülü - Her an çalışır)
+      const KAABA_LAT = 21.4225;
+      const KAABA_LON = 39.8262;
+      const R = 6371; // Dünya Yarıçapı (km)
+      const dLat = rad(KAABA_LAT - safeLa);
+      const dLon = rad(KAABA_LON - safeLo);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(safeLa)) * Math.cos(rad(KAABA_LAT)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distKm = (R * c).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
       
-  } catch (e) { console.warn("Kıble Hatası:", e); }
-}
+      const chaEl = document.getElementById('cHA');
+      if(chaEl) chaEl.textContent = distKm + " km"; // KM anında arayüze yazılır
 
-let calOffsetDays = 0;
-function chgCalWeek(dir) {
-    calOffsetDays += (dir * 7);
-    renderCal();
+      const qaEl = document.getElementById('cQA');
+      if(qaEl) qaEl.textContent = "--°"; 
+
+      document.getElementById('cKContainer').style.transform = `rotate(${q}deg)`;
+  } catch (e) { console.warn("Kıble Hatası:", e); }
 }
 
 async function renderCal(){
@@ -3299,21 +3307,18 @@ function initQiblaMapBg() {
                 let cLat = pos.coords.latitude;
                 let cLng = pos.coords.longitude;
                 
-                const KAABA_LAT = 21.4225;
-                const KAABA_LON = 39.8262;
-                
-                // Kıble Çizgisi
+                // Kıble Çizgisi Hedefi
                 let cAngle = qibla(cLat, cLng);
                 let d = 50.0; 
                 let cLat2 = cLat + d * Math.cos(rad(cAngle));
                 let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
-                // Güneş Çizgisi
+                // Güneş Çizgisi Hedefi
                 let sLat2 = cLat + d * Math.cos(rad(globalSunAzimuth));
                 let sLng2 = cLng + (d * Math.sin(rad(globalSunAzimuth))) / Math.cos(rad(cLat));
                 
-                // Ekranda Görünmesi İçin Güneş İkonunu 100 Metre Uzağa Koyuyoruz
-                let sunDist = 0.0015;
+                // Güneşi Ekrana Sığdırmak İçin Mesafeyi Kısalttık (~60 metre uzağa çizer)
+                let sunDist = 0.0006; 
                 let mLat = cLat + sunDist * Math.cos(rad(globalSunAzimuth));
                 let mLng = cLng + (sunDist * Math.sin(rad(globalSunAzimuth))) / Math.cos(rad(cLat));
 
@@ -3323,7 +3328,8 @@ function initQiblaMapBg() {
                     
                     // 1. Güneş (Alt Katman)
                     qSunLine = L.polyline([[cLat, cLng], [sLat2, sLng2]], { color: '#f39c12', weight: 3, opacity: 0.8, dashArray: '5, 10' }).addTo(qMap);
-                    const sunIconHTML = L.divIcon({ className: 'map-sun-marker', html: '<div style="font-size:24px; filter:drop-shadow(0 0 5px #f1c40f);">☀️</div>', iconSize: [24, 24], iconAnchor: [12, 12] });
+                    // className: '' kullanılarak Leaflet engelleri aşıldı, gölge efekti eklendi
+                    const sunIconHTML = L.divIcon({ className: '', html: '<div style="font-size:32px; line-height:1; filter:drop-shadow(0 0 8px rgba(241,196,15,0.8));">☀️</div>', iconSize: [32, 32], iconAnchor: [16, 16] });
                     qSunMarker = L.marker([mLat, mLng], { icon: sunIconHTML }).addTo(qMap);
 
                     // 2. Kıble (Üst Katman)
@@ -3347,10 +3353,6 @@ function initQiblaMapBg() {
                     qSunMarker.setOpacity(0);
                 }
 
-                let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
-                let distKm = (distMeters / 1000).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                document.getElementById('cHA').textContent = distKm + " km";
-
                 setTimeout(() => qMap.invalidateSize(), 300);
             },
             (err) => {
@@ -3359,9 +3361,6 @@ function initQiblaMapBg() {
             }, 
             { enableHighAccuracy: true, timeout: 6000 }
         );
-    } else {
-        alert("Cihazınızda GPS özelliği bulunamadı.");
-        if (isMapMode) toggleMap();
     }
 }
 
