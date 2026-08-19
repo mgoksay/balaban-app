@@ -3327,7 +3327,7 @@ function initQiblaMapBg() {
 
                 // Güneşin Gerçek Azimut Açısıyla Haritada Konumlandırılması
                 let az = globalSunAzimuth || 0;
-                let sunDist = 0.00015; 
+                let sunDist = 0.00035; 
                 let sLat = cLat + sunDist * Math.cos(rad(az));
                 let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
@@ -3482,31 +3482,31 @@ function updateSunPosition() {
     try {
         const now = new Date();
         const tz = -now.getTimezoneOffset() / 60;
-        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));[cite: 1]
+        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));
         
-        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;[cite: 1]
-        const tst = h + EqT + (uLo / 15) - tz;[cite: 1]
-        const ha = (tst - 12) * 15;[cite: 1]
+        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+        const tst = h + EqT + (uLo / 15) - tz;
+        const ha = (tst - 12) * 15;
         
-        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));[cite: 1]
-        const alt = deg(Math.asin(sinAlt));[cite: 1]
+        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));
+        const alt = deg(Math.asin(sinAlt));
         
-        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));[cite: 1]
-        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));[cite: 1]
+        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));
+        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));
         
-        if (Math.sin(rad(ha)) > 0) { az = 360 - az; }[cite: 1]
+        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } 
         
         globalSunAzimuth = az;
         globalSunAltitude = alt;
         
-        const sunCont = document.getElementById('cSunContainer');[cite: 1]
-        const sunIco = document.getElementById('cSun');[cite: 1]
+        const sunCont = document.getElementById('cSunContainer');
+        const sunIco = document.getElementById('cSun');
         
         if(sunCont && sunIco) {
-            sunCont.style.transform = `rotate(${az}deg)`;[cite: 1]
-            sunIco.style.opacity = alt > -1 ? '1' : '0';[cite: 1]
+            sunCont.style.transform = `rotate(${az}deg)`;
+            sunIco.style.opacity = alt > -1 ? '1' : '0'; 
         }
-    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }[cite: 1]
+    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
 }
 
 // --- EKRAN AÇIK TUTMA (WAKE LOCK) MOTORU ---
