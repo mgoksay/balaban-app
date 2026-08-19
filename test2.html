@@ -265,6 +265,13 @@ select option {
     transform-origin: center center;
 }
 
+/* Harita açıkken uyarı yazısını daha görünür yap */
+.c-movl.map-on .c-warn { 
+    color: #f5e505; 
+    font-weight: 800; 
+    text-shadow: 0px 1px 4px rgba(0,0,0,1), 0px 0px 8px rgba(0,0,0,1); 
+}
+
 .c-movl.map-on .c-dial-wrap {
     opacity: 0;
     pointer-events: none;
@@ -503,7 +510,7 @@ select option {
     </div>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
-      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.4.4</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.5.0</div>
     </div>
   </div>
 </div>
@@ -1652,7 +1659,7 @@ const T={
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler (Arka Plan)',
       thL:'Ayet/Hadis Teması (Koyu)',stPreAlarms: 'Vakitlerden Önce Uyarılar', minsBefore: 'dk. önce', sysSound: 'Sistem Sesi',      
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir', mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
-      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.4.4', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.5.0', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et', ns:'Yeni konum aranacak...', sg:'Öneri: ',
       cp:'Kıble Pusulası', tl:'← Sola dönün', tr:'Sağa dönün →', tp:'🕋 Harika! Kıbleye döndünüz', ch:'Şu anki Yön', cw:'Telefonu yere paralel tutun. Yön hatalıysa cihazınızla havada 8 çizin.',
@@ -1670,7 +1677,7 @@ const T={
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       thL:'Motyw Wersetu (Ciemny)',stPreAlarms: 'Alerty Przed Czasem', minsBefore: 'min przed', sysSound: 'Dźwięk Systemu',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień', mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
-      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.4.4', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.5.0', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',
       volLbl:'Głośność',testLbl:'Test Dźwięku', ns:'Wyszuka nową lokalizację...', sg:'Sugestia: ',
       cp:'Kompas Qibla', tl:'← Skręć w lewo', tr:'Skręć w prawo →', tp:'🕋 Jesteś na Qibli!', ch:'Obecny kierunek', cw:'Trzymaj telefon płasko. Jeśli kierunek jest błędny, zrób ósemkę w powietrzu.',
@@ -1688,7 +1695,7 @@ const T={
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       thL:'Verse Theme (Dark)',stPreAlarms: 'Pre-Prayer Alerts', minsBefore: 'mins before', sysSound: 'System Sound',
       ll:'Language / Dil',lol:'Location',chg:'Change', mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
-      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.4.4', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.5.0', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
       sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',
       volLbl:'Volume',testLbl:'Test Sound', ns:'Will search new location...', sg:'Suggestion: ',
       cp:'Qibla Compass', tl:'← Turn Left', tr:'Turn Right →', tp:'🕋 You are on Qibla!', ch:'Current Heading', cw:'Hold phone flat. If direction is wrong, draw an 8 in the air.',
@@ -1706,7 +1713,7 @@ const T={
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       thL:'Vers-Design (Dunkel)',stPreAlarms: 'Vorab-Warnungen', minsBefore: 'Min. vorher', sysSound: 'Systemton',
       ll:'Sprache',lol:'Standort',chg:'Ändern', mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
-      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.4.4', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.5.0', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
       sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',
       volLbl:'Lautstärke',testLbl:'Ton testen', ns:'Neuer Standort wird gesucht...', sg:'Vorschlag: ',
       cp:'Qibla Kompass', tl:'← Nach links drehen', tr:'Nach rechts drehen →', tp:'🕋 Sie sind auf Qibla!', ch:'Aktuelle Richtung', cw:'Halten Sie das Telefon flach. Wenn die Richtung falsch ist, zeichnen Sie eine 8.',
@@ -1724,7 +1731,7 @@ const T={
       tw:'Время на эту неделю',st:'Настройки',ml:'Метод расчета',nl:'Уведомления',
       thL:'Тема Аята (Темная)',stPreAlarms: 'Предварительные оповещения', minsBefore: 'мин до', sysSound: 'Системный звук',
       ll:'Язык / Language',lol:'Местоположение',chg:'Изменить', mt:'Выберите место',ms1:'Популярных городов:',ms2:'Введите название города:',
-      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.4.4', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
+      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.5.0', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
       sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',
       volLbl:'Громкость',testLbl:'Проверка звука', ns:'Будет найден новый адрес...', sg:'Предложение: ',
       cp:'Компас Киблы', tl:'← Поверните налево', tr:'Поверните направо →', tp:'🕋 Вы на Кибле!', ch:'Текущее направление', cw:'Держите телефон ровно. Если направление неверное, нарисуйте в воздухе 8.',
@@ -1742,7 +1749,7 @@ const T={
       tw:'أوقات هذا الأسبوع',st:'الإعدادات',ml:'طريقة الحساب',nl:'الإشعارات (الخلفية)',
       thL:'الآية (داكن)',stPreAlarms: 'تنبيهات قبل الوقت', minsBefore: 'دقيقة قبل', sysSound: 'صوت النظام',
       ll:'اللغة / Language',lol:'الموقع',chg:'تغيير', mt:'اختر الموقع',ms1:'المدن الشهيرة:',ms2:'أدخل اسم المدينة:',
-      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.4.4', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
+      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.5.0', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
       sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',
       volLbl:'مستوى الصوت',testLbl:'اختبار الصوت', ns:'سيتم البحث عن موقع جديد...', sg:'اقتراح: ',
       cp:'بوصلة القبلة', tl:'← اتجه يساراً', tr:'اتجه يميناً →', tp:'🕋 أنت في اتجاه القبلة!', ch:'الاتجاه الحالي', cw:'احمل الهاتف بشكل مسطح. إذا كان الاتجاه خاطئًا، ارسم رقم 8 في الهواء.',
@@ -3319,24 +3326,24 @@ function initQiblaMapBg() {
                 let cLat2 = cLat + d * Math.cos(rad(cAngle));
                 let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
-                // Güneş ikonu konumu (Mavi noktanın yaklaşık 30 metre çaprazı)
-                let sunDist = 0.0003;
-                let sLat = cLat + sunDist * Math.cos(rad(globalSunAzimuth));
-                let sLng = cLng + (sunDist * Math.sin(rad(globalSunAzimuth))) / Math.cos(rad(cLat));
+                // Güneş ikonu konumu (Mavi noktanın altında kalmasın diye mesafeyi 0.0004 yaptık)
+                let az = globalSunAzimuth || 0;
+                let sunDist = 0.00025;
+                let sLat = cLat + sunDist * Math.cos(rad(az));
+                let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
                 if (!qMap) {
-                    // Harita etkileşimleri serbest (Zoom ve kaydırma yapılabilir)
                     qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
                     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
                     
-                    // 1. Güneş İkonu
+                    // 1. Güneş İkonu (Parlak gölgeli ve her zaman üstte kalacak şekilde)
                     const sunIconHTML = L.divIcon({ 
-                        className: 'map-sun-icon', 
-                        html: '<div style="font-size:24px; filter:drop-shadow(0 0 6px rgba(241,196,15,0.9));">☀️</div>', 
-                        iconSize: [24, 24], 
-                        iconAnchor: [12, 12] 
+                        className: '', 
+                        html: '<div style="font-size:26px; text-shadow: 0px 0px 8px rgba(241,196,15,1);">☀️</div>', 
+                        iconSize: [30, 30], 
+                        iconAnchor: [15, 15] 
                     });
-                    qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML }).addTo(qMap);
+                    qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML, zIndexOffset: 1000 }).addTo(qMap);
 
                     // 2. Kıble Çizgisi (Başlangıçta Kesik Mavi)
                     qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '5, 8' }).addTo(qMap);
@@ -3351,7 +3358,7 @@ function initQiblaMapBg() {
                 }
 
                 // Gece ise güneşi haritada gizle
-                if (globalSunAltitude > -1) {
+                if (globalSunAltitude > -5) {
                     qSunMarker.setOpacity(1);
                 } else {
                     qSunMarker.setOpacity(0);
@@ -3373,6 +3380,7 @@ function initQiblaMapBg() {
         );
     }
 }
+
 function handleHeading(e) {
     // Eğer kesin yön event'i tetiklendiyse ve flag henüz kalkmadıysa
     if (e.type === 'deviceorientationabsolute' && e.absolute && !usingAbsoluteHeading) {
@@ -3411,12 +3419,10 @@ function handleHeading(e) {
 function animateCompass() {
     smoothedRotation += (targetRotation - smoothedRotation) * 0.05; 
 
-    // Pusula kadranı
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
     
-    // Haritanın döndürülmesi
     if (isMapMode && qMap) {
-        document.getElementById('qiblaMapBg').style.transform = `rotate(${-smoothedRotation}deg)`;
+document.getElementById('qiblaMapBg').style.transform = `rotate(${mapRotation}deg)`;
     }
 
     let displayHeading = Math.round(smoothedRotation) % 360;
@@ -3438,11 +3444,14 @@ function animateCompass() {
             if (dirVal) dirVal.textContent = "0°";
             if (infoBox) infoBox.classList.add('qibla-success');
             
-            // Nokta ve Çizgi Yeşil ve Düz Olur
             if (qMarker) qMarker.setStyle({ fillColor: '#2e7d32' }); 
             if (qLine) qLine.setStyle({ color: '#2e7d32', dashArray: null, weight: 6 });
             
-            if(navigator.vibrate && Math.random() < 0.05) navigator.vibrate(10);
+            // HATA BURADAYDI DÜZELTİLDİ: Hedefi bulduğunda ardışık 2 güçlü titreşim verir
+            if(navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]); 
+            }
+            
             wasAligned = true;
         }
     } else {
@@ -3450,7 +3459,6 @@ function animateCompass() {
             if (infoBox) infoBox.classList.remove('qibla-success');
             if (turn) turn.innerHTML = ''; 
             
-            // Nokta ve Çizgi Tekrar Mavi ve Kesik Olur
             if (qMarker) qMarker.setStyle({ fillColor: '#4285F4' });
             if (qLine) qLine.setStyle({ color: '#4285F4', dashArray: '5, 8', weight: 4 });
             
