@@ -3317,18 +3317,15 @@ function initQiblaMapBg() {
                 const KAABA_LAT = 21.4225;
                 const KAABA_LON = 39.8262;
 
-                // Güneşin konumunu anlık hesapla
                 if (typeof updateSunPosition === 'function') updateSunPosition();
 
-                // Kıble çizgisi
+                // Kıble Çizgisi
                 let cAngle = qibla(cLat, cLng);
-                // HATA BURADAYDI DÜZELTİLDİ: 50.0 değeri kutupları aşıp çizgiyi büküyordu. 
-                // 0.02 (yaklaşık 2.5 km) yapıldı. Ekranı kaplar ama açıyı asla bozmaz.
                 let d = 0.02; 
                 let cLat2 = cLat + d * Math.cos(rad(cAngle));
                 let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
-                // Güneş ikonu konumu (Mavi noktaya çok yakın: 0.00015)
+                // Güneşin Gerçek Azimut Açısıyla Haritada Konumlandırılması
                 let az = globalSunAzimuth || 0;
                 let sunDist = 0.00015; 
                 let sLat = cLat + sunDist * Math.cos(rad(az));
@@ -3347,10 +3344,10 @@ function initQiblaMapBg() {
                     });
                     qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML, zIndexOffset: 1000 }).addTo(qMap);
 
-                    // 2. Kıble Çizgisi (Başlangıçta Kesik Mavi)
+                    // 2. Kıble Çizgisi
                     qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '5, 8' }).addTo(qMap);
                     
-                    // 3. Merkez Konum (Mavi Nokta)
+                    // 3. Kullanıcı Konumu
                     qMarker = L.circleMarker([cLat, cLng], { radius: 8, fillColor: "#4285F4", color: "#fff", weight: 3, opacity: 1, fillOpacity: 1 }).addTo(qMap);
                 } else {
                     qMap.setView([cLat, cLng], 18);
@@ -3359,14 +3356,12 @@ function initQiblaMapBg() {
                     qSunMarker.setLatLng([sLat, sLng]);
                 }
 
-                // Gece ise güneşi haritada gizle (-5 derece ufuk altı payı)
                 if (globalSunAltitude > -5) {
                     qSunMarker.setOpacity(1);
                 } else {
                     qSunMarker.setOpacity(0);
                 }
 
-                // KM Uzaklığı
                 let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
                 let distKm = (distMeters / 1000).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 let haEl = document.getElementById('cHA');
@@ -3487,32 +3482,31 @@ function updateSunPosition() {
     try {
         const now = new Date();
         const tz = -now.getTimezoneOffset() / 60;
-        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));
+        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));[cite: 1]
         
-        // Gerçek Güneş Zamanı ve Saat Açısı
-        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
-        const tst = h + EqT + (uLo / 15) - tz;
-        const ha = (tst - 12) * 15;
+        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;[cite: 1]
+        const tst = h + EqT + (uLo / 15) - tz;[cite: 1]
+        const ha = (tst - 12) * 15;[cite: 1]
         
-        // Güneşin Yüksekliği (Ufkun altında mı üstünde mi?)
-        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));
-        const alt = deg(Math.asin(sinAlt));
+        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));[cite: 1]
+        const alt = deg(Math.asin(sinAlt));[cite: 1]
         
-        // Güneşin Pusula Yönü (Azimuth)
-        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));
-        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));
+        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));[cite: 1]
+        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));[cite: 1]
         
-        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } // Öğleden sonraysa açıyı ters çevir
+        if (Math.sin(rad(ha)) > 0) { az = 360 - az; }[cite: 1]
         
-        const sunCont = document.getElementById('cSunContainer');
-        const sunIco = document.getElementById('cSun');
+        globalSunAzimuth = az;
+        globalSunAltitude = alt;
+        
+        const sunCont = document.getElementById('cSunContainer');[cite: 1]
+        const sunIco = document.getElementById('cSun');[cite: 1]
         
         if(sunCont && sunIco) {
-            sunCont.style.transform = `rotate(${az}deg)`;
-            // Eğer güneş ufkun altındaysa (gece) ikonu gizle, üstündeyse göster
-            sunIco.style.opacity = alt > -1 ? '1' : '0'; 
+            sunCont.style.transform = `rotate(${az}deg)`;[cite: 1]
+            sunIco.style.opacity = alt > -1 ? '1' : '0';[cite: 1]
         }
-    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
+    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }[cite: 1]
 }
 
 // --- EKRAN AÇIK TUTMA (WAKE LOCK) MOTORU ---
