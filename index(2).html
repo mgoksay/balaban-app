@@ -260,6 +260,15 @@ select option {
 .c-movl.map-on #qiblaMapBg { opacity:1; }
 .c-movl.map-on { background:#000; }
 
+/* Harita için konum netleşene kadar gösterilen yükleme katmanı.
+   Amaç: GPS sonucu gelmeden ASLA yanlış/eski bir konum çizmemek -
+   önce boş+spinner, sonra doğrudan doğru konumla tek seferde harita. */
+.q-map-loading { position:absolute; inset:0; z-index:1; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#0b1423; opacity:0; transition:opacity 0.3s ease; }
+.c-movl.map-on.map-loading .q-map-loading { display:flex; opacity:1; }
+.q-spinner { width:38px; height:38px; border-radius:50%; border:3px solid rgba(201,168,76,0.2); border-top-color:var(--gold); animation:qSpin 0.8s linear infinite; }
+@keyframes qSpin{to{transform:rotate(360deg)}}
+.q-map-loading-txt { font-size:13px; color:var(--mx); font-weight:700; }
+
 .c-hdr, .c-turn, .c-warn, .c-dial-wrap, .c-info { z-index:2; position:relative; }
 .c-hdr { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 .c-back { font-size:24px; color:var(--gold); cursor:pointer; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:var(--surf); border-radius:50%; border:0.5px solid var(--br); transition:all 0.3s;}
@@ -513,6 +522,10 @@ select option {
 <div class="c-movl" id="compassMov">
   <!-- Kamera yerine Harita arka planı eklendi -->
   <div id="qiblaMapBg"></div>
+  <div id="qiblaMapLoading" class="q-map-loading">
+    <div class="q-spinner"></div>
+    <div class="q-map-loading-txt">Konumunuz belirleniyor...</div>
+  </div>
   
   <div class="c-hdr">
     <div class="c-back" onclick="closeCompass()">✕</div>
@@ -3238,7 +3251,7 @@ function toggleMap() {
         btn.innerHTML = '<span style="font-size:18px;">✕</span>'; // Kapat ikonu
         initQiblaMapBg();
     } else {
-        movl.classList.remove('map-on');
+        movl.classList.remove('map-on', 'map-loading');
         btn.textContent = "Harita";
     }
 }
@@ -3253,13 +3266,15 @@ function drawQiblaMapPoint(cLat, cLng) {
 
     if (!qMap) {
         // Harita özgür bırakıldı: parmakla gezilebilir ve yakınlaştırılabilir
-        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
+        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18, { animate: false });
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
         qMarker = L.circleMarker([cLat, cLng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
         qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
     } else {
         // Harita ve çizgi HER ZAMAN aynı başlangıç noktasından (marker konumundan) çizilir
-        qMap.setView([cLat, cLng], 18);
+        // animate:false -> olası bir sonraki konum güncellemesinde de "kayan/panlanan"
+        // görsel sıçrama olmaz, tek karede doğru yere geçer.
+        qMap.setView([cLat, cLng], 18, { animate: false });
         qMarker.setLatLng([cLat, cLng]);
         qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
     }
@@ -3268,30 +3283,34 @@ function drawQiblaMapPoint(cLat, cLng) {
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
-    // 1) ANINDA ÇİZİM: Uygulamanın zaten bildiği son konumu (uLa/uLo) kullanarak
-    //    haritayı DERHAL göster. Bu, 27sn'lik "siyah ekran + yeni GPS fix bekleme"
-    //    gecikmesini ortadan kaldırıp referans videodaki gibi ~1sn'de harita
-    //    açılmasını sağlar. Konum bilgisi zaten Ana Sayfa/Kıble kartında kullanılıyor,
-    //    burada yeniden GPS'in cevap vermesini beklemeye gerek yok.
-    let safeLa = parseFloat(uLa) || 41.0082;
-    let safeLo = parseFloat(uLo) || 28.9784;
-    drawQiblaMapPoint(safeLa, safeLo);
+    const movl = document.getElementById('compassMov');
+    movl.classList.add('map-loading'); // konum netleşene kadar spinner göster, HİÇBİR ŞEY ÇİZME
 
-    // 2) SESSİZ İYİLEŞTİRME: Arka planda daha hassas/güncel bir GPS konumu iste.
-    //    Sonuç gelince, kullanıcı fark etmeden marker+çizgi+harita aynı anda
-    //    (senkron) yeni konuma kayar. Hata durumunda ekranı bozmadan, mevcut
-    //    tahmini konumla haritayı göstermeye devam eder.
+    // TEK SEFERLİK ÇİZİM İLKESİ: Önce eski/önbellekteki konumla, sonra taze GPS'le
+    // iki kez çizmek (eski yaklaşım) kullanıcıya "önce yanlış şehir, sonra doğru yer"
+    // şeklinde bir sıçrama olarak görünüyordu. Artık konum netleşmeden harita hiç
+    // çizilmiyor; böylece ekranda tek ve doğru bir sonuç beliriyor.
+    const finish = (la, lo) => {
+        if (!isMapMode) return; // kullanıcı bu sırada haritayı kapattıysa boşuna çizme
+        drawQiblaMapPoint(la, lo);
+        movl.classList.remove('map-loading');
+    };
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                if (!isMapMode) return; // kullanıcı haritayı kapattıysa boşuna işlem yapma
-                drawQiblaMapPoint(pos.coords.latitude, pos.coords.longitude);
-            },
+            (pos) => finish(pos.coords.latitude, pos.coords.longitude),
             (err) => {
-                console.warn('Hassas GPS alınamadı, tahmini konumla devam ediliyor:', err);
+                // Taze GPS alınamadı: son bilinen (uLa/uLo) konumla TEK SEFER göster,
+                // asla önce yanlış sonra doğru şeklinde iki kez çizme.
+                console.warn('Hassas GPS alınamadı, son bilinen konumla devam ediliyor:', err);
+                finish(parseFloat(uLa) || 41.0082, parseFloat(uLo) || 28.9784);
             },
-            { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+            // maximumAge: cihaz/tarayıcı yakın zamanda bir konum bulduysa (ör. ana ekran
+            // açılışında) onu anında kullanır - çoğu durumda spinner göz açıp kapayana kadar sürer.
+            { enableHighAccuracy: true, timeout: 8000, maximumAge: 20000 }
         );
+    } else {
+        finish(parseFloat(uLa) || 41.0082, parseFloat(uLo) || 28.9784);
     }
 }
 
