@@ -3237,6 +3237,11 @@ let isMapMode = false;
 let qMap = null;
 let qMarker = null;
 let qLine = null;
+let qSunLine = null;
+let qSunMarker = null;
+let globalSunAzimuth = 0;
+let globalSunAltitude = -1;
+let wasAligned = false;
 
 // Harita Modunu Açıp Kapatan Buton
 function toggleMap() {
@@ -3246,12 +3251,44 @@ function toggleMap() {
     isMapMode = !isMapMode;
     if (isMapMode) {
         movl.classList.add('map-on');
-        btn.innerHTML = '<span style="font-size:18px;">✕</span>'; // Kapat ikonu
+        btn.innerHTML = '<span style="font-size:18px;">✕</span>';
         initQiblaMapBg();
     } else {
         movl.classList.remove('map-on');
         btn.textContent = "Harita";
     }
+}
+
+// O ANKİ GERÇEK GÜNEŞ AÇISINI HESAPLAYAN FONKSİYON
+function updateSunPosition() {
+    try {
+        const now = new Date();
+        const tz = -now.getTimezoneOffset() / 60;
+        const { d, EqT } = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate()));
+        
+        const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+        const tst = h + EqT + (uLo / 15) - tz;
+        const ha = (tst - 12) * 15;
+        
+        const sinAlt = Math.sin(rad(uLa)) * Math.sin(rad(d)) + Math.cos(rad(uLa)) * Math.cos(rad(d)) * Math.cos(rad(ha));
+        const alt = deg(Math.asin(sinAlt));
+        
+        const cosAz = (Math.sin(rad(d)) - Math.sin(rad(uLa)) * sinAlt) / (Math.cos(rad(uLa)) * Math.cos(rad(alt)));
+        let az = deg(Math.acos(Math.max(-1, Math.min(1, cosAz))));
+        
+        if (Math.sin(rad(ha)) > 0) { az = 360 - az; } 
+        
+        globalSunAzimuth = az;
+        globalSunAltitude = alt;
+        
+        const sunCont = document.getElementById('cSunContainer');
+        const sunIco = document.getElementById('cSun');
+        
+        if(sunCont && sunIco) {
+            sunCont.style.transform = `rotate(${az}deg)`;
+            sunIco.style.opacity = alt > -1 ? '1' : '0'; 
+        }
+    } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
 }
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
@@ -3265,25 +3302,49 @@ function initQiblaMapBg() {
                 const KAABA_LAT = 21.4225;
                 const KAABA_LON = 39.8262;
                 
+                // Kıble Çizgisi
                 let cAngle = qibla(cLat, cLng);
                 let d = 50.0; 
                 let cLat2 = cLat + d * Math.cos(rad(cAngle));
                 let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
+                // Güneş Çizgisi
+                let sLat2 = cLat + d * Math.cos(rad(globalSunAzimuth));
+                let sLng2 = cLng + (d * Math.sin(rad(globalSunAzimuth))) / Math.cos(rad(cLat));
+                
+                // Ekranda Görünmesi İçin Güneş İkonunu 100 Metre Uzağa Koyuyoruz
+                let sunDist = 0.0015;
+                let mLat = cLat + sunDist * Math.cos(rad(globalSunAzimuth));
+                let mLng = cLng + (sunDist * Math.sin(rad(globalSunAzimuth))) / Math.cos(rad(cLat));
+
                 if (!qMap) {
-                    qMap = L.map('qiblaMapBg', { 
-                        zoomControl: false, 
-                        attributionControl: false
-                    }).setView([cLat, cLng], 18);
-                    
+                    qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
                     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
                     
+                    // 1. Güneş (Alt Katman)
+                    qSunLine = L.polyline([[cLat, cLng], [sLat2, sLng2]], { color: '#f39c12', weight: 3, opacity: 0.8, dashArray: '5, 10' }).addTo(qMap);
+                    const sunIconHTML = L.divIcon({ className: 'map-sun-marker', html: '<div style="font-size:24px; filter:drop-shadow(0 0 5px #f1c40f);">☀️</div>', iconSize: [24, 24], iconAnchor: [12, 12] });
+                    qSunMarker = L.marker([mLat, mLng], { icon: sunIconHTML }).addTo(qMap);
+
+                    // 2. Kıble (Üst Katman)
                     qMarker = L.circleMarker([cLat, cLng], { radius: 8, fillColor: "#4285F4", color: "#fff", weight: 3, opacity: 1, fillOpacity: 1 }).addTo(qMap);
                     qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 5, opacity: 0.9, dashArray: '1, 10' }).addTo(qMap);
                 } else {
                     qMap.setView([cLat, cLng], 18);
+                    
                     qMarker.setLatLng([cLat, cLng]);
                     qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
+                    qSunLine.setLatLngs([[cLat, cLng], [sLat2, sLng2]]);
+                    qSunMarker.setLatLng([mLat, mLng]);
+                }
+
+                // Gece ise güneşi haritada gizle
+                if (globalSunAltitude > -1) {
+                    qSunLine.setStyle({opacity: 0.8});
+                    qSunMarker.setOpacity(1);
+                } else {
+                    qSunLine.setStyle({opacity: 0});
+                    qSunMarker.setOpacity(0);
                 }
 
                 let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
@@ -3344,7 +3405,7 @@ function animateCompass() {
 
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
     
-    if (isMapMode) {
+    if (isMapMode && qMap) {
         document.getElementById('qiblaMapBg').style.transform = `rotate(${-smoothedRotation}deg)`;
     }
 
@@ -3359,16 +3420,32 @@ function animateCompass() {
     let dirVal = document.getElementById('cQA');
 
     let absDiff = Math.round(Math.abs(diff));
+    let isAligned = absDiff < 3; // 3 Dereceden azsa hedefteyiz
 
-    if (absDiff < 3) {
-        turn.innerHTML = `✓ Hizada`;
-        dirVal.textContent = "0°";
-        infoBox.classList.add('qibla-success');
-        
-        if(navigator.vibrate && Math.random() < 0.05) navigator.vibrate(10);
+    if (isAligned) {
+        if (!wasAligned) { // Sadece durum değiştiğinde tetikle
+            turn.innerHTML = `✓ Hizada`;
+            dirVal.textContent = "0°";
+            infoBox.classList.add('qibla-success');
+            
+            // Çizgiyi Yeşil ve Düz Yap
+            if (qLine) qLine.setStyle({ color: '#2e7d32', dashArray: null, weight: 6 }); 
+            if (qMarker) qMarker.setStyle({ fillColor: '#2e7d32' }); 
+            
+            if(navigator.vibrate && Math.random() < 0.05) navigator.vibrate(10);
+            wasAligned = true;
+        }
     } else {
-        infoBox.classList.remove('qibla-success');
-        turn.innerHTML = ''; 
+        if (wasAligned) {
+            infoBox.classList.remove('qibla-success');
+            turn.innerHTML = ''; 
+            
+            // Çizgiyi Tekrar Kesik Mavi Yap
+            if (qLine) qLine.setStyle({ color: '#4285F4', dashArray: '1, 10', weight: 5 }); 
+            if (qMarker) qMarker.setStyle({ fillColor: '#4285F4' });
+            
+            wasAligned = false;
+        }
         
         if (diff > 0) {
             dirVal.textContent = `${absDiff}° sağa`;
