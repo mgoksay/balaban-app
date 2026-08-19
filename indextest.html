@@ -265,6 +265,13 @@ select option {
     transform-origin: center center;
 }
 
+/* Harita açıkken uyarı yazısını daha görünür yap */
+.c-movl.map-on .c-warn { 
+    color: #ffffff; 
+    font-weight: 800; 
+    text-shadow: 0px 1px 4px rgba(0,0,0,1), 0px 0px 8px rgba(0,0,0,1); 
+}
+
 .c-movl.map-on .c-dial-wrap {
     opacity: 0;
     pointer-events: none;
@@ -3321,7 +3328,7 @@ function initQiblaMapBg() {
 
                 // Güneş ikonu konumu (Mavi noktanın altında kalmasın diye mesafeyi 0.0004 yaptık)
                 let az = globalSunAzimuth || 0;
-                let sunDist = 0.0004;
+                let sunDist = 0.00015;
                 let sLat = cLat + sunDist * Math.cos(rad(az));
                 let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
