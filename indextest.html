@@ -3309,8 +3309,6 @@ function animateCompass() {
     if (mapBg) mapBg.style.transform = `rotate(${-smoothedRotation}deg)`;
 
     let displayHeading = Math.round(smoothedRotation) % 360;
-
-    let displayHeading = Math.round(smoothedRotation) % 360;
     if (displayHeading < 0) displayHeading += 360;
     document.getElementById('cHA').textContent = displayHeading + '°';
 
