@@ -269,7 +269,7 @@ select option {
 /* Harita Açıldığında Pusula Arayüzünün Tamamen Şeffaflaşması (SENİN KODUN) */
 .c-movl.map-on .c-back { background:rgba(22,32,50,0.8); border:none; }
 .c-movl.map-on .ar-btn { background:var(--gold); color:#000; border:none; }
-.c-movl.map-on .c-dial { background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; border-color:transparent; box-shadow:none; }
+.c-movl.map-on .c-dial { background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; border-color:transparent; box-shadow:none; pointer-events:none; }
 .c-movl.map-on .c-info { background:rgba(13,27,42,0.8); backdrop-filter:blur(8px); border:none; }
 .c-movl.map-on .c-e, .c-movl.map-on .c-s, .c-movl.map-on .c-w, .c-movl.map-on .c-tick { text-shadow: 0 0 4px #000, 0 0 8px #000; }
 
@@ -3226,34 +3226,37 @@ function toggleMap() {
 
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
-    // 1. Doğrudan uygulamanın ana konumunu alıyoruz (Gizli GPS araması ve zıplama YOK)
-    let lat = parseFloat(uLa);
-    let lng = parseFloat(uLo);
+    const KAABA = [21.422487, 39.826206];
     
-    // 2. Pusulayla birebir aynı açıda düz bir sanal çizgi çiziyoruz
-    let qAngle = qibla(lat, lng);
-    let d = 0.02; // Çizginin uzunluğu
-    let lat2 = lat + d * Math.cos(rad(qAngle));
-    let lng2 = lng + (d * Math.sin(rad(qAngle))) / Math.cos(rad(lat));
+    // İstanbul'da başlamasını engellemek için hafızadaki son konumu (Örn: Varşova) al
+    let lat = parseFloat(uLa); if (isNaN(lat)) lat = 41.0082;
+    let lng = parseFloat(uLo); if (isNaN(lng)) lng = 28.9784;
 
     if (!qMap) {
-        // Haritayı parmakla kaydırmaya kapatıyoruz
-        qMap = L.map('qiblaMapBg', { 
-            zoomControl: false, attributionControl: false,
-            dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false
-        }).setView([lat, lng], 18);
-        
+        // HATA DÜZELTİLDİ: Tüm kısıtlamalar kaldırıldı, parmakla kaydırma ve zoom aktif!
+        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([lat, lng], 18);
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
         qMarker = L.circleMarker([lat, lng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
-        qLine = L.polyline([[lat, lng], [lat2, lng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
-    } else {
-        qMap.setView([lat, lng], 18);
-        qMarker.setLatLng([lat, lng]);
-        qLine.setLatLngs([[lat, lng], [lat2, lng2]]);
+        qLine = L.polyline([[lat, lng], KAABA], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
+    }
+
+    // Harita yüklendikten sonra GERÇEK sokağını yüksek hassasiyetle bul
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            let cLat = pos.coords.latitude;
+            let cLng = pos.coords.longitude;
+            
+            // HATA DÜZELTİLDİ: Zıplamak yerine kamerayı sokağına yumuşakça kaydırır
+            qMap.flyTo([cLat, cLng], 18, { animate: true, duration: 1.5 }); 
+            qMarker.setLatLng([cLat, cLng]);
+            qLine.setLatLngs([[cLat, cLng], KAABA]);
+            
+        }, null, { enableHighAccuracy: true });
     }
     
     setTimeout(() => qMap.invalidateSize(), 300);
 }
+
 function handleHeading(e) {
     // Eğer kesin yön event'i tetiklendiyse ve flag henüz kalkmadıysa
     if (e.type === 'deviceorientationabsolute' && e.absolute && !usingAbsoluteHeading) {
@@ -3292,7 +3295,10 @@ function handleHeading(e) {
 function animateCompass() {
     smoothedRotation += (targetRotation - smoothedRotation) * 0.03;
 
+    // Sadece pusula dairesi döner
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
+    
+    // NOT: Haritayı döndürme kodu silindi çünkü parmakla kaydırma ve zoom özelliklerini bozuyordu.
 
     let displayHeading = Math.round(smoothedRotation) % 360;
     if (displayHeading < 0) displayHeading += 360;
