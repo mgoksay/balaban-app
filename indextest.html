@@ -256,8 +256,7 @@ select option {
 .c-movl.open { opacity:1; pointer-events:all; }
 
 /* YENİ: Harita Arka Planı (AR Video Yerine) */
-/* YENİ: Harita Arka Planı (Döndüğünde köşeler görünmesin diye büyütüldü) */
-#qiblaMapBg { position:absolute; top:-25%; left:-25%; width:150%; height:150%; z-index:0; opacity:0; transition:opacity 0.5s ease; }
+#qiblaMapBg { position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:0; transition:opacity 0.5s ease; }
 .c-movl.map-on #qiblaMapBg { opacity:1; }
 .c-movl.map-on { background:#000; }
 
@@ -3230,31 +3229,28 @@ function toggleMap() {
 // Açık Kaynak Uydu Haritasını Çizen Fonksiyon
 function initQiblaMapBg() {
     const KAABA = [21.422487, 39.826206];
-    // İstanbul yerine direkt kullanıcının hafızadaki konumunu (Örn: Varşova) al
-    let lat = uLa || 41.0082; 
-    let lng = uLo || 28.9784;
 
+    // Harita zaten açıksa tekrar oluşturma
     if (!qMap) {
-        // Haritayı parmakla kaydırmaya/yakınlaştırmaya kapatıyoruz
-        qMap = L.map('qiblaMapBg', { 
-            zoomControl: false, attributionControl: false,
-            dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false
-        }).setView([lat, lng], 18);
-        
+        qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([41.0082, 28.9784], 18);
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
-        qMarker = L.circleMarker([lat, lng], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
-        qLine = L.polyline([[lat, lng], KAABA], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
+        qMarker = L.circleMarker([41.0082, 28.9784], { radius: 7, fillColor: "#4285F4", color: "#fff", weight: 2, opacity: 1, fillOpacity: 1 }).addTo(qMap);
+        qLine = L.polyline([[41.0082, 28.9784], KAABA], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '8, 8' }).addTo(qMap);
     }
 
+    // Telefonun GERÇEK GPS Konumunu al ve haritayı oraya odakla
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
-            let cLat = pos.coords.latitude;
-            let cLng = pos.coords.longitude;
-            qMap.setView([cLat, cLng], 18);
-            qMarker.setLatLng([cLat, cLng]);
-            qLine.setLatLngs([[cLat, cLng], KAABA]);
+            let lat = pos.coords.latitude;
+            let lng = pos.coords.longitude;
+            qMap.setView([lat, lng], 18);
+            qMarker.setLatLng([lat, lng]);
+            qLine.setLatLngs([[lat, lng], KAABA]);
             setTimeout(() => qMap.invalidateSize(), 300);
         }, (err) => {
+            // Eğer kullanıcı GPS'e izin vermezse hafızadaki son konumu kullan
+            let lat = uLa || 41.0082; 
+            let lng = uLo || 28.9784;
             qMap.setView([lat, lng], 18);
             qMarker.setLatLng([lat, lng]);
             qLine.setLatLngs([[lat, lng], KAABA]);
@@ -3301,12 +3297,7 @@ function handleHeading(e) {
 function animateCompass() {
     smoothedRotation += (targetRotation - smoothedRotation) * 0.03;
 
-    // Pusula dairesini döndür
     document.getElementById('cDial').style.transform = `rotate(${-smoothedRotation}deg)`;
-    
-    // YENİ: Arkadaki uydu haritasını da pusula ile tamamen aynı açıda döndür!
-    const mapBg = document.getElementById('qiblaMapBg');
-    if (mapBg) mapBg.style.transform = `rotate(${-smoothedRotation}deg)`;
 
     let displayHeading = Math.round(smoothedRotation) % 360;
     if (displayHeading < 0) displayHeading += 360;
