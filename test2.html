@@ -3320,15 +3320,17 @@ function initQiblaMapBg() {
                 // Güneşin konumunu anlık hesapla
                 if (typeof updateSunPosition === 'function') updateSunPosition();
 
-                // Kıble çizgisi (Ufka kadar uzanır)
+                // Kıble çizgisi
                 let cAngle = qibla(cLat, cLng);
-                let d = 50.0; 
+                // HATA BURADAYDI DÜZELTİLDİ: 50.0 değeri kutupları aşıp çizgiyi büküyordu. 
+                // 0.02 (yaklaşık 2.5 km) yapıldı. Ekranı kaplar ama açıyı asla bozmaz.
+                let d = 0.02; 
                 let cLat2 = cLat + d * Math.cos(rad(cAngle));
                 let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
-                // Güneş ikonu konumu (Mavi noktanın altında kalmasın diye mesafeyi 0.0004 yaptık)
+                // Güneş ikonu konumu (Mavi noktaya çok yakın: 0.00015)
                 let az = globalSunAzimuth || 0;
-                let sunDist = 0.00030;
+                let sunDist = 0.00015; 
                 let sLat = cLat + sunDist * Math.cos(rad(az));
                 let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
@@ -3336,7 +3338,7 @@ function initQiblaMapBg() {
                     qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
                     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
                     
-                    // 1. Güneş İkonu (Parlak gölgeli ve her zaman üstte kalacak şekilde)
+                    // 1. Güneş İkonu
                     const sunIconHTML = L.divIcon({ 
                         className: '', 
                         html: '<div style="font-size:26px; text-shadow: 0px 0px 8px rgba(241,196,15,1);">☀️</div>', 
@@ -3357,7 +3359,7 @@ function initQiblaMapBg() {
                     qSunMarker.setLatLng([sLat, sLng]);
                 }
 
-                // Gece ise güneşi haritada gizle
+                // Gece ise güneşi haritada gizle (-5 derece ufuk altı payı)
                 if (globalSunAltitude > -5) {
                     qSunMarker.setOpacity(1);
                 } else {
