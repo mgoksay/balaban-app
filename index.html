@@ -1894,7 +1894,7 @@ let globalDid = null;
 let isDiyanetDown = false; 
 setInterval(() => { isDiyanetDown = false; globalMonthData = null; }, 3600000);
 
-let defaultPrefs = {fajr:'off', sunrise:'alert4', dhuhr:'ogle', asr:'ikindi', maghrib:'aksam', isha:'yatsi'};
+let defaultPrefs = {fajr:'off', sunrise:'off', dhuhr:'ogle', asr:'ikindi', maghrib:'aksam', isha:'yatsi'};
 let preSoundPrefs = {
     fajr: { on: false, min: 15, snd: 'alert1' },
     sunrise: { on: false, min: 15, snd: 'alert1' },
@@ -2046,18 +2046,18 @@ notifOn = (await getPref('bNotif', 'off')) === 'on';
 if (isNative && LocalNotifications) {
             try {
                 await LocalNotifications.requestPermissions();
-                await LocalNotifications.createChannel({ id: 'kanal_azan1_v3', name: 'Ezan 1', sound: 'azan1.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_sabah_v3', name: 'Sabah Ezanı', sound: 'sabah.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_ogle_v3', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v3', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_aksam_v3', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v3', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert2_v3', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert3_v3', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert4_v3', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_beep_v3', name: 'Bip Sesi', sound: 'beep.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_system_v3', name: 'Sistem Sesi', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_vibrate_v3', name: 'Sadece Titreşim', sound: 'sessiz.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_azan1_v4', name: 'Ezan 1', sound: 'azan1.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_sabah_v4', name: 'Sabah Ezanı', sound: 'sabah.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ogle_v4', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v4', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_aksam_v4', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v4', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert2_v4', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert3_v4', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert4_v4', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_beep_v4', name: 'Bip Sesi', sound: 'beep.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_system_v4', name: 'Sistem Sesi', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_vibrate_v4', name: 'Sadece Titreşim', sound: 'sessiz.mp3', importance: 5, visibility: 1, vibration: true });
             } catch(e) {}
 // Android 14+ Tam Zamanlı Alarm İzni Kontrolü
         if (Capacitor.Plugins.Alarm && typeof Capacitor.Plugins.Alarm.checkExactAlarmPermission === 'function') {
@@ -2433,18 +2433,18 @@ async function scheduleAndroidNotifications(times) {
         if(d <= now) { d.setDate(d.getDate() + 1); }
 
         let cId = 'kanal_beep_v3';
-        if (pref === 'azan1') cId = 'kanal_azan1_v3';
-        else if (pref === 'sabah') cId = 'kanal_sabah_v3';
-        else if (pref === 'ogle') cId = 'kanal_ogle_v3';
-        else if (pref === 'ikindi') cId = 'kanal_ikindi_v3';
-        else if (pref === 'aksam') cId = 'kanal_aksam_v3';
-        else if (pref === 'yatsi') cId = 'kanal_yatsi_v3';
-        else if (pref === 'alert1') cId = 'kanal_alert1_v3'; 
-        else if (pref === 'alert2') cId = 'kanal_alert2_v3'; 
-        else if (pref === 'alert3') cId = 'kanal_alert3_v3';
-        else if (pref === 'alert4') cId = 'kanal_alert4_v3'; 
-        else if (pref === 'system') cId = 'kanal_system_v3';
-        else if (pref === 'vibrate') cId = 'kanal_vibrate_v3'; 
+        if (pref === 'azan1') cId = 'kanal_azan1_v4';
+        else if (pref === 'sabah') cId = 'kanal_sabah_v4';
+        else if (pref === 'ogle') cId = 'kanal_ogle_v4';
+        else if (pref === 'ikindi') cId = 'kanal_ikindi_v4';
+        else if (pref === 'aksam') cId = 'kanal_aksam_v4';
+        else if (pref === 'yatsi') cId = 'kanal_yatsi_v4';
+        else if (pref === 'alert1') cId = 'kanal_alert1_v4'; 
+        else if (pref === 'alert2') cId = 'kanal_alert2_v4'; 
+        else if (pref === 'alert3') cId = 'kanal_alert3_v4';
+        else if (pref === 'alert4') cId = 'kanal_alert4_v4'; 
+        else if (pref === 'system') cId = 'kanal_system_v4';
+        else if (pref === 'vibrate') cId = 'kanal_vibrate_v4'; 
 
         // --- MANEVİ SÖZÜ RASTGELE SEÇ VE METNE EKLE ---
         const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
@@ -2468,18 +2468,18 @@ async function scheduleAndroidNotifications(times) {
             if(d <= now) { d.setDate(d.getDate() + 1); }
             
             let cId = 'kanal_beep_v3';
-            if (prePref.snd === 'alert1') cId = 'kanal_alert1_v3';
-            else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v3';
-            else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v3';
-            else if (prePref.snd === 'system') cId = 'kanal_system_v3'; 
-            else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v3';
-            else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v3'; 
-            else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v3'; 
-            else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v3'; 
-            else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v3'; 
-            else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v3'; 
-            else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v3'; 
-            else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v3';
+            if (prePref.snd === 'alert1') cId = 'kanal_alert1_v4';
+            else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v4';
+            else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v4';
+            else if (prePref.snd === 'system') cId = 'kanal_system_v4'; 
+            else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v4';
+            else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v4'; 
+            else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v4'; 
+            else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v4'; 
+            else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v4'; 
+            else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v4'; 
+            else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v4'; 
+            else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v4';
             
             scheduled.push({ id: i + 10, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId });
         }
@@ -3884,7 +3884,7 @@ document.querySelectorAll('.prayer-flash-banner').forEach(el => el.remove());
 }
 
 // --- TEMKİN (OFFSET) SİSTEMİ BURADAN BAŞLIYOR ---
-let offsets = {fajr:0, sunrise:0, dhuhr:0, asr:0, maghrib:0, isha:0};
+let offsets = {fajr:0, sunrise:-7, dhuhr:5, asr:4, maghrib:6, isha:-10};
 
 function addMinutesToTime(timeStr, mins) {
     if (!timeStr || isNaN(mins) || mins == 0) return timeStr;
