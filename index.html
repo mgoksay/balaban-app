@@ -2052,6 +2052,7 @@ if (isNative && LocalNotifications) {
                 await LocalNotifications.createChannel({ id: 'kanal_ikindi_v4', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_aksam_v4', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_yatsi_v4', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert1_v4', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert2_v4', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert3_v4', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert4_v4', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
@@ -2432,7 +2433,7 @@ async function scheduleAndroidNotifications(times) {
         let d = new Date(); d.setHours(h, m, 0, 0);
         if(d <= now) { d.setDate(d.getDate() + 1); }
 
-        let cId = 'kanal_beep_v3';
+        let cId = 'kanal_beep_v4';
         if (pref === 'azan1') cId = 'kanal_azan1_v4';
         else if (pref === 'sabah') cId = 'kanal_sabah_v4';
         else if (pref === 'ogle') cId = 'kanal_ogle_v4';
@@ -2467,7 +2468,7 @@ async function scheduleAndroidNotifications(times) {
             d.setMinutes(d.getMinutes() - prePref.min); 
             if(d <= now) { d.setDate(d.getDate() + 1); }
             
-            let cId = 'kanal_beep_v3';
+            let cId = 'kanal_beep_v4';
             if (prePref.snd === 'alert1') cId = 'kanal_alert1_v4';
             else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v4';
             else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v4';
