@@ -16,6 +16,7 @@
   --bg-top:#0d1b2a; --bg-bot:#0a111a;
   --card:rgba(22, 32, 50, 0.65); 
   --surf:rgba(30, 45, 66, 0.65);
+  --mavi:#6B9CF0;--kirmizi:#F52707;
   --gold:#c9a84c;--gl:#e8c97a;--teal:#4ecdc4;--td:#2a9d8f;
   --tx:#f0ede4;--mx:#8a97aa;--br:rgba(201,168,76,0.18);
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
@@ -151,6 +152,14 @@ select option {
 .pname{font-size:11px;color:var(--mx);font-weight:600}
 .ptime{font-size:21px;font-weight:700;color:var(--gl);font-variant-numeric:tabular-nums;margin-top:3px}
 .pbadge{position:absolute;top:9px;right:9px;background:var(--gold);color:#1a1200;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+/* NAFİLE VAKİTLER SATIRI */
+.nf-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 16px 0;padding:10px 4px;background:var(--card);border:0.5px solid var(--br);border-radius:16px}
+.nf-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px;border-radius:10px;border:0.5px solid transparent}
+.nf-item.act{background:rgba(201,168,76,0.15);border-color:var(--gold)}
+.nf-n{font-size:9px;color:var(--mx);font-weight:700;text-align:center;line-height:1.15}
+.nf-item.act .nf-n{color:var(--gold)}
+.nf-t{font-size:12px;color:var(--tx);font-weight:800;font-variant-numeric:tabular-nums}
+.nf-item.act .nf-t{color:var(--gl)}
 .vcard{margin:10px 16px;border:0.5px solid var(--br);border-radius:20px;padding:18px; transition:transform 0.2s;}
 .vcard:active{transform:scale(0.97);}
 .vhdr{display:flex; align-items:center; gap:12px; margin-bottom:12px}
@@ -298,8 +307,8 @@ select option {
 .c-title { font-family:'Amiri',serif; font-size:22px; color:var(--gold); font-weight:700;}
 .ar-btn { 
     background: rgba(201, 168, 76, 0.15); 
-    border: 1px solid var(--gold); 
-    color: var(--gold); 
+    border: 3px solid var(--kirmizi); 
+    color: var(--mavi); 
     font-family: 'Nunito', sans-serif; 
     font-weight: 800; 
     font-size: 14px; 
@@ -312,6 +321,7 @@ select option {
     cursor: pointer; 
     transition: all 0.3s; 
     box-shadow: 0 0 10px rgba(201, 168, 76, 0.3); /* Butonun etrafına altın sarısı bir parlama ekler */
+
 }
 
 /* Harita Açıldığında Pusula Arayüzünün Tamamen Şeffaflaşması (SENİN KODUN) */
@@ -335,8 +345,26 @@ select option {
 .c-info-lbl { font-size:10px; color:var(--mx); text-transform:uppercase; letter-spacing:1px;}
 .c-info-val { font-size:20px; color:var(--tx); font-weight:700; font-variant-numeric:tabular-nums;}
 .c-turn { font-size:18px; font-weight:700; color:var(--teal); min-height:26px; transition:color 0.3s; margin-top:0; text-align:center; text-shadow:0 2px 4px rgba(0,0,0,0.5); }
-.c-warn { font-size: 11px; color: var(--mx); text-align: center; margin-bottom: 20px; padding: 0 10px; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+.c-warn { font-size: 12px; color: var(--mx); text-align: center; margin-bottom: 4px; padding: 0 10px; text-shadow:0 1px 2px rgba(0,0,0,0.5); position: relative; z-index: 2;}
+.c-mag-warn { font-size: 12px; color: var(--kirmizi); text-align: center; margin-bottom: 16px; padding: 0 15px; text-shadow:0 1px 2px rgba(0,0,0,0.5); z-index: 2; position: relative; transition: opacity 0.3s; line-height: 1.4; }
+.c-movl.map-on .c-mag-warn { opacity: 0; pointer-events: none; }
 .c-phone-line { position:absolute; top:-30px; left:50%; width:4px; height:40px; background:#e74c3c; transform:translateX(-50%); border-radius:2px; z-index:10; }
+/* ZAMAN ÇİZELGESİ (BANT GRAFİĞİ) */
+.tl-wrap{margin:0 16px 12px;background:var(--card);border:0.5px solid var(--br);border-radius:16px;padding:10px 8px 8px;overflow:hidden}
+.tl-axis{position:relative;height:16px;margin-bottom:4px}
+.tl-tick{position:absolute;top:0;font-size:8px;color:var(--mx);font-weight:700;transform:translateX(-50%)}
+.tl-tick::after{content:'';position:absolute;left:50%;top:11px;width:1px;height:4px;background:var(--mx);opacity:.6}
+.tl-bands{position:relative;height:64px;display:flex;flex-direction:row}
+.tl-band{position:relative;height:100%;border-right:0.5px solid rgba(13,27,42,0.6);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tl-lbl{writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;font-weight:800;color:var(--tx);opacity:.85;white-space:nowrap;letter-spacing:.5px}
+.tl-band.normal{background:rgba(138,151,170,0.22)}
+.tl-band.nafile{background:rgba(78,205,196,0.14)}
+.tl-band.gece{background:rgba(107,156,240,0.14)}
+.tl-band.kerahat{background:repeating-linear-gradient(45deg, rgba(245,39,7,0.28) 0 3px, rgba(245,39,7,0.10) 3px 6px)}
+.tl-band.act{background:rgba(201,168,76,0.30);box-shadow:inset 0 0 0 1px var(--gold)}
+.tl-band.act .tl-lbl{color:var(--gl)}
+.tl-now{position:absolute;top:0;bottom:0;width:1.5px;background:var(--kirmizi);z-index:5;box-shadow:0 0 6px rgba(245,39,7,.8)}
+.tl-now::before{content:'';position:absolute;top:-3px;left:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--kirmizi)}
 @media(max-width:360px){.hcd{font-size:34px}.ptime{font-size:19px}}
 
 /* PUSULA GÜNEŞ İKONU CSS */
@@ -390,9 +418,15 @@ select option {
       <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
       <div class="plbl" id="plbl">—</div>
     </div>
-
+<div id="nfWarn" style="display:none; margin:0 16px 10px; padding:8px 12px; background:rgba(245,39,7,0.12); border:0.5p
     <div class="stitle" id="ptTitle">Namaz Vakitleri</div>
     <div class="pgrid" id="pgrid"></div>
+<div class="stitle" id="tlTitle">Zaman Çizelgesi</div>
+<div class="tl-wrap" id="tlWrap"></div>
+
+<div class="stitle" id="nfTitle">Nafile Vakitler</div>
+<div class="nf-grid" id="nfGrid"></div>
+
 <!-- MANEVİ BUTONLAR BURAYA TAŞINDI VE ÜSTTEN BOŞLUK VERİLDİ -->
     <div class="m-bar" id="mBar" style="margin-top: 24px;">
         </div>
@@ -560,47 +594,48 @@ select option {
 </div>
 
 <div class="c-movl" id="compassMov">
-  <!-- Kamera yerine Harita arka planı eklendi -->
   <div id="qiblaMapBg"></div>
   
   <div class="c-hdr">
     <div class="c-back" onclick="closeCompass()">✕</div>
     <div class="c-title" id="cTitle">Kıble Pusulası</div>
-    <!-- AR butonu Harita butonuna çevrildi -->
     <div class="ar-btn" onclick="toggleMap()" id="arBtn" title="Harita Modu" style="font-size: 11px;">Harita</div>
   </div>
   
   <div class="c-turn" id="cTurn">--</div>
   <div class="c-warn" id="cWarn">Telefonu yere paralel tutun. Yön hatalıysa havada 8 çizin.</div>
+  
+  <!-- UYARI TAM OLARAK BURADA, DİĞER KOPYALAR SİLİNDİ -->
+  <div class="c-mag-warn" id="cMagWarn">⚠️ Eğer çevrenizde çok fazla manyetik alan varsa (binalar, demirler), lütfen Harita'yı kullanın.</div>
 
   <div class="c-dial-wrap">
     <div class="c-phone-line"></div>
     <div class="c-dial" id="cDial">
       <div class="c-tick">N</div>
       <div class="c-e">E</div><div class="c-s">S</div><div class="c-w">W</div>
-<div class="c-sun-container" id="cSunContainer"><div class="c-sun" id="cSun">☀️</div></div>
+      <div class="c-sun-container" id="cSunContainer"><div class="c-sun" id="cSun">☀️</div></div>
       <div class="c-k-container" id="cKContainer">
         <div class="c-k-line"><div class="c-kaaba">🕋</div></div>
       </div>
     </div>
   </div>
 
-<div class="c-info" id="cInfoBox">
+  <div class="c-info" id="cInfoBox">
     <div class="c-info-box" style="text-align:left;">
       <div class="c-info-lbl" id="cLblQA">Kıbleye</div>
       <div class="c-info-val" id="cQA" style="font-size: 16px;">--° sola</div>
     </div>
-    
     <div class="c-info-box" style="text-align:center; justify-content:center;">
         <div class="c-turn" id="cTurn" style="margin: 0;">--</div>
     </div>
-
     <div class="c-info-box" style="text-align:right">
       <div class="c-info-lbl" id="cLblHA">Kâbe'ye</div>
       <div class="c-info-val" id="cHA">-- km</div>
     </div>
   </div>
 </div>
+
+
 
 <div class="m-movl" id="maneviMovl" onclick="if(event.target===this) closeManevi()">
   <div class="m-modal">
@@ -1674,114 +1709,126 @@ const SPECIAL_DAYS = [
 
 let lang;
 const T={
-  tr:{h:'Ana Sayfa',c:'Takvim',s:'Ayarlar',pt:'Namaz Vakitleri',vd:'Günün Ayeti',stop: 'Durdur',
+  tr:{mapBtn:'Harita', h:'Ana Sayfa',c:'Takvim',s:'Ayarlar',pt:'Namaz Vakitleri',vd:'Günün Ayeti',stop: 'Durdur',
       qbl:'Kıble Yönü',qfr:'Kuzeyden saat yönünde',np:'Sonraki Namaz',act:'Şimdi',sVib: 'Sadece Titreşim',
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler (Arka Plan)',
       thL:'Ayet/Hadis Teması (Koyu)',stPreAlarms: 'Vakitlerden Önce Uyarılar', minsBefore: 'dk. önce', sysSound: 'Sistem Sesi',      
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir', mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
       ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.5.1', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
-      sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',
+      sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',tlTitle:'Zaman Çizelgesi', ker:'Kerahat',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et', ns:'Yeni konum aranacak...', sg:'Öneri: ',
       cp:'Kıble Pusulası', tl:'← Sola dönün', tr:'Sağa dönün →', tp:'🕋 Harika! Kıbleye döndünüz', ch:'Şu anki Yön', cw:'Telefonu yere paralel tutun. Yön hatalıysa cihazınızla havada 8 çizin.',
       spcTitle:'Yaklaşan Özel Gün', today:'Bugün!', daysL:'gün kaldı',
       copied:'Metin panoya kopyalandı!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ İpucu:</span> Uyarıyı <b>"Sistem Sesi"</b> yaparsanız, cihazınızın <b>Ayarlar > Uygulamalar > Balaban > Bildirimler</b> menüsünden dilediğiniz melodiyi seçebilirsiniz.',
-      pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Nafile Vakitler', nfWarn:'⚠️ Kerahat vakti — şu an namaz kılınmaz',
+      nf:{israk:'İşrak',duha:'Duha',evvabin:'Evvabin',gece13:'Gece 1/3',gece12:'Gece 1/2',gece23:'Gece 2/3',seher:'Seher'},
       dy:['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'],
       mo:['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
       vl:'Ayet yükleniyor...',gc:'Konum araştırılıyor...',ge:'Konum bulunamadı.',ph:'Şehir adı...',
       batWarn:'ÖNEMLİ: Ezanın ekran kapalıyken de tam vaktinde okunabilmesi için lütfen cihaz Ayarlarından bu uygulama için Pil (Batarya) kullanımını "Kısıtlandırılmamış" olarak değiştirin.',
       nagNotif:'LÜTFEN DİKKAT: Vaktinde ezan okunabilmesi için Ayarlar sekmesine giderek "Bildirimler (Arka Plan)" seçeneğini açık hale getirin.',
-      rTitle:"Kur'an-ı Kerim Radyosu", rSub:"7/24 Kesintisiz Yayın", rStatPlay:"Şu an dinliyorsunuz (Canlı)", rStatStop:"Canlı dinlemek için dokunun", rStatLd:"Bağlanıyor...", rStatErr:"Bağlantı hatası!"},
-  pl:{h:'Strona Główna',c:'Kalendarz',s:'Ustawienia',pt:'Czasy Modlitwy',vd:'Werset Dnia',stop: 'Zatrzymaj',
+      rTitle:"Kur'an-ı Kerim Radyosu", rSub:"7/24 Kesintisiz Yayın", rStatPlay:"Şu an dinliyorsunuz (Canlı)", rStatStop:"Canlı dinlemek için dokunun", rStatLd:"Bağlanıyor...", rStatErr:"Bağlantı hatası!",
+      magWarn: "⚠️ Eğer çevrenizde çok fazla manyetik alan varsa (binalar, demirler), lütfen Harita'yı kullanın."},
+  pl:{mapBtn:'Mapa', h:'Strona Główna',c:'Kalendarz',s:'Ustawienia',pt:'Czasy Modlitwy',vd:'Werset Dnia',stop: 'Zatrzymaj',
       qbl:'Kierunek Kibli',qfr:'Zgodnie z ruchem wskazówek od Północy',np:'Następna Modlitwa',act:'Teraz',sVib: 'Tylko Wibracje',
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       thL:'Motyw Wersetu (Ciemny)',stPreAlarms: 'Alerty Przed Czasem', minsBefore: 'min przed', sysSound: 'Dźwięk Systemu',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień', mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
       ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.5.1', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
-      sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',
+      sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',tlTitle:'Oś Czasu', ker:'Kerahat',
       volLbl:'Głośność',testLbl:'Test Dźwięku', ns:'Wyszuka nową lokalizację...', sg:'Sugestia: ',
       cp:'Kompas Qibla', tl:'← Skręć w lewo', tr:'Skręć w prawo →', tp:'🕋 Jesteś na Qibli!', ch:'Obecny kierunek', cw:'Trzymaj telefon płasko. Jeśli kierunek jest błędny, zrób ósemkę w powietrzu.',
       spcTitle:'Zbliżający się Dzień', today:'Dzisiaj!', daysL:'dni pozostało',
       copied:'Tekst skopiowany do schowka!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ Wskazówka:</span> Jeśli wybierzesz <b>"Dźwięk Systemu"</b>, możesz ustawić dowolną melodię w <b>Ustawienia > Aplikacje > Balaban > Powiadomienia</b> na swoim urządzeniu.',
-      pr:['Fajr','Wschód','Zuhr','Asr','Maghrib','Isza'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['Fajr','Wschód','Zuhr','Asr','Maghrib','Isza'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Czasy Nafile', nfWarn:'⚠️ Czas kerahat — teraz nie wykonuje się modlitwy',
+nf:{israk:'Iszrak',duha:'Duha',evvabin:'Evvabin',gece13:'Noc 1/3',gece12:'Noc 1/2',gece23:'Noc 2/3',seher:'Seher'},
       dy:['Nd','Pn','Wt','Śr','Cz','Pt','Sb'],
       mo:['Stycznia','Lutego','Marca','Kwietnia','Maja','Czerwca','Lipca','Sierpnia','Września','Października','Listopada','Grudnia'],
       vl:'Ładowanie wersetu...',gc:'Wyszukiwanie lokalizacji...',ge:'Nie znaleziono lokalizacji.',ph:'Nazwa miasta...',
       batWarn:'WAŻNE: Aby adhan był odtwarzany na czas przy wyłączonym ekranie, zmień ustawienia baterii dla tej aplikacji na "Brak ograniczeń".',
       nagNotif:'UWAGA: Aby słyszeć wezwanie do modlitwy o czasie, włącz "Powiadomienia" w zakładce Ustawienia.',
-      rTitle:"Radio Koran", rSub:"Transmisja 24/7", rStatPlay:"Odtwarzanie (Na żywo)", rStatStop:"Dotknij, aby słuchać", rStatLd:"Łączenie...", rStatErr:"Błąd połączenia!"},
-  en:{h:'Home',c:'Calendar',s:'Settings',pt:'Prayer Times',vd:'Verse of the Day',stop: 'Stop',
+      rTitle:"Radio Koran", rSub:"Transmisja 24/7", rStatPlay:"Odtwarzanie (Na żywo)", rStatStop:"Dotknij, aby słuchać", rStatLd:"Łączenie...", rStatErr:"Błąd połączenia!",
+      magWarn: "⚠️ Jeśli wokół Ciebie jest dużo zakłóceń magnetycznych (budynki, żelazo), skorzystaj z Mapy."},
+  en:{mapBtn:'Map', h:'Home',c:'Calendar',s:'Settings',pt:'Prayer Times',vd:'Verse of the Day',stop: 'Stop',
       qbl:'Qibla Direction',qfr:'Clockwise from North',np:'Next Prayer',act:'Now',sVib: 'Vibrate Only',
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       thL:'Verse Theme (Dark)',stPreAlarms: 'Pre-Prayer Alerts', minsBefore: 'mins before', sysSound: 'System Sound',
       ll:'Language / Dil',lol:'Location',chg:'Change', mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
       ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.5.1', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
-      sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',
+      sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',tlTitle:'Timeline', ker:'Karahat',
       volLbl:'Volume',testLbl:'Test Sound', ns:'Will search new location...', sg:'Suggestion: ',
       cp:'Qibla Compass', tl:'← Turn Left', tr:'Turn Right →', tp:'🕋 You are on Qibla!', ch:'Current Heading', cw:'Hold phone flat. If direction is wrong, draw an 8 in the air.',
       spcTitle:'Upcoming Special Day', today:'Today!', daysL:'days left',
       copied:'Text copied to clipboard!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ Tip:</span> If you select <b>"System Sound"</b>, you can choose any melody from your device\'s <b>Settings > Apps > Balaban > Notifications</b> menu.',
-      pr:['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Optional Prayers', nfWarn:'⚠️ Karahat time — prayer is not performed now',
+nf:{israk:'Ishraq',duha:'Duha',evvabin:'Awwabin',gece13:'Night 1/3',gece12:'Night 1/2',gece23:'Night 2/3',seher:'Sahar'},
       dy:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
       mo:['January','February','March','April','May','June','July','August','September','October','November','December'],
       vl:'Loading verse...',gc:'Searching location...',ge:'Location not found.',ph:'City name...',
       batWarn:'IMPORTANT: To ensure the Adhan plays on time when the screen is off, please set the battery usage for this app to "Unrestricted" in your device settings.',
       nagNotif:'ATTENTION: To hear the Adhan on time, please enable "Notifications (Background)" in the Settings tab.',
-      rTitle:"Quran Radio", rSub:"24/7 Live Broadcast", rStatPlay:"Playing (Live)", rStatStop:"Tap to listen live", rStatLd:"Connecting...", rStatErr:"Connection error!"},
-  de:{h:'Startseite',c:'Kalender',s:'Einstellungen',pt:'Gebetszeiten',vd:'Vers des Tages',stop: 'Stopp',
+      rTitle:"Quran Radio", rSub:"24/7 Live Broadcast", rStatPlay:"Playing (Live)", rStatStop:"Tap to listen live", rStatLd:"Connecting...", rStatErr:"Connection error!",
+      magWarn: "⚠️ If there is a lot of magnetic interference around you (buildings, iron), please use the Map."},
+  de:{mapBtn:'Karte', h:'Startseite',c:'Kalender',s:'Einstellungen',pt:'Gebetszeiten',vd:'Vers des Tages',stop: 'Stopp',
       qbl:'Qibla-Richtung',qfr:'Im Uhrzeigersinn von Norden',np:'Nächstes Gebet',act:'Jetzt',sVib: 'Nur Vibrieren',
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       thL:'Vers-Design (Dunkel)',stPreAlarms: 'Vorab-Warnungen', minsBefore: 'Min. vorher', sysSound: 'Systemton',
       ll:'Sprache',lol:'Standort',chg:'Ändern', mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
       ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.5.1', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
-      sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',
+      sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',tlTitle:'Zeitachse', ker:'Karahat',
       volLbl:'Lautstärke',testLbl:'Ton testen', ns:'Neuer Standort wird gesucht...', sg:'Vorschlag: ',
       cp:'Qibla Kompass', tl:'← Nach links drehen', tr:'Nach rechts drehen →', tp:'🕋 Sie sind auf Qibla!', ch:'Aktuelle Richtung', cw:'Halten Sie das Telefon flach. Wenn die Richtung falsch ist, zeichnen Sie eine 8.',
       spcTitle:'Kommender Feiertag', today:'Heute!', daysL:'Tage verbleibend',
       copied:'Text in die Zwischenablage kopiert!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ Tipp:</span> Wenn Sie <b>"Systemton"</b> wählen, können Sie im Menü <b>Einstellungen > Apps > Balaban > Benachrichtigungen</b> Ihres Geräts eine beliebige Melodie auswählen.',
-      pr:['Fadschr','Sonnenaufgang','Dhuhr','Asr','Maghrib','Ischa'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['Fadschr','Sonnenaufgang','Dhuhr','Asr','Maghrib','Ischa'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Nafile-Zeiten', nfWarn:'⚠️ Karahat-Zeit — jetzt wird kein Gebet verrichtet',
+nf:{israk:'Ischrak',duha:'Duha',evvabin:'Awwabin',gece13:'Nacht 1/3',gece12:'Nacht 1/2',gece23:'Nacht 2/3',seher:'Sahar'},
       dy:['So','Mo','Di','Mi','Do','Fr','Sa'],
       mo:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
       vl:'Vers wird geladen...',gc:'Standort wird gesucht...',ge:'Standort nicht gefunden.',ph:'Stadtname...',
       batWarn:'WICHTIG: Damit der Adhan pünktlich abgespielt wird, wenn der Bildschirm ausgeschaltet ist, stellen Sie bitte die Akkunutzung für diese App in den Geräteeinstellungen auf "Nicht eingeschränkt".',
       nagNotif:'ACHTUNG: Um den Adhan pünktlich zu hören, aktivieren Sie bitte "Benachrichtigungen" in den Einstellungen.',
-      rTitle:"Koran Radio", rSub:"24/7 Live-Übertragung", rStatPlay:"Wird abgespielt (Live)", rStatStop:"Tippen zum Anhören", rStatLd:"Verbinden...", rStatErr:"Verbindungsfehler!"},
-  ru:{h:'Главная',c:'Календарь',s:'Настройки',pt:'Время Намаза',vd:'Аят Дня',stop: 'Стоп',
+      rTitle:"Koran Radio", rSub:"24/7 Live-Übertragung", rStatPlay:"Wird abgespielt (Live)", rStatStop:"Tippen zum Anhören", rStatLd:"Verbinden...", rStatErr:"Verbindungsfehler!",
+      magWarn: "⚠️ Wenn in Ihrer Umgebung ein starkes Magnetfeld herrscht (Gebäude, Eisen), verwenden Sie bitte die Karte."},
+  ru:{mapBtn:'Карта', h:'Главная',c:'Календарь',s:'Настройки',pt:'Время Намаза',vd:'Аят Дня',stop: 'Стоп',
       qbl:'Направление Киблы',qfr:'По часовой стрелке от Севера',np:'Следующий Намаз',act:'Сейчас',sVib: 'Только Вибрация',
       tw:'Время на эту неделю',st:'Настройки',ml:'Метод расчета',nl:'Уведомления',
       thL:'Тема Аята (Темная)',stPreAlarms: 'Предварительные оповещения', minsBefore: 'мин до', sysSound: 'Системный звук',
       ll:'Язык / Language',lol:'Местоположение',chg:'Изменить', mt:'Выберите место',ms1:'Популярных городов:',ms2:'Введите название города:',
       ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.5.1', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
-      sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',
+      sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',tlTitle:'Шкала времени', ker:'Карахат',
       volLbl:'Громкость',testLbl:'Проверка звука', ns:'Будет найден новый адрес...', sg:'Предложение: ',
       cp:'Компас Киблы', tl:'← Поверните налево', tr:'Поверните направо →', tp:'🕋 Вы на Кибле!', ch:'Текущее направление', cw:'Держите телефон ровно. Если направление неверное, нарисуйте в воздухе 8.',
       spcTitle:'Предстоящий праздник', today:'Сегодня!', daysL:'дней осталось',
       copied:'Текст скопирован в буфер обмена!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ Подсказка:</span> Если выберете <b>"Системный звук"</b>, вы можете выбрать любую мелодию в меню <b>Настройки > Приложения > Balaban > Уведомления</b> вашего устройства.',
-      pr:['Имсак','Восход','Зухр','Аср','Магриб','Иша'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['Имсак','Восход','Зухр','Аср','Магриб','Иша'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Времена нафиля', nfWarn:'⚠️ Время карахат — сейчас намаз не совершается',
+nf:{israk:'Ишрак',duha:'Духа',evvabin:'Аввабин',gece13:'Ночь 1/3',gece12:'Ночь 1/2',gece23:'Ночь 2/3',seher:'Сахар'},
       dy:['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
       mo:['Января','Февраля','Марта','Апреля','Мая','Июня','Июля','Августа','Сентября','Октября','Ноября','Декабря'],
       vl:'Загрузка аята...',gc:'Поиск местоположения...',ge:'Местоположение не найдено.',ph:'Название города...',
       batWarn:'ВАЖНО: Чтобы азан воспроизводился вовремя при выключенном экране, установите использование батареи для этого приложения на «Без ограничений» в настройках устройства.',
       nagNotif:'ВНИМАНИЕ: Чтобы услышать азан вовремя, включите «Уведомления» на вкладке Настройки.',
-      rTitle:"Радио Коран", rSub:"Трансляция 24/7", rStatPlay:"Воспроизведение (Прямой эфир)", rStatStop:"Нажмите, чтобы слушать", rStatLd:"Подключение...", rStatErr:"Ошибка подключения!"},
-  ar:{h:'الرئيسية',c:'التقويم',s:'الإعدادات',pt:'أوقات الصلاة',vd:'آية اليوم',stop: 'إيقاف',
+      rTitle:"Радио Коран", rSub:"Трансляция 24/7", rStatPlay:"Воспроизведение (Прямой эфир)", rStatStop:"Нажмите, чтобы слушать", rStatLd:"Подключение...", rStatErr:"Ошибка подключения!",
+      magWarn: "⚠️ Если вокруг вас сильное магнитное поле (здания, железо), пожалуйста, используйте Карту."},
+  ar:{mapBtn:'خريطة', h:'الرئيسية',c:'التقويم',s:'الإعدادات',pt:'أوقات الصلاة',vd:'آية اليوم',stop: 'إيقاف',
       qbl:'اتجاه القبلة',qfr:'في اتجاه عقارب الساعة من الشمال',np:'الصلاة القادمة',act:'الآن',sVib: 'اهتزاز فقط',
       tw:'أوقات هذا الأسبوع',st:'الإعدادات',ml:'طريقة الحساب',nl:'الإشعارات (الخلفية)',
       thL:'الآية (داكن)',stPreAlarms: 'تنبيهات قبل الوقت', minsBefore: 'دقيقة قبل', sysSound: 'صوت النظام',
       ll:'اللغة / Language',lol:'الموقع',chg:'تغيير', mt:'اختر الموقع',ms1:'المدن الشهيرة:',ms2:'أدخل اسم المدينة:',
       ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.5.1', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
-      sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',
+      sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',tlTitle:'الخط الزمني', ker:'الكراهة',
       volLbl:'مستوى الصوت',testLbl:'اختبار الصوت', ns:'سيتم البحث عن موقع جديد...', sg:'اقتراح: ',
       cp:'بوصلة القبلة', tl:'← اتجه يساراً', tr:'اتجه يميناً →', tp:'🕋 أنت في اتجاه القبلة!', ch:'الاتجاه الحالي', cw:'احمل الهاتف بشكل مسطح. إذا كان الاتجاه خاطئًا، ارسم رقم 8 في الهواء.',
       spcTitle:'يوم خاص قادم', today:'اليوم!', daysL:'أيام متبقية',
       copied:'تم نسخ النص إلى الحافظة!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ تلميح:</span> إذا اخترت "صوت النظام"، يمكنك اختيار أي نغمة من قائمة الإعدادات > التطبيقات > Balaban > الإشعارات في جهازك.',
-      pr:['الفجر', 'الشروق', 'الظهر', 'العصر', 'المغرب', 'العشاء'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],
+      pr:['الفجر', 'الشروق', 'الظهر', 'العصر', 'المغرب', 'العشاء'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'أوقات النافلة', nfWarn:'⚠️ وقت الكراهة — لا صلاة الآن',
+nf:{israk:'الإشراق',duha:'الضحى',evvabin:'الأوابين',gece13:'الليل 1/3',gece12:'الليل 1/2',gece23:'الليل 2/3',seher:'السحر'},
       dy:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
       mo:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
       vl:'جاري تحميل الآية...',gc:'جاري البحث عن الموقع...',ge:'لم يتم العثور على الموقع.',ph:'اسم المدينة...',
-      batWarn:'هام: لضمان تشغيل الأذان في وقته عندما تكون الشاشة مغلقة، يرجى تعيين استخدام البطارية لهذا التطبيق إلى "غير مقيد" в إعدادات جهازك.',
+      batWarn:'هام: لضمان تشغيل الأذان في وقته عندما تكون الشاشة مغلقة، يرجى تعيين استخدام البطارية لهذا التطبيق إلى "غير مقيد" في إعدادات جهازك.',
       nagNotif:'تنبيه: لسماع الأذان في وقته، يرجى تفعيل "الإشعارات" في علامة تبويب الإعدادات.',
-      rTitle:"إذاعة القرآن الكريم", rSub:"بث مباشر على مدار الساعة", rStatPlay:"تستمع الآن (مباشر)", rStatStop:"اضغط للاستماع", rStatLd:"جاري الاتصال...", rStatErr:"خطأ في الاتصال!"}
+      rTitle:"إذاعة القرآن الكريم", rSub:"بث مباشر على مدار الساعة", rStatPlay:"تستمع الآن (مباشر)", rStatStop:"اضغط للاستماع", rStatLd:"جاري الاتصال...", rStatErr:"خطأ في الاتصال!",
+      magWarn: "⚠️ إذا كان هناك الكثير من التداخل المغناطيسي حولك (مباني، حديد)، يرجى استخدام الخريطة."}
 };
 
 const ANCHORS = [
@@ -2388,13 +2435,14 @@ async function loadAll(){
 }
 
 // ── UYARI MESAJLARI ──
-async function scheduleAndroidNotifications(times) {
+async function scheduleAndroidNotifications(ignoredTimes) {
     if (!isNative || !LocalNotifications || !notifOn) return;
     
-    await LocalNotifications.cancel({ notifications: [
-        {id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6},
-        {id: 10}, {id: 11}, {id: 12}, {id: 13}, {id: 14}, {id: 15}
-    ]});
+    // Eski tüm alarmları tamamen temizle (15 günlük kuyruğu sıfırlar)
+    const pending = await LocalNotifications.getPending();
+    if (pending.notifications.length > 0) {
+        await LocalNotifications.cancel(pending);
+    }
 
     const keys = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
     const t = T[lang] || T['tr'];
@@ -2404,7 +2452,7 @@ async function scheduleAndroidNotifications(times) {
     const ENTRY_MSGS = { tr:(n)=>`${n} vakti girdi.`, pl:(n)=>`Nadszedł czas na: ${n}.`, en:(n)=>`It is time for ${n}.`, de:(n)=>`Es ist Zeit für ${n}.`, ru:(n)=>`Наступило время: ${n}.`, ar:(n)=>`حان وقت ${n}.` };
     const PRE_MSGS = { tr:(n,m)=>`${n} vaktine ${m} dakika kaldı.`, pl:(n,m)=>`Do modlitwy ${n} pozostało ${m} minut.`, en:(n,m)=>`${m} minutes left until ${n} prayer.`, de:(n,m)=>`Noch ${m} Minuten bis zum ${n}-Gebet.`, ru:(n,m)=>`До намаза ${n} осталось ${m} минут.`, ar:(n,m)=>`بقي ${m} دقيقة على صلاة ${n}.` };
     
-    // --- MANEVİ SÖZLER HAVUZU (GERİ GELDİ) ---
+    // --- MANEVİ SÖZLER HAVUZU ---
     const QUOTES = {
         tr: ["Namaz kalbin huzurudur.", "Namaz insanı kötülükten alıkoyar.",  "Her namaz yeni bir başlangıçtır.",  "Namaz sabrın ve teslimiyetin kapısıdır.",  "Ezan gönüllere rahmet çağrısıdır.",  "Secde eden kalp huzur bulur.",  "Namaz ruhun gıdasıdır.",  "Allah’a en güzel yakınlık namazladır.",  "Namaz karanlıkta nurdur.",  "Vakit namazı bereket getirir."],
         pl: ["Modlitwa jest spokojem serca.",  "Modlitwa powstrzymuje od zła.",  "Każda modlitwa jest nowym początkiem.",  "Modlitwa jest bramą cierpliwości i poddania.",  "Adhan jest wezwaniem miłosierdzia dla serc.",  "Serce znajdujące się w pokłonie odnajduje spokój.",  "Modlitwa jest pokarmem duszy.",  "Najpiękniejsza bliskość z Allahem jest przez modlitwę.",  "Modlitwa jest światłem w ciemności.",  "Modlitwa o czasie przynosi błogosławieństwo."],
@@ -2421,68 +2469,102 @@ async function scheduleAndroidNotifications(times) {
     let scheduled = [];
     const now = new Date();
 
-    // 1. TAM VAKTİ GİRDİĞİNDE ÇALAN BİLDİRİMLER (Manevi Söz Eklendi)
-    for(let i=0; i<keys.length; i++) {
-        const k = keys[i];
-        const pref = soundPrefs[k]; 
-        if(pref === 'off') continue;
-        const timeStr = times[k];
-        if(!timeStr) continue;
-        
-        const [h, m] = timeStr.split(':').map(Number);
-        let d = new Date(); d.setHours(h, m, 0, 0);
-        if(d <= now) { d.setDate(d.getDate() + 1); }
+    // 15 GÜNLÜK İLERİYE DÖNÜK DÖNGÜ BAŞLIYOR
+    for (let dayOffset = 0; dayOffset < 15; dayOffset++) {
+        let targetDate = new Date();
+        targetDate.setDate(now.getDate() + dayOffset); 
 
-        let cId = 'kanal_beep_v4';
-        if (pref === 'azan1') cId = 'kanal_azan1_v4';
-        else if (pref === 'sabah') cId = 'kanal_sabah_v4';
-        else if (pref === 'ogle') cId = 'kanal_ogle_v4';
-        else if (pref === 'ikindi') cId = 'kanal_ikindi_v4';
-        else if (pref === 'aksam') cId = 'kanal_aksam_v4';
-        else if (pref === 'yatsi') cId = 'kanal_yatsi_v4';
-        else if (pref === 'alert1') cId = 'kanal_alert1_v4'; 
-        else if (pref === 'alert2') cId = 'kanal_alert2_v4'; 
-        else if (pref === 'alert3') cId = 'kanal_alert3_v4';
-        else if (pref === 'alert4') cId = 'kanal_alert4_v4'; 
-        else if (pref === 'system') cId = 'kanal_system_v4';
-        else if (pref === 'vibrate') cId = 'kanal_vibrate_v4'; 
+        // O günün vakitlerini belirle (Diyanet Cache veya Matematiksel)
+        let ptForDay = {};
+        if (method === 13 && globalMonthData) {
+            const dd = String(targetDate.getDate()).padStart(2, '0');
+            const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const yyyy = targetDate.getFullYear();
+            const targetStr = `${dd}.${mm}.${yyyy}`;
+            const v = globalMonthData.find(x => x.MiladiTarihKisa === targetStr);
+            if (v) {
+                ptForDay = applyTemkin({ fajr: v.Imsak, sunrise: v.Gunes, dhuhr: v.Ogle, asr: v.Ikindi, maghrib: v.Aksam, isha: v.Yatsi });
+            } else {
+                ptForDay = applyTemkin(calcPTLocal(targetDate, uLa, uLo, method));
+            }
+        } else {
+            ptForDay = applyTemkin(calcPTLocal(targetDate, uLa, uLo, method));
+        }
 
-        // --- MANEVİ SÖZÜ RASTGELE SEÇ VE METNE EKLE ---
-        const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
-        const dynamicTitle = msgFormatter(names[i]); // Başlık: "İkindi vakti girdi."
-        const dynamicBody = randomQuote;             // Gövde (Alt Satır): "Her namaz yeni bir başlangıçtır."
-
-        scheduled.push({ id: i + 1, title: dynamicTitle, body: dynamicBody, schedule: { at: d, allowWhileIdle: true }, channelId: cId });    }
-
-    // 2. VAKİTTEN ÖNCE UYARILAR İÇİN
-    for(let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        const prePref = preSoundPrefs[k];
-        if(prePref && prePref.on) {
-            const timeStr = times[k];
-            if(!timeStr) continue;
+        // 1. TAM VAKTİ GİRDİĞİNDE ÇALAN BİLDİRİMLER
+        for(let i=0; i<keys.length; i++) {
+            const k = keys[i];
+            const pref = soundPrefs[k]; 
+            if(pref === 'off') continue;
+            
+            const timeStr = ptForDay[k];
+            if(!timeStr || timeStr.includes('NaN')) continue;
             
             const [h, m] = timeStr.split(':').map(Number);
-            let d = new Date(); 
+            if (isNaN(h) || isNaN(m)) continue;
+            
+            let d = new Date(targetDate); 
             d.setHours(h, m, 0, 0);
-            d.setMinutes(d.getMinutes() - prePref.min); 
-            if(d <= now) { d.setDate(d.getDate() + 1); }
-            
-            let cId = 'kanal_beep_v4';
-            if (prePref.snd === 'alert1') cId = 'kanal_alert1_v4';
-            else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v4';
-            else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v4';
-            else if (prePref.snd === 'system') cId = 'kanal_system_v4'; 
-            else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v4';
-            else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v4'; 
-            else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v4'; 
-            else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v4'; 
-            else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v4'; 
-            else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v4'; 
-            else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v4'; 
-            else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v4';
-            
-            scheduled.push({ id: i + 10, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId });
+
+            // GEÇMİŞ VAKİTLERİ ALARMA EKLEME! Sadece gelecekte olanları kur
+            if(d > now) {
+                let cId = 'kanal_beep_v4';
+                if (pref === 'azan1') cId = 'kanal_azan1_v4';
+                else if (pref === 'sabah') cId = 'kanal_sabah_v4';
+                else if (pref === 'ogle') cId = 'kanal_ogle_v4';
+                else if (pref === 'ikindi') cId = 'kanal_ikindi_v4';
+                else if (pref === 'aksam') cId = 'kanal_aksam_v4';
+                else if (pref === 'yatsi') cId = 'kanal_yatsi_v4';
+                else if (pref === 'alert1') cId = 'kanal_alert1_v4'; 
+                else if (pref === 'alert2') cId = 'kanal_alert2_v4'; 
+                else if (pref === 'alert3') cId = 'kanal_alert3_v4';
+                else if (pref === 'alert4') cId = 'kanal_alert4_v4'; 
+                else if (pref === 'system') cId = 'kanal_system_v4';
+                else if (pref === 'vibrate') cId = 'kanal_vibrate_v4'; 
+
+                const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
+                const dynamicTitle = msgFormatter(names[i]); 
+                const dynamicBody = randomQuote;             
+
+                let uniqueId = (dayOffset * 100) + (i + 1);
+                scheduled.push({ id: uniqueId, title: dynamicTitle, body: dynamicBody, schedule: { at: d, allowWhileIdle: true }, channelId: cId });    
+            }
+        }
+
+        // 2. VAKİTTEN ÖNCE UYARILAR İÇİN
+        for(let i = 0; i < keys.length; i++) {
+            const k = keys[i];
+            const prePref = typeof preSoundPrefs !== 'undefined' ? preSoundPrefs[k] : null;
+            if(prePref && prePref.on) {
+                const timeStr = ptForDay[k];
+                if(!timeStr || timeStr.includes('NaN')) continue;
+                
+                const [h, m] = timeStr.split(':').map(Number);
+                if (isNaN(h) || isNaN(m)) continue;
+                
+                let d = new Date(targetDate); 
+                d.setHours(h, m, 0, 0);
+                d.setMinutes(d.getMinutes() - prePref.min); 
+                
+                if(d > now) {
+                    let cId = 'kanal_beep_v4';
+                    if (prePref.snd === 'alert1') cId = 'kanal_alert1_v4';
+                    else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v4';
+                    else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v4';
+                    else if (prePref.snd === 'system') cId = 'kanal_system_v4'; 
+                    else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v4';
+                    else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v4'; 
+                    else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v4'; 
+                    else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v4'; 
+                    else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v4'; 
+                    else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v4'; 
+                    else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v4'; 
+                    else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v4';
+                    
+                    let uniquePreId = (dayOffset * 100) + 10 + (i + 1);
+                    scheduled.push({ id: uniquePreId, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId });
+                }
+            }
         }
     }
 
@@ -2495,8 +2577,13 @@ function updateTxt(){
   const t=T[lang] || T['tr']; 
   document.getElementById('n0').textContent=t.h;document.getElementById('n1').textContent=t.c;document.getElementById('n2').textContent=t.s;
   document.getElementById('ptTitle').textContent=t.pt;document.getElementById('vTitle').textContent=t.vd;document.getElementById('vLbl').textContent=t.vd;
+if (document.getElementById('nfTitle')) document.getElementById('nfTitle').textContent = t.nfTitle || 'Nafile Vakitler';
+if (document.getElementById('tlTitle')) document.getElementById('tlTitle').textContent = t.tlTitle || 'Zaman Çizelgesi';
   document.getElementById('qLbl').textContent=t.qbl;document.getElementById('nxtLbl').textContent=t.np;
   document.getElementById('chgTxt').textContent=t.chg+' ›';
+if (document.getElementById('cMagWarn')) {
+      document.getElementById('cMagWarn').textContent = t.magWarn || "⚠️ Eğer çevrenizde çok fazla manyetik alan varsa (binalar, demirler), lütfen Harita'yı kullanın.";
+  }
 if(document.getElementById('sysHintBox')) document.getElementById('sysHintBox').innerHTML = t.sysHint;
   document.getElementById('calTitle').textContent=t.tw;document.getElementById('setTitle').textContent=t.st;
   document.getElementById('mLbl').textContent=t.ml;document.getElementById('nLbl').textContent=t.nl;
@@ -2514,10 +2601,19 @@ renderPreAlarmsUI(); // Dil değiştiğinde içeriklerin de çevrilmesi için ye
   document.getElementById('cInput').placeholder = t.ph;
   
   document.getElementById('cTitle').textContent = t.cp;
+// Harita Butonu Çevirisi
+  if(document.getElementById('arBtn')) {
+      if(!isMapMode) {
+          document.getElementById('arBtn').textContent = t.mapBtn;
+      }
+      document.getElementById('arBtn').title = t.mapBtn;
+  }
   document.getElementById('cLblQA').textContent = t.qbl;
   document.getElementById('cLblHA').textContent = t.ch;
   document.getElementById('cWarn').textContent = t.cw;
-  
+  if (document.getElementById('cMagWarn')) {
+      document.getElementById('cMagWarn').textContent = t.magWarn;
+  }
   document.getElementById('hdrLangSel').value = lang;
  
 // Radyo Dil Çevirileri
@@ -2851,6 +2947,8 @@ function renderPrayers(){
       
       document.body.setAttribute('data-theme', tIdx);
   }
+try { renderNafile(); } catch(e) {}
+try { renderTimeline(); } catch(e) {}
 }
 
 function updateCD(){
@@ -3309,6 +3407,7 @@ let wasAligned = false;
 function toggleMap() {
     const movl = document.getElementById('compassMov');
     const btn = document.getElementById('arBtn');
+    const t = T[lang] || T['tr']; // Aktif dili al
     
     isMapMode = !isMapMode;
     if (isMapMode) {
@@ -3317,7 +3416,7 @@ function toggleMap() {
         initQiblaMapBg();
     } else {
         movl.classList.remove('map-on');
-        btn.textContent = "Harita";
+        btn.textContent = t.mapBtn; // Sabit "Harita" yazısı yerine çeviriyi kullan
     }
 }
 
@@ -3925,6 +4024,139 @@ async function resetTemkin() {
     ['fajr','sunrise','dhuhr','asr','maghrib','isha'].forEach(k => { document.getElementById('off_'+k).value = 0; });
     await setPref('bOffsets', JSON.stringify(offsets));
     loadAll();
+}
+
+// --- NAFİLE VAKİT MOTORU (Rakip verisiyle doğrulanmış) ---
+let NAFILE_IHTIYAT = 7; // İşrak'a eklenen ihtiyat payı (dk). Rakiple birebir = 7
+function hesapNafile(v, la) {
+    // v = [imsak, gunes, ogle, ikindi, aksam, yatsi] dakika
+    const now = new Date();
+    const d = sunP(jDay(now.getFullYear(), now.getMonth() + 1, now.getDate())).d;
+    function H(alt) {
+        const c = (Math.sin(rad(alt)) - Math.sin(rad(la)) * Math.sin(rad(d))) /
+                  (Math.cos(rad(la)) * Math.cos(rad(d)));
+        if (c > 1) return 0;
+        if (c < -1) return 180;
+        return deg(Math.acos(c));
+    }
+// SABAH KERAHATI: mızrak boyu (5°) + ihtiyat → hadisle sabit, dokunmuyoruz
+const KERAKAT_SABAH_ALT = 5;
+// AKŞAM KERAHATI: sarıarma (isfirâr) ≈ 3° → yüksek enlemde şişmez
+const KERAKAT_AKSAM_ALT = 3;
+// EMNİYET TAVANI: kerahat, İkindi→Akşam penceresinin en fazla %35'i olabilir
+const KERAKAT_TAVAN_ORAN = 0.35;
+
+const dkSabah = Math.round((H(-0.833) - H(KERAKAT_SABAH_ALT)) * 4) + NAFILE_IHTIYAT;
+const astroAksam = Math.round((H(-0.833) - H(KERAKAT_AKSAM_ALT)) * 4);
+const pencereIkindiAksam = v[4] - v[3];
+const tavan = Math.max(15, Math.round(pencereIkindiAksam * KERAKAT_TAVAN_ORAN));
+const dkAksam = Math.min(astroAksam, tavan);
+
+const israk = v[1] + dkSabah;
+    const night = (v[0] + 1440) - v[4]; // Akşam → İmsak (seçili yöntemin imsakı)
+    return {
+        israk: israk,
+        duha: israk + 20,
+        evvabin: v[4],
+        gece13: v[4] + Math.round(night / 3),
+        gece12: v[4] + Math.round(night / 2),
+        gece23: v[4] + Math.round(2 * night / 3),
+        seher: v[4] + Math.round(5 * night / 6),
+        kerahat: [
+    [v[1], israk],                 // sabah kerahatı (5° + ihtiyat)
+    [v[2] - 10, v[2]],             // istiva kerahatı
+    [v[4] - dkAksam, v[4]]         // akşam kerahatı (3° + tavan)  ← ESKİ: dkKerahat
+]
+    };
+}
+function renderNafile() {
+    const grid = document.getElementById('nfGrid');
+    const warn = document.getElementById('nfWarn');
+    if (!grid) return;
+    if (!pT || !pT.fajr || pT.fajr.includes('--')) { grid.innerHTML = ''; if (warn) warn.style.display = 'none'; return; }
+    const t = T[lang] || T['tr'];
+    const keys = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const v = keys.map(k => { const p = (pT[k] || '0:0').split(':').map(Number); return p[0] * 60 + p[1]; });
+    const n = hesapNafile(v, uLa);
+    const now = new Date();
+    const cur = now.getHours() * 60 + now.getMinutes();
+    const windows = [
+        ['seher', n.seher, v[0]], ['israk', n.israk, n.duha], ['duha', n.duha, v[2] - 10],
+        ['evvabin', n.evvabin, v[5]], ['gece13', n.gece13, n.gece12],
+        ['gece12', n.gece12, n.gece23], ['gece23', n.gece23, n.seher]
+    ];
+    let aktif = null;
+    for (const w of windows) { if (cur >= w[1] && cur < w[2]) { aktif = w[0]; break; } }
+    const items = [['israk', n.israk], ['duha', n.duha], ['evvabin', n.evvabin],
+                   ['gece13', n.gece13], ['gece12', n.gece12], ['gece23', n.gece23], ['seher', n.seher]];
+    let html = '';
+    for (const it of items) {
+        const dk = ((it[1] % 1440) + 1440) % 1440;
+        const hh = String(Math.floor(dk / 60)).padStart(2, '0');
+        const mm = String(dk % 60).padStart(2, '0');
+        const isAct = (it[0] === aktif);
+        html += `<div class="nf-item${isAct ? ' act' : ''}">
+            <div class="nf-n">${(t.nf || {})[it[0]] || it[0]}</div>
+            <div class="nf-t">${hh}:${mm}</div></div>`;
+    }
+    grid.innerHTML = html;
+    if (warn) {
+        let inK = false;
+        for (const k of n.kerahat) { if (cur >= k[0] && cur < k[1]) { inK = true; break; } }
+        warn.textContent = t.nfWarn || '⚠️ Kerahat vakti';
+        warn.style.display = inK ? 'block' : 'none';
+    }
+}
+
+// --- ZAMAN ÇİZELGESİ (BANT GRAFİĞİ) ---
+function renderTimeline() {
+    const wrap = document.getElementById('tlWrap');
+    if (!wrap) return;
+    if (!pT || !pT.fajr || pT.fajr.includes('--')) { wrap.innerHTML = ''; return; }
+    const t = T[lang] || T['tr'];
+    const keys = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const v = keys.map(k => { const p = (pT[k] || '0:0').split(':').map(Number); return p[0] * 60 + p[1]; });
+    const n = hesapNafile(v, uLa);
+    const nf = t.nf || {};
+    const ker = t.ker || 'Kerahat';
+    const T0 = v[0]; // Pencere başlangıcı: İmsak
+    const pos = m => { let x = m - T0; if (x < 0) x += 1440; return x; };
+    const dkAksam = v[4] - n.kerahat[2][0];
+
+    const bands = [
+        { s: v[0], e: v[1], lb: t.pr[0], cls: 'normal' },
+        { s: v[1], e: n.israk, lb: ker, cls: 'kerahat' },
+        { s: n.israk, e: n.duha, lb: nf.israk || 'İşrak', cls: 'nafile' },
+        { s: n.duha, e: v[2] - 10, lb: nf.duha || 'Duha', cls: 'nafile' },
+        { s: v[2] - 10, e: v[2], lb: ker, cls: 'kerahat' },
+        { s: v[2], e: v[3], lb: t.pr[2], cls: 'normal' },
+        { s: v[3], e: v[4] - dkAksam, lb: t.pr[3], cls: 'normal' },
+        { s: v[4] - dkAksam, e: v[4], lb: ker, cls: 'kerahat' },
+        { s: v[4], e: v[5], lb: t.pr[4], cls: 'normal' },
+        { s: v[5], e: n.gece13, lb: t.pr[5], cls: 'normal' },
+        { s: n.gece13, e: n.gece12, lb: nf.gece13 || 'Gece 1/3', cls: 'gece' },
+        { s: n.gece12, e: n.gece23, lb: nf.gece12 || 'Gece 1/2', cls: 'gece' },
+        { s: n.gece23, e: n.seher, lb: nf.gece23 || 'Gece 2/3', cls: 'gece' },
+        { s: n.seher, e: v[0] + 1440, lb: nf.seher || 'Seher', cls: 'gece' }
+    ];
+
+    const now = new Date();
+    const curPos = pos(now.getHours() * 60 + now.getMinutes());
+
+    let html = '<div class="tl-axis">';
+    for (let h = 0; h < 24; h += 4) {
+        const mm = (T0 + h * 60) % 1440;
+        html += `<div class="tl-tick" style="left:${(h * 60 / 1440) * 100}%">${String(Math.floor(mm / 60)).padStart(2, '0')}</div>`;
+    }
+    html += '</div><div class="tl-bands">';
+    for (const b of bands) {
+        let dur = b.e - b.s; if (dur <= 0) dur = 1;
+        const bp = pos(b.s);
+        const act = (curPos >= bp && curPos < bp + dur);
+        html += `<div class="tl-band ${b.cls}${act ? ' act' : ''}" style="flex:${dur} 1 0">${dur >= 25 ? `<span class="tl-lbl">${b.lb}</span>` : ''}</div>`;
+    }
+    html += `<div class="tl-now" style="left:${(curPos / 1440) * 100}%"></div></div>`;
+    wrap.innerHTML = html;
 }
 
 // --- UYGULAMA UYANMA (RESUME) KONTROLÜ ---
