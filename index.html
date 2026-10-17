@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0d1b2a">
 <title>Balaban Namaz Vakti</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -76,7 +76,6 @@ body[data-theme="3"] .stars { opacity:0; }
 body[data-theme="4"] { --bg-top:#2b192e; --bg-bot:#1a0b16; } /* Akşam / Gün Batımı */
 body[data-theme="4"] .sun-moon { background:#d94848; top:60%; left:80%; transform:scale(1.1); opacity:0.6; }
 body[data-theme="4"] .stars { opacity:0.2; }
-
 body[data-theme="5"] { --bg-top:#050505; --bg-bot:#0d1b2a; } /* Gece / Zifiri Karanlık */
 body[data-theme="5"] .sun-moon { background:#a3b1c6; top:20%; left:70%; transform:scale(0.7); opacity:0.4; }
 body[data-theme="5"] .stars { opacity:0.8; }
@@ -106,6 +105,7 @@ select option {
 .hloc svg{width:11px;height:11px;fill:var(--teal);flex-shrink:0}
 .hloc-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hloc-c{font-size:11px;color:var(--teal);cursor:pointer;flex-shrink:0;background:rgba(13,27,42,0.5);padding:2px 6px;border-radius:6px;}
+.hloc-c1{font-size:12px;color:rgba(255,144,144,1);cursor:pointer;flex-shrink:0;padding:2px 6px;border-radius:6px;}
 .hdate{font-size:13px;color:var(--gl);margin-bottom:3px}
 .hhijri{font-family:'Amiri',serif;font-size:15px;color:var(--mx);margin-bottom:14px}
 .hnl{font-size:10px;color:var(--mx);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
@@ -381,7 +381,7 @@ select option {
   <div class="aname">☽ Balaban</div>
   <select class="lbtn" id="hdrLangSel" onchange="setLang(this.value)" style="appearance:none; text-align-last:center; outline:none; padding-right:14px;">
     <option value="tr">TR</option><option value="pl">PL</option><option value="en">EN</option>
-    <option value="de">DE</option><option value="ru">RU</option><option value="ar">AR</option>
+    <option value="de">DE</option><option value="ru">RU</option><option value="ar">AR</option><option value="fr">FR</option>
   </select>
 </div>
 <div class="sc">
@@ -399,7 +399,7 @@ select option {
       <div class="hloc">
         <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
         <span class="hloc-n" id="locName">...</span>
-        <span class="hloc-c" onclick="openModal()" id="chgTxt">Değiştir ›</span>
+        <span class="hloc-c1" onclick="openModal()" id="chgTxt">Değiştir ›</span>
       </div>
       
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -418,7 +418,7 @@ select option {
       <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
       <div class="plbl" id="plbl">—</div>
     </div>
-<div id="nfWarn" style="display:none; margin:0 16px 10px; padding:8px 12px; background:rgba(245,39,7,0.12); border:0.5p solid var(--br); border-radius:12px; color:var(--kirmizi); font-size:12px; font-weight:bold; text-align:center;"></div>
+<div id="nfWarn" style="display:none; margin:0 16px 10px; padding:8px 12px; background:rgba(245,39,7,0.12); border:0.5px solid var(--br); border-radius:12px; color:var(--kirmizi); font-size:12px; font-weight:bold; text-align:center;"></div>
     <div class="stitle" id="ptTitle">Namaz Vakitleri</div>
     <div class="pgrid" id="pgrid"></div>
 <div class="stitle" id="tlTitle">Zaman Çizelgesi</div>
@@ -562,7 +562,7 @@ select option {
     </div>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
-      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.5.2</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.6.2</div>
     </div>
   </div>
 </div>
@@ -656,7 +656,8 @@ const ALERT_DND_TXT = {
     en: { msg: "Do not show this warning again", ok: "Understood" },
     de: { msg: "Diese Warnung nicht mehr anzeigen", ok: "Verstanden" },
     ru: { msg: "Больше не показывать это предупреждение", ok: "Понятно" },
-    ar: { msg: "لا تظهر هذا التحذير مرة أخرى", ok: "مفهوم" }
+    ar: { msg: "لا تظهر هذا التحذير مرة أخرى", ok: "مفهوم" },
+    fr: { msg: "Ne plus afficher cet avertissement", ok: "Compris" }
 };
 
 let currentAlertKey = '';
@@ -687,805 +688,106 @@ async function closeCustomAlert() {
     document.getElementById('customAlertMov').classList.remove('open');
 }
 
-// MANEVİ KÜTÜPHANE
-const MANEVI_DATA = {
-    ayet: [
-{
-arabic:'يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ كَمَا كُتِبَ عَلَى الَّذِينَ مِن قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ',
-tr:'Ey iman edenler! Sizden öncekilere farz kılındığı gibi oruç size de farz kılındı. Umulur ki sakınırsınız.',
-pl:'O wy, którzy wierzycie! Został wam nakazany post, tak jak został nakazany tym przed wami, abyście stali się bogobojni.',
-en:'O you who believe! Fasting has been prescribed for you as it was prescribed for those before you, that you may become righteous.',
-de:'O die ihr glaubt! Euch ist das Fasten vorgeschrieben worden, wie es denjenigen vor euch vorgeschrieben wurde, auf dass ihr gottesfürchtig werdet.',
-ru:'О те, которые уверовали! Вам предписан пост, как он был предписан тем, кто был до вас, — быть может, вы станете богобоязненными.',
-ref:'Bakara 2:183'
-},
-
-{
-arabic:'أَيَّامًا مَّعْدُودَاتٍ ۚ فَمَن كَانَ مِنكُم مَّرِيضًا أَوْ عَلَىٰ سَفَرٍ فَعِدَّةٌ مِّنْ أَيَّامٍ أُخَرَ',
-tr:'Oruç sayılı günlerdedir. Sizden kim hasta olur veya yolculukta bulunursa, tutamadığı günler sayısınca başka günlerde oruç tutar.',
-pl:'To są policzone dni. Kto z was jest chory albo w podróży, powinien pościć taką samą liczbę dni później.',
-en:'[Fast for] a limited number of days. So whoever among you is ill or on a journey should make up an equal number of days later.',
-de:'Es sind nur bestimmte Tage. Wer von euch krank ist oder sich auf einer Reise befindet, soll eine entsprechende Anzahl anderer Tage fasten.',
-ru:'Поститесь считанные дни. А если кто из вас болен или находится в пути, то пусть постится столько же дней в другое время.',
-ref:'Bakara 2:184'
-},
-
-{
-arabic:'شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ هُدًى لِّلنَّاسِ وَبَيِّنَاتٍ مِّنَ الْهُدَىٰ وَالْفُرْقَانِ',
-tr:'Ramazan ayı, insanlara yol gösterici, doğru yolun ve hakkı batıldan ayırmanın açık delilleri olarak Kur’an’ın indirildiği aydır.',
-pl:'Miesiąc Ramadan jest miesiącem, w którym został zesłany Koran jako przewodnictwo dla ludzi.',
-en:'The month of Ramadan is that in which the Quran was revealed as guidance for mankind.',
-de:'Der Monat Ramadan ist es, in dem der Quran als Rechtleitung für die Menschen herabgesandt wurde.',
-ru:'Месяц Рамадан — это месяц, в который был ниспослан Коран как руководство для людей.',
-ref:'Bakara 2:185'
-},
-
-{
-arabic:'وَكُلُوا وَاشْرَبُوا حَتَّىٰ يَتَبَيَّنَ لَكُمُ الْخَيْطُ الْأَبْيَضُ مِنَ الْخَيْطِ الْأَسْوَدِ مِنَ الْفَجْرِ ثُمَّ أَتِمُّوا الصِّيَامَ إِلَى اللَّيْلِ',
-tr:'Fecrin beyaz ipliği siyah ipliğinden ayırt edilinceye kadar yiyin için; sonra geceye kadar orucu tamamlayın.',
-pl:'Jedzcie i pijcie, aż odróżnicie białą nić świtu od czarnej nici nocy, a następnie zachowujcie post aż do nocy.',
-en:'Eat and drink until the white thread of dawn becomes distinct from the black thread of night, then complete the fast until nightfall.',
-de:'Esst und trinkt, bis sich für euch der weiße Faden der Morgendämmerung vom schwarzen Faden der Nacht unterscheidet; dann vollendet das Fasten bis zur Nacht.',
-ru:'Ешьте и пейте, пока не станет различимой для вас белая нить рассвета от черной нити ночи, затем соблюдайте пост до наступления ночи.',
-ref:'Bakara 2:187'
-},
-
-{
-arabic:'وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ وَارْكَعُوا مَعَ الرَّاكِعِينَ',
-tr:'Namazı dosdoğru kılın, zekâtı verin ve rükû edenlerle birlikte rükû edin.',
-pl:'Odprawiajcie modlitwę, dawajcie jałmużnę i kłaniajcie się wraz z tymi, którzy się kłaniają.',
-en:'Establish prayer, give zakah and bow with those who bow.',
-de:'Verrichtet das Gebet, entrichtet die Zakat und verbeugt euch mit den Sich-Verbeugenden.',
-ru:'Совершайте молитву, выплачивайте закят и кланяйтесь вместе с кланяющимися.',
-ref:'Bakara 2:43'
-},
-
-{
-arabic:'خُذْ مِنْ أَمْوَالِهِمْ صَدَقَةً تُطَهِّرُهُمْ وَتُزَكِّيهِم بِهَا وَصَلِّ عَلَيْهِمْ ۖ إِنَّ صَلَاتَكَ سَكَنٌ لَّهُمْ ۗ وَاللَّهُ سَمِيعٌ عَلِيمٌ',
-tr:'Onların mallarından sadaka al; bununla onları temizler ve arındırırsın. Onlara dua et. Şüphesiz senin duan onlar için huzurdur. Allah işitendir, bilendir.',
-pl:'Weź z ich majątków jałmużnę, aby ich oczyścić i uświęcić. Módl się za nich. Zaprawdę twoja modlitwa jest dla nich uspokojeniem. Allah jest Słyszący i Wiedzący.',
-en:'Take from their wealth a charity by which you purify them and cause them increase, and invoke blessings upon them. Indeed, your supplication is reassurance for them. And Allah is Hearing and Knowing.',
-de:'Nimm von ihrem Besitz eine Abgabe, durch die du sie reinigst und läuterst. Und bete für sie. Dein Gebet ist für sie eine Beruhigung. Allah ist Allhörend und Allwissend.',
-ru:'Бери из их имущества милостыню, чтобы очистить и возвысить их. Молись за них. Воистину, твоя молитва приносит им успокоение. Аллах — Слышащий, Знающий.',
-ref:'Tevbe 9:103'
-},
-
-{
-arabic:'إِنَّمَا الصَّدَقَاتُ لِلْفُقَرَاءِ وَالْمَسَاكِينِ وَالْعَامِلِينَ عَلَيْهَا وَالْمُؤَلَّفَةِ قُلُوبُهُمْ',
-tr:'Sadakalar (zekâtlar), fakirler, miskinler, zekât görevlileri ve kalpleri İslam’a ısındırılmak istenenler içindir.',
-pl:'Jałmużny są przeznaczone dla ubogich, potrzebujących, pracujących przy ich zbieraniu i tych, których serca mają zostać pozyskane.',
-en:'Alms are only for the poor, the needy, those employed to collect them and those whose hearts are to be reconciled.',
-de:'Die Almosen sind nur für die Armen, die Bedürftigen, die damit Beschäftigten und diejenigen, deren Herzen gewonnen werden sollen.',
-ru:'Пожертвования предназначены только для бедных, нуждающихся, собирающих их и тех, чьи сердца хотят привлечь к истине.',
-ref:'Tevbe 9:60'
-},
-
-{
-arabic:'وَفِي أَمْوَالِهِمْ حَقٌّ لِّلسَّائِلِ وَالْمَحْرُومِ',
-tr:'Onların mallarında isteyen ve mahrum olanlar için bir hak vardır.',
-pl:'W ich majątkach jest prawo dla proszącego i potrzebującego.',
-en:'And in their wealth was a known right for the petitioner and the deprived.',
-de:'Und in ihrem Besitz gibt es ein Recht für den Bittenden und den Bedürftigen.',
-ru:'В их имуществе есть доля для просящего и лишенного.',
-ref:'Zariyat 51:19'
-},
-
-{
-arabic:'وَلَا تَقْرَبُوا الزِّنَىٰ ۖ إِنَّهُ كَانَ فَاحِشَةً وَسَاءَ سَبِيلًا',
-tr:'Zinaya yaklaşmayın. Çünkü o hayâsızlıktır ve çok kötü bir yoldur.',
-pl:'Nie zbliżajcie się do cudzołóstwa. Zaprawdę jest ono czynem haniebnym i złą drogą.',
-en:'Do not approach unlawful sexual intercourse. Indeed, it is an immorality and an evil way.',
-de:'Nähert euch nicht der Unzucht. Gewiss, sie ist etwas Abscheuliches und ein übler Weg.',
-ru:'Не приближайтесь к прелюбодеянию. Воистину, это мерзость и дурной путь.',
-ref:'İsra 17:32'
-},
-
-{
-arabic:'الزَّانِيَةُ وَالزَّانِي فَاجْلِدُوا كُلَّ وَاحِدٍ مِّنْهُمَا مِائَةَ جَلْدَةٍ',
-tr:'Zina eden kadın ile zina eden erkeğin her birine yüz değnek vurun.',
-pl:'Cudzołożnicy i cudzołożnicę ukarzcie stu razami.',
-en:'The woman and the man guilty of adultery or fornication, flog each of them with a hundred lashes.',
-de:'Die Unzüchtige und der Unzüchtige – geißelt jeden von ihnen mit hundert Hieben.',
-ru:'Прелюбодейку и прелюбодея подвергните ста ударам.',
-ref:'Nur 24:2'
-},
-
-{
-arabic:'قُل لِّلْمُؤْمِنِينَ يَغُضُّوا مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ',
-tr:'Mümin erkeklere söyle: Gözlerini haramdan sakınsınlar ve iffetlerini korusunlar. Bu onlar için daha temizdir.',
-pl:'Powiedz wierzącym mężczyznom, aby spuszczali wzrok i strzegli swojej czystości.',
-en:'Tell the believing men to lower their gaze and guard their chastity. That is purer for them.',
-de:'Sag den gläubigen Männern, sie sollen ihre Blicke senken und ihre Keuschheit bewahren.',
-ru:'Скажи верующим мужчинам, чтобы они потупляли взоры и оберегали свое целомудрие.',
-ref:'Nur 24:30'
-},
-
-{
-arabic:'وَقُل لِّلْمُؤْمِنَاتِ يَغْضُضْنَ مِنْ أَبْصَارِهِنَّ وَيَحْفَظْنَ فُرُوجَهُنَّ',
-tr:'Mümin kadınlara da söyle: Gözlerini haramdan sakınsınlar ve iffetlerini korusunlar.',
-pl:'Powiedz wierzącym kobietom, aby spuszczały wzrok i strzegły swojej czystości.',
-en:'And tell the believing women to lower their gaze and guard their chastity.',
-de:'Und sag den gläubigen Frauen, sie sollen ihre Blicke senken und ihre Keuschheit bewahren.',
-ru:'Скажи верующим женщинам, чтобы они потупляли взоры и оберегали свое целомудрие.',
-ref:'Nur 24:31'
-},
-
-{
-arabic:'إِنَّ الَّذِينَ يُحِبُّونَ أَن تَشِيعَ الْفَاحِشَةُ فِي الَّذِينَ آمَنُوا لَهُمْ عَذَابٌ أَلِيمٌ',
-tr:'Müminler arasında hayasızlığın yayılmasını isteyenler için elem verici bir azap vardır.',
-pl:'Ci, którzy pragną rozpowszechniania niemoralności wśród wierzących, będą mieli bolesną karę.',
-en:'Those who love that immorality should be spread among the believers will have a painful punishment.',
-de:'Diejenigen, die möchten, dass sich Schändlichkeit unter den Gläubigen verbreitet, erwartet eine schmerzhafte Strafe.',
-ru:'Тем, кто любит распространять мерзость среди верующих, уготовано мучительное наказание.',
-ref:'Nur 24:19'
-},
-
-{
-arabic:'يَا أَيُّهَا الَّذِينَ آمَنُوا إِنَّمَا الْخَمْرُ وَالْمَيْسِرُ وَالْأَنصَابُ وَالْأَزْلَامُ رِجْسٌ مِّنْ عَمَلِ الشَّيْطَانِ فَاجْتَنِبُوهُ لَعَلَّكُمْ تُفْلِحُونَ',
-tr:'Ey iman edenler! İçki, kumar, dikili taşlar ve fal okları şeytan işi birer pisliktir. Bunlardan kaçının ki kurtuluşa eresiniz.',
-pl:'O wy, którzy wierzycie! Alkohol, hazard, bałwany i wróżby są obrzydliwością pochodzącą od szatana. Unikajcie ich, abyście odnieśli sukces.',
-en:'O you who believe! Intoxicants, gambling, stone altars and divining arrows are but defilement from the work of Satan, so avoid them that you may be successful.',
-de:'O die ihr glaubt! Rauschmittel, Glücksspiel, Opfersteine und Lospfeile sind ein Gräuel vom Werk Satans. Meidet sie, auf dass ihr Erfolg habt.',
-ru:'О верующие! Опьяняющие напитки, азартные игры, идолы и гадальные стрелы — скверна из деяний сатаны. Сторонитесь этого, чтобы преуспеть.',
-ref:'Maide 5:90'
-},
-
-{
-arabic:'إِنَّمَا يُرِيدُ الشَّيْطَانُ أَن يُوقِعَ بَيْنَكُمُ الْعَدَاوَةَ وَالْبَغْضَاءَ فِي الْخَمْرِ وَالْمَيْسِرِ',
-tr:'Şeytan içki ve kumar yoluyla aranıza düşmanlık ve kin sokmak ister.',
-pl:'Szatan chce wzbudzić między wami wrogość i nienawiść przez alkohol i hazard.',
-en:'Satan only wants to cause enmity and hatred among you through intoxicants and gambling.',
-de:'Der Satan will durch Rauschmittel und Glücksspiel Feindschaft und Hass zwischen euch säen.',
-ru:'Сатана желает посеять между вами вражду и ненависть посредством опьяняющего и азартных игр.',
-ref:'Maide 5:91'
-},
-
-{
-arabic:'يَسْأَلُونَكَ عَنِ الْخَمْرِ وَالْمَيْسِرِ ۖ قُلْ فِيهِمَا إِثْمٌ كَبِيرٌ وَمَنَافِعُ لِلنَّاسِ وَإِثْمُهُمَا أَكْبَرُ مِن نَّفْعِهِمَا',
-tr:'Sana içkiyi ve kumarı sorarlar. De ki: Onlarda büyük günah ve insanlar için bazı faydalar vardır; fakat günahları faydalarından daha büyüktür.',
-pl:'Pytają cię o alkohol i hazard. Powiedz: W nich jest wielki grzech i pewne korzyści dla ludzi, lecz grzech jest większy niż korzyść.',
-en:'They ask you about intoxicants and gambling. Say: In them is great sin and some benefit for people, but their sin is greater than their benefit.',
-de:'Sie fragen dich nach Rauschmitteln und Glücksspiel. Sprich: In ihnen liegt große Sünde und Nutzen für die Menschen, doch ihre Sünde ist größer als ihr Nutzen.',
-ru:'Они спрашивают тебя об опьяняющем и азартных играх. Скажи: В них есть большой грех и польза для людей, но греха в них больше, чем пользы.',
-ref:'Bakara 2:219'
-},
-
-{
-arabic:'حُرِّمَتْ عَلَيْكُمُ الْمَيْتَةُ وَالدَّمُ وَلَحْمُ الْخِنزِيرِ وَمَا أُهِلَّ لِغَيْرِ اللَّهِ بِهِ',
-tr:'Leş, kan, domuz eti ve Allah’tan başkası adına kesilenler size haram kılındı.',
-pl:'Zakazane zostały wam padlina, krew, mięso wieprzowe i to, nad czym wymieniono imię kogoś innego niż Allah.',
-en:'Forbidden to you are dead animals, blood, the flesh of swine, and that which has been dedicated to other than Allah.',
-de:'Verboten sind euch Verendetes, Blut, Schweinefleisch und das, worüber ein anderer Name als Allahs angerufen wurde.',
-ru:'Вам запрещены мертвечина, кровь, мясо свиньи и то, над чем было произнесено имя не Аллаха.',
-ref:'Maide 5:3'
-},
-
-{
-arabic:'إِنَّمَا حَرَّمَ عَلَيْكُمُ الْمَيْتَةَ وَالدَّمَ وَلَحْمَ الْخِنزِيرِ وَمَا أُهِلَّ بِهِ لِغَيْرِ اللَّهِ',
-tr:'Allah size ancak leşi, kanı, domuz etini ve Allah’tan başkası adına kesileni haram kılmıştır.',
-pl:'On zakazał wam jedynie padliny, krwi, mięsa wieprzowego i tego, nad czym wymieniono inne imię niż Allah.',
-en:'He has only forbidden you dead animals, blood, the flesh of swine, and that which has been dedicated to other than Allah.',
-de:'Verboten hat Er euch nur Verendetes, Blut, Schweinefleisch und das, worüber ein anderer Name als Allahs angerufen wurde.',
-ru:'Он запретил вам только мертвечину, кровь, мясо свиньи и то, над чем было произнесено имя не Аллаха.',
-ref:'Bakara 2:173'
-},
-
-{
-arabic:'فَكُلُوا مِمَّا ذُكِرَ اسْمُ اللَّهِ عَلَيْهِ إِن كُنتُم بِآيَاتِهِ مُؤْمِنِينَ',
-tr:'Eğer Allah’ın ayetlerine inanıyorsanız üzerine Allah’ın adı anılmış olanlardan yiyin.',
-pl:'Jedzcie z tego, nad czym wymieniono imię Allaha, jeśli wierzycie w Jego znaki.',
-en:'So eat of that upon which the name of Allah has been mentioned, if you are believers in His verses.',
-de:'Esst von dem, worüber Allahs Name ausgesprochen wurde, wenn ihr an Seine Zeichen glaubt.',
-ru:'Ешьте то, над чем упомянуто имя Аллаха, если вы веруете в Его знамения.',
-ref:'Enam 6:118'
-},
-
-{
-arabic:'يَا أَيُّهَا النَّاسُ كُلُوا مِمَّا فِي الْأَرْضِ حَلَالًا طَيِّبًا وَلَا تَتَّبِعُوا خُطُوَاتِ الشَّيْطَانِ ۚ إِنَّهُ لَكُمْ عَدُوٌّ مُّبِينٌ',
-tr:'Ey insanlar! Yeryüzündeki helal ve temiz şeylerden yiyin; şeytanın adımlarını izlemeyin. Çünkü o sizin apaçık düşmanınızdır.',
-pl:'O ludzie! Jedzcie to, co na ziemi jest dozwolone i dobre, i nie idźcie śladami szatana. On jest waszym jawnym wrogiem.',
-en:'O mankind! Eat from whatever is on earth that is lawful and good and do not follow the footsteps of Satan. Indeed, he is to you a clear enemy.',
-de:'O ihr Menschen! Esst von dem, was auf der Erde erlaubt und gut ist, und folgt nicht den Fußstapfen des Satans. Gewiss, er ist euch ein deutlicher Feind.',
-ru:'О люди! Ешьте дозволенное и благое из того, что есть на земле, и не следуйте по стопам сатаны. Воистину, он ваш явный враг.',
-ref:'Bakara 2:168'
-},
-
-{
-"arabic": "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ",
-"tr": "Sabrederek ve namaz kılarak (Allah'tan) yardım dileyin. Şüphesiz namaz, Allah'a derinden saygı duyanlardan başkasına ağır gelir.",
-"pl": "Szukajcie pomocy w cierpliwości i w modlitwie! Zaprawdę, to jest trudna rzecz, ale nie dla pokornych;",
-"en": "And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive [to Allah].",
-"de": "Und sucht Hilfe in der Standhaftigkeit und im Gebet! Es ist freilich schwer, nur nicht für die Demütigen,",
-"ru": "Обратитесь за помощью к терпению и намазу. Воистину, это тягостно для всех, кроме смиренных,",
-"ref": "Bakara 2:45"
-},
-
-{
-"arabic": "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
-"tr": "Öyleyse beni anın ki ben de sizi anayım. Bana şükredin; sakın bana nankörlük etmeyin.",
-"pl": "Wspominajcie Mnie, to i Ja was wspomnę! Dziękujcie Mi i nie bądźcie wobec Mnie niewdzięczni!",
-"en": "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
-"de": "So gedenkt Meine, dann gedenke Ich eurer. Und seid Mir dankbar und seid nicht undankbar gegen Mich.",
-"ru": "Поминайте Меня, и Я буду помнить о вас. Благодарите Меня и не будьте неблагодарны Мне.",
-"ref": "Bakara 2:152"
-},
-
-{
-"arabic": "يَا أَيُّهَا الَّذِينَ آمَنُوا اسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",
-"tr": "Ey iman edenler! Sabır ve namaz ile Allah’tan yardım dileyin. Şüphesiz ki Allah, sabredenlerle beraberdir.",
-"pl": "O wy, którzy wierzycie! Szukajcie pomocy w cierpliwości i modlitwie! Zaprawdę, Allah jest z cierpliwymi!",
-"en": "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
-"de": "O die ihr glaubt, sucht Hilfe in der Standhaftigkeit und im Gebet! Allah ist mit den Standhaften.",
-"ru": "О те, которые уверовали! Обратитесь за помощью к терпению и намазу. Воистину, Аллах — с терпеливыми.",
-"ref": "Bakara 2:153"
-},
-
-{
-"arabic": "لَا إِكْرَاهَ فِي الدِّينِ ۖ قَد تَّبَيَّنَ الرُّشْدُ مِنَ الْغَيِّ ۚ فَمَن يَكْفُرْ بِالطَّاغُوتِ وَيُؤْمِن بِاللَّهِ فَقَدِ اسْتَمْسَكَ بِالْعُرْوَةِ الْوُثْقَىٰ لَا انفِصَامَ لَهَا ۗ وَاللَّهُ سَمِيعٌ عَلِيمٌ",
-"tr": "Dinde zorlama yoktur. Artık doğrulukla eğrilik birbirinden ayrılmıştır. O hâlde kim tâğutu reddedip Allah’a inanırsa, kopmayan sağlam bir kulpa yapışmıştır. Allah, hakkıyla işitendir, hakkıyla bilendir.",
-"pl": "Nie ma przymusu w religii! Prawość wyróżnia się od nieprawości. I ten, kto odrzuca fałszywe bóstwa, a wierzy w Allaha, uchwycił za niezawodny uchwyt, który nie pęknie. Allah jest Słyszący, Wszechwiedzący!",
-"en": "There shall be no compulsion in [acceptance of] the religion. The right course has become clear from the wrong. So whoever disbelieves in Taghut and believes in Allah has grasped the most trustworthy handhold with no break in it. And Allah is Hearing and Knowing.",
-"de": "Es gibt keinen Zwang in der Religion. Der rechte Weg hat sich (klar) vom Irrtum unterschieden. Wer also falsche Götter verleugnet, jedoch an Allah glaubt, der hält sich an der festesten Handhabe, die nicht reißt. Und Allah ist Allhörend und Allwissend.",
-"ru": "Нет принуждения в религии. Прямой путь уже отличился от заблуждения. Кто не верует в тагута, а верует в Аллаха, тот ухватился за самую надежную рукоять, которая никогда не сломается. Аллах — Слышащий, Знающий.",
-"ref": "Bakara 2:256"
-},
-
-{
-"arabic": "وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا وَلَا تَفَرَّقُوا",
-"tr": "Hep birlikte Allah’ın ipine (Kur’an’a) sımsıkı sarılın. Parçalanıp bölünmeyin.",
-"pl": "Trzymajcie się mocno sznura Allaha wszyscy razem i nie rozdzielajcie się!",
-"en": "And hold firmly to the rope of Allah all together and do not become divided.",
-"de": "Und haltet alle fest am Seil Allahs und geht nicht auseinander!",
-"ru": "Крепко держитесь за вервь Аллаха все вместе и не распадайтесь.",
-"ref": "Al-i İmran 3:103"
-},
-
-{
-"arabic": "الَّذِينَ يُنفِقُونَ فِي السَّرَّاءِ وَالضَّرَّاءِ وَالْكَاظِمِينَ الْغَيْظَ وَالْعَافِينَ عَنِ النَّاسِ ۗ وَاللَّهُ يُحِبُّ الْمُحْسِنِينَ",
-"tr": "Onlar bollukta ve darlıkta Allah yolunda harcayanlar, öfkelerini yenenler, insanları affedenlerdir. Allah, iyilik edenleri sever.",
-"pl": "Tych, którzy rozdają swoje majątki w radości i w smutku; tych, którzy powstrzymują gniew i przebaczają ludziom. Allah miłuje czyniących dobro.",
-"en": "Who spend [in the cause of Allah] during ease and hardship and who restrain anger and who pardon the people - and Allah loves the doers of good;",
-"de": "(sie,) die in guten wie in schlechten Tagen ausgeben und ihren Groll unterdrücken und den Menschen verzeihen – Allah liebt die Gutes Tuenden –,",
-"ru": "которые делают пожертвования в радости и в горе, сдерживают гнев и прощают людей. Воистину, Аллах любит творящих добро.",
-"ref": "Al-i İmran 3:134"
-},
-
-{
-"arabic": "إِنَّ اللَّهَ يَأْمُرُكُمْ أَن تُؤَدُّوا الْأَمَانَاتِ إِلَىٰ أَهْلِهَا وَإِذَا حَكَمْتُم بَيْنَ النَّاسِ أَن تَحْكُمُوا بِالْعَدْلِ",
-"tr": "Şüphesiz Allah, emanetleri ehline teslim etmenizi ve insanlar arasında hükmettiğinizde adaletle hükmetmenizi emrediyor.",
-"pl": "Zaprawdę, Allah nakazuje wam, abyście oddawali powierzone dobra ich właścicielom, a kiedy sądzicie między ludźmi, abyście sądzili sprawiedliwie.",
-"en": "Indeed, Allah commands you to render trusts to whom they are due and when you judge between people to judge with justice.",
-"de": "Allah befiehlt euch, die anvertrauten Güter ihren Eigentümern zurückzugeben und, wenn ihr zwischen den Menschen richtet, nach Gerechtigkeit zu richten.",
-"ru": "Воистину, Аллах велит вам возвращать вверенное имущество хозяевам и судить по справедливости, когда вы судите среди людей.",
-"ref": "Nisa 4:58"
-},
-
-{
-"arabic": "يَا أَيُّهَا الَّذِينَ آمَنُوا كُونُوا قَوَّامِينَ لِلَّهِ شُهَدَاءَ بِالْقِسْطِ ۖ وَلَا يَجْرِمَنَّكُمْ شَنَآنُ قَوْمٍ عَلَىٰ أَلَّا تَعْدِلُوا ۚ اعْدِلُوا هُوَ أَقْرَبُ لِلتَّقْوَىٰ",
-"tr": "Ey iman edenler! Allah için hakkı titizlikle ayakta tutan, adalet ile şahitlik eden kimseler olun. Bir topluluğa olan kininiz, sizi adaletsizliğe itmesin. Adil olun; bu, takvaya daha uygundur.",
-"pl": "O wy, którzy wierzycie! Bądźcie niezłomni dla Allaha, świadcząc sprawiedliwie. I niech nienawiść do jakiegokolwiek ludu nie skłania was do niesprawiedliwości. Bądźcie sprawiedliwi! To jest bliższe bogobojności.",
-"en": "O you who have believed, be persistently standing firm for Allah, witnesses in justice, and do not let the hatred of a people prevent you from being just. Be just; that is nearer to righteousness.",
-"de": "O die ihr glaubt, setzt euch für Allah ein und seid Zeugen der Gerechtigkeit. Und der Hass gegen eine Gruppe soll euch nicht (dazu) verleiten, anders als gerecht zu handeln. Handelt gerecht, das kommt der Gottesfurcht näher.",
-"ru": "О те, которые уверовали! Будьте стойки ради Аллаха, свидетельствуя беспристрастно, и пусть ненависть людей не подтолкнет вас к несправедливости. Будьте справедливы, ибо это ближе к богобоязненности.",
-"ref": "Maide 5:8"
-},
-
-{
-"arabic": "يَا بَنِي آدَمَ خُذُوا زِينَتَكُمْ عِندَ كُلِّ مَسْجِدٍ وَكُلُوا وَاشْرَبُوا وَلَا تُسْرِفُوا ۚ إِنَّهُ لَا يُحِبُّ الْمُسْرِفِينَ",
-"tr": "Ey Âdemoğulları! Her mescide gidişinizde güzel giysilerinizi giyin. Yiyin, için fakat israf etmeyin. Çünkü Allah israf edenleri sevmez.",
-"pl": "O synowie Adama! Bierzcie wasze ozdoby na każde miejsce modlitwy. Jedzcie i pijcie, ale nie bądźcie rozrzutni. Zaprawdę, On nie miłuje rozrzutnych!",
-"en": "O children of Adam, take your adornment at every masjid, and eat and drink, but be not excessive. Indeed, He likes not those who commit excess.",
-"de": "O Kinder Adams, legt euren Schmuck bei jeder Gebetsstätte an. Und esst und trinkt, aber seid nicht maßlos! - Er liebt nicht die Maßlosen.",
-"ru": "О сыны Адама! Облекайтесь в свои украшения при каждой мечети. Ешьте и пейте, но не излишествуйте, ибо Он не любит тех, кто излишествует.",
-"ref": "Araf 7:31"
-},
-
-{
-"arabic": "الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ اللَّهِ ۗ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
-"tr": "Onlar, inananlar ve kalpleri Allah’ı anmakla huzura kavuşanlardır. Biliniz ki, kalpler ancak Allah’ı anmakla huzur bulur.",
-"pl": "Ci, którzy uwierzyli i których serca uspokajają się na wspomnienie Allaha. Zaprawdę, na wspomnienie Allaha uspokajają się serca!",
-"en": "Those who have believed and whose hearts are assured by the remembrance of Allah. Unquestionably, by the remembrance of Allah hearts are assured.",
-"de": "(Es sind) diejenigen, die glauben und deren Herzen im Gedenken Allahs Ruhe finden. Sicherlich, im Gedenken Allahs finden die Herzen Ruhe!",
-"ru": "Они уверовали, и их сердца утешаются поминанием Аллаха. Разве не поминанием Аллаха утешаются сердца?",
-"ref": "Rad 13:28"
-},
-
-{
-"arabic": "وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ ۖ وَلَئِن كَفَرْتُمْ إِنَّ عَذَابِي لَشَدِيدٌ",
-"tr": "Hani Rabbiniz şöyle bildirmişti: “Andolsun, eğer şükrederseniz elbette size nimetimi artırırım. Eğer nankörlük ederseniz hiç şüphesiz azabım çok şiddetlidir.”",
-"pl": "I oto obwieścił wasz Pan: „Jeśli będziecie wdzięczni, to Ja z pewnością pomnożę wam dobro; a jeśli będziecie niewdzięczni, to zaprawdę, Moja kara jest straszna!”",
-"en": "And [remember] when your Lord proclaimed, 'If you are grateful, I will surely increase you [in favor]; but if you deny, indeed, My punishment is severe.'",
-"de": "Und als euer Herr ankündigte: „Wenn ihr dankbar seid, werde Ich euch ganz gewiss noch mehr geben. Wenn ihr jedoch undankbar seid, so ist Meine Strafe wahrlich streng.“",
-"ru": "Вот ваш Господь возвестил: «Если вы будете благодарны, то Я одарю вас еще большим. А если вы будете неблагодарны, то ведь мучения от Меня тяжки».",
-"ref": "İbrahim 14:7"
-},
-
-{
-"arabic": "فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُ",
-"tr": "Kim zerre miktarı hayır yapmışsa onu görür. Kim de zerre miktarı şer işlemişse onu görür.",
-"pl": "Kto uczynił dobro ciężaru pyłku, ten je ujrzy; I kto uczynił zło ciężaru pyłku, ten je ujrzy.",
-"en": "So whoever does an atom's weight of good will see it, And whoever does an atom's weight of evil will see it.",
-"de": "Wer nun im Gewicht eines Stäubchens Gutes tut, wird es sehen. Und wer im Gewicht eines Stäubchens Böses tut, wird es sehen.",
-"ru": "Тот, кто сделал добро весом в мельчайшую частицу, увидит его. И тот, кто сделал зло весом в мельчайшую частицу, увидит его.",
-"ref": "Zilzal 99:7-8"
-},
-
-{
-"arabic": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
-"tr": "Hamd (övme ve övülme), âlemlerin Rabbi Allah’a mahsustur.",
-"pl": "Chwała Allahowi, Panu światów,",
-"en": "[All] praise is [due] to Allah, Lord of the worlds -",
-"de": "Alles Lob gehört Allah, dem Herrn der Welten,",
-"ru": "Хвала Аллаху, Господу миров,",
-"ref": "Fatiha 1:2"
-},
-{
-"arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ",
-"tr": "De ki: O, Allah birdir.",
-"pl": "Powiedz: \"On - Allah Jeden,",
-"en": "Say, \"He is Allah, [who is] One,",
-"de": "Sag: Er ist Allah, ein Einer,",
-"ru": "Скажи: «Он — Аллах Единый,",
-"ref": "İhlas 112:1"
-},
-{
-"arabic": "وَقُل رَّبِّ زِدْنِي عِلْمًا",
-"tr": "\"Rabbim, ilmimi artır\" de.",
-"pl": "I powiedz: \"Panie mój! Pomnóż moją wiedzę!\"",
-"en": "And say, \"My Lord, increase me in knowledge.\"",
-"de": "Und sag: Mein Herr, mehre mein Wissen.",
-"ru": "и говори: «Господи! Приумножь мои знания».",
-"ref": "Taha 20:114"
-},
-{
-"arabic": "هَلْ جَزَاءُ الْإِحْسَانِ إِلَّا الْإِحْسَانُ",
-"tr": "İyiliğin karşılığı iyilikten başka bir şey midir?",
-"pl": "Czy zapłatą za dobro jest co innego niż dobro?",
-"en": "Is the reward for good [anything] but good?",
-"de": "Ist der Lohn der guten Tat etwas anderes als (wieder) Gutes?",
-"ru": "Воздают ли за добро иначе, чем добром?",
-"ref": "Rahman 55:60"
-},
-{
-"arabic": "وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ",
-"tr": "(Ey Muhammed!) Biz seni ancak âlemlere rahmet olarak gönderdik.",
-"pl": "Posłaliśmy ciebie tylko jako miłosierdzie dla światów!",
-"en": "And We have not sent you, [O Muhammad], except as a mercy to the worlds.",
-"de": "Und Wir haben dich nur als Barmherzigkeit für die Weltenbewohner gesandt.",
-"ru": "Мы отправили тебя только в качестве милости к мирам.",
-"ref": "Enbiya 21:107"
-},
-{
-"arabic": "وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ",
-"tr": "Rabbiniz şöyle dedi: \"Bana dua edin, duanıza cevap vereyim.\"",
-"pl": "I powiedział wasz Pan: \"Wzywajcie Mnie, a Ja was wysłucham!\"",
-"en": "And your Lord says, \"Call upon Me; I will respond to you.\"",
-"de": "Und euer Herr sagt: \"Ruft Mich an, so erhöre Ich euch.\"",
-"ru": "Ваш Господь сказал: «Взывайте ко Мне, и Я отвечу вам».",
-"ref": "Mümin 40:60"
-},
-{
-"arabic": "الَّذِينَ إِذَا أَصَابَتْهُم مُّصِيبَةٌ قَالُوا إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",
-"tr": "Onlar; başlarına bir musibet gelince, \"Biz şüphesiz (her şeyimizle) Allah’a aidiz ve şüphesiz O’na döneceğiz\" derler.",
-"pl": "Którzy mówią, kiedy dosięgnie ich nieszczęście: \"Zaprawdę, my należymy do Allaha i, zaprawdę, my do Niego powrócimy!\"",
-"en": "Who, when disaster strikes them, say, \"Indeed we belong to Allah, and indeed to Him we will return.\"",
-"de": "die, wenn sie ein Unglück trifft, sagen: \"Wir gehören Allah, und zu Ihm kehren wir zurück.\"",
-"ru": "которые, когда их постигает беда, говорят: «Воистину, мы принадлежим Аллаху, и к Нему мы вернемся».",
-"ref": "Bakara 2:156"
-},
-{
-"arabic": "وَمِنْهُم مَّن يَقُولُ رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
-"tr": "Onlardan, \"Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru\" diyenler de vardır.",
-"pl": "Są wśród nich tacy, którzy mówią: \"Panie nasz! Daj nam dobro na tym świecie i dobro w życiu ostatecznym, i uchroń nas od kary ognia!\"",
-"en": "But among them is he who says, \"Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good and protect us from the punishment of the Fire.\"",
-"de": "Unter ihnen gibt es auch solche, die sagen: \"Unser Herr, gib uns im Diesseits Gutes und im Jenseits Gutes, und bewahre uns vor der Strafe des (Höllen)feuers!\"",
-"ru": "Но среди них есть такие, которые говорят: «Господь наш! Одари нас добром в этом мире и добром в Последней жизни и защити нас от мучений в Огне».",
-"ref": "Bakara 2:201"
-},
-{
-"arabic": "وَإِنَّكَ لَعَلَىٰ خُلُقٍ عَظِيمٍ",
-"tr": "Sen elbette yüce bir ahlâk üzeresin.",
-"pl": "Zaprawdę, ty masz wzniosły charakter!",
-"en": "And indeed, you are of a great moral character.",
-"de": "Und du bist wahrlich von großartiger Wesensart.",
-"ru": "Воистину, твой нрав превосходен.",
-"ref": "Kalem 68:4"
-},
-
-{
-"arabic": "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِن لَّدُنكَ رَحْمَةً ۚ إِنَّكَ أَنتَ الْوَهَّابُ",
-"tr": "(Onlar şöyle yakarırlar): \"Rabbimiz! Bizi doğru yola ilettikten sonra kalplerimizi eğriltme. Bize tarafından rahmet bağışla. Lütfu en bol olan sensin.\"",
-"pl": "\"Panie nasz! Nie pozwól zboczyć naszym sercom, skoro Ty już poprowadziłeś nas drogą prostą! Daj nam od Siebie miłosierdzie! Zaprawdę, Ty jesteś Dawcą!\"",
-"en": "[Who say], \"Our Lord, let not our hearts deviate after You have guided us and grant us from Yourself mercy. Indeed, You are the Bestower.\"",
-"de": "(Sie sagen:) \"Unser Herr, lasse unsere Herzen nicht abschweifen, nachdem Du uns rechtgeleitet hast, und schenke uns Erbarmen von Dir aus. Du bist ja der unablässig Schenkende.\"",
-"ru": "Они говорят: «Господь наш! Не уклоняй наши сердца в сторону после того, как Ты наставил нас на прямой путь, и даруй нам милость от Себя, ведь Ты — Дарующий!»",
-"ref": "Al-i İmran 3:8"
-},
-{
-"arabic": "هُوَ اللَّهُ الْخَالِقُ الْبَارِئُ الْمُصَوِّرُ ۖ لَهُ الْأَسْمَاءُ الْحُسْنَىٰ ۚ يُسَبِّحُ لَهُ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ ۖ وَهُوَ الْعَزِيزُ الْحَكِيمُ",
-"tr": "O, yaratan, yoktan var eden, şekil veren Allah’tır. Güzel isimler O’nundur. Göklerdeki ve yerdeki her şey O’nu tesbih eder. O, mutlak güç sahibidir, hüküm ve hikmet sahibidir.",
-"pl": "On jest Allahem - Stwórcą, Twórcą, Kształtującym! Do Niego należą imiona najpiękniejsze. Wysławia Go to, co jest w niebiosach i na ziemi; On jest Potężny, Mądry!",
-"en": "He is Allah, the Creator, the Inventor, the Fashioner; to Him belong the best names. Whatever is in the heavens and earth is exalting Him. And He is the Exalted in Might, the Wise.",
-"de": "Er ist Allah, der Schöpfer, der Erschaffer, der Bildner. Sein sind die schönsten Namen. Ihn preist (alles), was in den Himmeln und auf der Erde ist. Und Er ist der Allmächtige und Allweise.",
-"ru": "Он — Аллах, Творец, Создатель, Дарующий облик. У Него — самые прекрасные имена. Славит Его то, что на небесах и на земле. Он — Могущественный, Мудрый.",
-"ref": "Haşr 59:24"
-},
-{
-"arabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا إِنَّ مَعَ الْعُسْرِ يُسْرًا",
-"tr": "Şüphesiz zorlukla beraber bir kolaylık vardır. Gerçekten, zorlukla beraber bir kolaylık daha vardır.",
-"pl": "Zaprawdę, po udręce przychodzi ułatwienie! Zaprawdę, po udręce przychodzi ułatwienie!",
-"en": "For indeed, with hardship [will be] ease. Indeed, with hardship [will be] ease.",
-"de": "Also gewiss, mit der Erschwernis ist Erleichterung, gewiss, mit der Erschwernis ist Erleichterung.",
-"ru": "Воистину, за каждой тягостью наступает облегчение. За каждой тягостью наступает облегчение.",
-"ref": "İnşirah 94:5-6"
-},
-{
-"arabic": "إِنَّا أَنزَلْنَا التَّوْرَاةَ فِيهَا هُدًى وَنُورٌ ۚ يَحْكُمُ بِهَا النَّبِيُّونَ الَّذِينَ أَسْلَمُوا لِلَّذِينَ هَادُوا وَالرَّبَّانِيُّونَ وَالْأَحْبَارُ بِمَا اسْتُحْفِظُوا مِن كِتَابِ اللَّهِ وَكَانُوا عَلَيْهِ شُهَدَاءَ ۚ فَلَا تَخْشَوُا النَّاسَ وَاخْشَوْنِ وَلَا تَشْتَرُوا بِآيَاتِي ثَمَنًا قَلِيلًا ۚ وَمَن لَّمْ يَحْكُم بِمَا أَنزَلَ اللَّهُ فَأُولَٰئِكَ هُمُ الْكَافِرُونَ",
-"tr": "Şüphesiz Tevrat'ı biz indirdik. İçinde bir hidayet, bir nur vardır. (Allah'a) teslim olmuş peygamberler, Yahudilere onunla hükmederlerdi. Din bilginleri ve hahamlar da Allah'ın kitabını korumakla görevlendirildikleri ve ona şahit oldukları için (onunla hükmederlerdi). Öyleyse insanlardan korkmayın, benden korkun ve âyetlerimi az bir karşılığa değişmeyin. Kim Allah'ın indirdiği ile hükmetmezse işte onlar kâfirlerin ta kendileridir.",
-"pl": "Zaprawdę, zesłaliśmy Torę, w której jest droga prosta i światło. Według niej sądzili prorocy, którzy się całkowicie poddali, tych, którzy wyznają judaizm; podobnie rabini i uczeni w piśmie, stosownie do tego, co im zostało powierzone z Księgi Allaha, której oni byli świadkami. Nie bójcie się więc ludzi, lecz bójcie się Mnie! I nie kupujcie za Moje znaki małej ceny! A ci, którzy nie sądzą według tego, co zesłał Allah, są niewiernymi!",
-"en": "Indeed, We sent down the Torah, in which was guidance and light. The prophets who submitted [to Allah] judged by it for the Jews, as did the rabbis and scholars by that with which they were entrusted of the Scripture of Allah, and they were witnesses thereto. So do not fear the people but fear Me, and do not exchange My verses for a small price. And whoever does not judge by what Allah has revealed - then it is those who are the disbelievers.",
-"de": "Gewiß, Wir haben die Tora hinabgesandt, in der Rechtleitung und Licht sind, womit die Propheten, die sich (Allah) ergeben hatten, für diejenigen urteilten, die dem Judentum angehören, und so auch die rabbanitischen Gelehrten und die Gelehrten, nach dem, was ihnen von der Schrift Allahs anvertraut worden war und worüber sie Zeugen waren. So fürchtet nicht die Menschen, sondern fürchtet Mich. Und verkauft Meine Zeichen nicht für einen geringen Preis! Wer nicht nach dem waltet, was Allah als Offenbarung herabgesandt hat, das sind die Ungläubigen.",
-"ru": "Мы ниспослали Таурат (Тору), в котором содержится верное руководство и свет. Покорившиеся пророки выносили по нему решения для иудеев. Раввины и первосвященники поступали таким же образом в соответствии с тем, что им было поручено сохранить из Писания Аллаха. Они свидетельствовали о нем. Не бойтесь же людей, а бойтесь Меня, и не продавайте Мои знамения за ничтожную цену. Те же, которые не принимают решений в соответствии с тем, что ниспослал Аллах, являются неверующими.",
-"ref": "Maide 5:44"
-},
-{
-"arabic": "وَكَتَبْنَا عَلَيْهِمْ فِيهَا أَنَّ النَّفْسَ بِالنَّفْسِ وَالْعَيْنَ بِالْعَيْنِ وَالْأَنفَ بِالْأَنفِ وَالْأُذُنَ بِالْأُذُنِ وَالسِّنَّ بِالسِّنِّ وَالْجُرُوحَ قِصَاصٌ ۚ فَمَن تَصَدَّقَ بِهِ فَهُوَ كَفَّارَةٌ لَّهُ ۚ وَمَن لَّمْ يَحْكُم بِمَا أَنزَلَ اللَّهُ فَأُولَٰئِكَ هُمُ الظَّالِمُونَ",
-"tr": "Biz Tevrat'ta onlara şöyle yazdık: Cana can, göze göz, buruna burun, kulağa kulak, dişe diş ve yaralara karşılık kısas vardır. Kim bunu (kısas hakkını) bağışlarsa o kendisi için kefaret olur. Kim Allah'ın indirdiği ile hükmetmezse işte onlar zalimlerin ta kendileridir.",
-"pl": "Przepisaliśmy im w niej: życie za życie, oko za oko, nos za nos, ucho za ucho, ząb za ząb; i za rany – wyrównanie. A kto zrezygnuje z niego jako jałmużny, to to będzie dla niego przebłaganiem. A ci, którzy nie sądzą według tego, co zesłał Allah, są niesprawiedliwi!",
-"en": "And We ordained for them therein a life for a life, an eye for an eye, a nose for a nose, an ear for an ear, a tooth for a tooth, and for wounds is legal retribution. But whoever gives [up his right as] charity, it is an expiation for him. And whoever does not judge by what Allah has revealed - then it is those who are the wrongdoers.",
-"de": "Und Wir haben ihnen darin vorgeschrieben: Leben um Leben, Auge um Auge, Nase um Nase, Ohr um Ohr, Zahn um Zahn; und (auch) für Verwundungen Wiedervergeltung. Wer es aber als Almosen eräßt, für den ist es eine Sühne. Wer nicht nach dem waltet, was Allah als Offenbarung herabgesandt hat, das sind die Ungerechten.",
-"ru": "Мы предписали им в нем: душа — за душу, глаз — за глаз, нос — за нос, ухо — за ухо, зуб — за зуб, а за раны — возмездие. Но если кто-нибудь пожертвует этим, то это станет для него искуплением. Те же, которые не принимают решений в соответствии с тем, что ниспослал Аллах, являются беззаконниками.",
-"ref": "Maide 5:45"
-},
-{
-  "arabic": "لَا يَمْلِكُونَ الشَّفَاعَةَ إِلَّا مَنِ اتَّخَذَ عِندَ الرَّحْمَٰنِ عَهْدًا",
-  "tr": "(O gün) Rahmân’ın katında söz ve izin alandan başkasının şefaat hakkı olmayacaktır.",
-  "pl": "Tego Dnia nikt nie będzie miał prawa do wstawiennictwa poza tym, kto otrzymał od Najmiłosierniejszego obietnicę i pozwolenie.",
-  "en": "On that Day, none will have the right to intercede except those who have received a covenant and permission from the Most Merciful.",
-  "de": "An jenem Tag wird niemand Fürsprache einlegen dürfen außer dem, der vom Allerbarmer eine Zusage und Erlaubnis erhalten hat.",
-  "ru": "В тот День никто не будет обладать правом заступничества, кроме тех, кто получил обещание и дозволение от Милостивого.",
-  "ref": "Meryem 19:87"
-},
-{
-  "arabic": "يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يَشْفَعُونَ إِلَّا لِمَنِ ارْتَضَى وَهُمْ مِنْ خَشْيَتِهِ مُشْفِقُونَ",
-  "tr": "Allah onların önlerindekini de arkalarındakini de (bildiklerini de bilmediklerini de) bilir. Onlar Allah’ın razı olduklarından başkasına şefaat edemezler ve Allah korkusundan titrerler!",
-  "pl": "Allah wie to, co jest przed nimi i za nimi. Nie wstawiają się oni za nikim poza tymi, z których Allah jest zadowolony, a sami drżą z bojaźni przed Nim.",
-  "en": "Allah knows what is before them and what is behind them. They do not intercede except for those with whom Allah is pleased, and they tremble in awe of Him.",
-  "de": "Allah weiß, was vor ihnen liegt und was hinter ihnen ist. Sie legen nur für diejenigen Fürsprache ein, mit denen Allah zufrieden ist, und sie erzittern aus Furcht vor Ihm.",
-  "ru": "Аллах знает то, что перед ними, и то, что позади них. Они заступаются только за тех, кем доволен Аллах, и трепещут перед Ним от страха.",
-  "ref": "Enbiya 21:28"
-},
-{
-  "arabic": "أَمِ اتَّخَذُوا مِن دُونِ اللَّهِ شُفَعَاءَ ۚ قُلْ أَوَلَوْ كَانُوا لَا يَمْلِكُونَ شَيْئًا وَلَا يَعْقِلُونَ",
-  "tr": "Yoksa onlar kendilerine Allah’tan başka şefaatçiler mi edindiler? De ki: “O şefaatçiler hiçbir şeye güç yetiremez, hiçbir şeyi kavrayamaz olsalar da mı?”",
-  "pl": "Czyż wzięli sobie orędowników poza Allahem? Powiedz: „Nawet jeśli nie mają żadnej mocy i niczego nie rozumieją?”",
-  "en": "Or have they taken intercessors besides Allah? Say: 'Even if they possess no power whatsoever and have no understanding?'",
-  "de": "Oder haben sie sich außer Allah Fürsprecher genommen? Sprich: „Selbst wenn sie über nichts verfügen und nichts begreifen?“",
-  "ru": "Неужели они взяли себе заступников помимо Аллаха? Скажи: «Даже если они ничем не владеют и ничего не понимают?»",
-  "ref": "Zumer 39:43"
-},
-{
-  "arabic": "قُل لِّلَّهِ الشَّفَاعَةُ جَمِيعًا ۖ لَّهُ مُلْكُ السَّمَاوَاتِ وَالْأَرْضِ ۖ ثُمَّ إِلَيْهِ تُرْجَعُونَ",
-  "tr": "De ki: “Şefaat etme yetkisi bütünüyle Allah’a aittir; göklerin ve yerin hükümranlığı O’nun elindedir; sonunda kaçınılmaz olarak dönüp O’na varacaksınız.”",
-  "pl": "Powiedz: „Całe prawo do wstawiennictwa należy wyłącznie do Allaha. Do Niego należy panowanie nad niebiosami i ziemią, a potem do Niego zostaniecie sprowadzeni.”",
-  "en": "Say: 'All intercession belongs entirely to Allah. To Him belongs the dominion of the heavens and the earth, and then to Him you will be returned.'",
-  "de": "Sprich: „Die gesamte Fürsprache gehört Allah allein. Ihm gehört die Herrschaft der Himmel und der Erde; dann werdet ihr zu Ihm zurückgebracht.“",
-  "ru": "Скажи: «Всё заступничество принадлежит только Аллаху. Ему принадлежит власть над небесами и землей, а затем вы будете возвращены к Нему».",
-  "ref": "Zumer 39:44"
-},
-{
-  "arabic": "مَنْ كَانَ عَدُوًّا لِلَّهِ وَمَلَائِكَتِهِ وَرُسُلِهِ وَجِبْرِيلَ وَمِيكَالَ فَإِنَّ اللَّهَ عَدُوٌّ لِّلْكَافِرِينَ",
-  "tr": "Her kim Allah’a, meleklerine, peygamberlerine, Cebrâil’e ve Mîkâil’e düşman ise bilsin ki Allah da inkârcıların düşmanıdır.",
-  "pl": "Kto jest wrogiem Allaha, Jego aniołów, Jego posłańców, Dżibrila i Mikaila, niech wie, że Allah jest wrogiem niewiernych.",
-  "en": "Whoever is an enemy to Allah, His angels, His messengers, Gabriel and Michael, then indeed Allah is an enemy to the disbelievers.",
-  "de": "Wer Allah, Seinen Engeln, Seinen Gesandten, Gabriel und Michael feindlich gesinnt ist, so ist Allah gewiss der Feind der Ungläubigen.",
-  "ru": "Кто враждует с Аллахом, Его ангелами, Его посланниками, Джибрилем и Микаилем, тот должен знать, что Аллах — враг неверующих.",
-  "ref": "Bakara 2:98"
-},
-{
-  "arabic": "إِنَّ الَّذِينَ يَكْفُرُونَ بِاللَّهِ وَرُسُلِهِ وَيُرِيدُونَ أَن يُفَرِّقُوا بَيْنَ اللَّهِ وَرُسُلِهِ وَيَقُولُونَ نُؤْمِنُ بِبَعْضٍ وَنَكْفُرُ بِبَعْضٍ وَيُرِيدُونَ أَن يَتَّخِذُوا بَيْنَ ذَٰلِكَ سَبِيلًا",
-  "tr": "Allah’ı ve peygamberlerini inkâr edenler, Allah ile peygamberlerini birbirinden ayırmak isteyenler, “Bir kısmına inanırız ama bir kısmına inanmayız” diyenler ve bunlar arasında bir yol tutmak isteyenler yok mu, işte gerçek kâfirler bunlardır ve biz kâfirlere alçaltıcı bir azap hazırlamışızdır.",
-  "pl": "Ci, którzy nie wierzą w Allaha i Jego posłańców, chcą rozdzielić Allaha od Jego posłańców, mówią: „Wierzymy w jednych, a innych odrzucamy”, i chcą obrać drogę pośrednią – to oni są prawdziwymi niewiernymi. Dla niewiernych przygotowaliśmy poniżającą karę.",
-  "en": "Those who disbelieve in Allah and His messengers and seek to make a distinction between Allah and His messengers, saying, 'We believe in some and disbelieve in others,' seeking a path in between, are truly disbelievers, and We have prepared for the disbelievers a humiliating punishment.",
-  "de": "Diejenigen, die Allah und Seine Gesandten verleugnen, zwischen Allah und Seinen Gesandten unterscheiden wollen und sagen: „An die einen glauben wir, an die anderen nicht“, und einen Mittelweg suchen – sie sind die wahren Ungläubigen. Für die Ungläubigen haben Wir eine erniedrigende Strafe bereitet.",
-  "ru": "Воистину, те, которые не веруют в Аллаха и Его посланников, хотят отделить Аллаха от Его посланников, говоря: «В одних мы веруем, а в других не веруем», и пытаются найти средний путь, являются истинными неверующими. Для неверующих Мы приготовили унизительное наказание.",
-  "ref": "Nisa 4:150"
-},
-{
-  "arabic": "الزَّانِي لَا يَنكِحُ إِلَّا زَانِيَةً أَوْ مُشْرِكَةً ۖ وَالزَّانِيَةُ لَا يَنكِحُهَا إِلَّا زَانٍ أَوْ مُشْرِكٌ ۚ وَحُرِّمَ ذَٰلِكَ عَلَى الْمُؤْمِنِينَ",
-  "tr": "Zina eden erkek ancak zinakâr veya müşrik bir kadınla evlenir, zina eden kadınla da ancak zinakâr veya müşrik bir erkek evlenir. Bu müminlere haram kılınmıştır.",
-  "pl": "Cudzołożnik poślubia tylko cudzołożnicę albo bałwochwalczynię, a cudzołożnicę poślubia tylko cudzołożnik albo bałwochwalca. Zostało to zakazane wierzącym.",
-  "en": "The adulterer marries none but an adulteress or an idolatrous woman, and the adulteress is married by none but an adulterer or an idolatrous man. This has been forbidden to the believers.",
-  "de": "Der Ehebrecher heiratet nur eine Ehebrecherin oder Götzendienerin, und die Ehebrecherin wird nur von einem Ehebrecher oder Götzendiener geheiratet. Dies ist den Gläubigen verboten worden.",
-  "ru": "Прелюбодей женится только на прелюбодейке или многобожнице, а на прелюбодейке женится только прелюбодей или многобожник. Это запрещено верующим.",
-  "ref": "Nur 24:3"
-},
-{
-  "arabic": "فَوَسْوَسَ لَهُمَا الشَّيْطَانُ لِيُبْدِيَ لَهُمَا مَا وُورِيَ عَنْهُمَا مِن سَوْآتِهِمَا وَقَالَ مَا نَهَاكُمَا رَبُّكُمَا عَنْ هَٰذِهِ الشَّجَرَةِ إِلَّا أَن تَكُونَا مَلَكَيْنِ أَوْ تَكُونَا مِنَ الْخَالِدِينَ",
-  "tr": "Derken şeytan, kapalı olan avret yerlerini birbirine göstermek için onlara fısıldayıp kafalarını karıştırdı ve “Rabbiniz size bu ağacı sırf melek olursunuz veya ebedî yaşayanlardan olursunuz diye yasakladı” dedi.",
-  "pl": "Szatan zaczął im szeptać, aby ukazać im to, co było przed nimi zakryte z ich nagości. Powiedział: „Wasz Pan zakazał wam tego drzewa tylko dlatego, abyście nie stali się aniołami albo nieśmiertelnymi”.",
-  "en": "Then Satan whispered to them in order to reveal to them what had been hidden of their nakedness. He said, 'Your Lord only forbade you this tree lest you become angels or become among the immortal.'",
-  "de": "Da flüsterte ihnen Satan ein, um ihnen ihre verborgene Blöße sichtbar zu machen. Er sagte: „Euer Herr hat euch diesen Baum nur verboten, damit ihr nicht Engel werdet oder zu den Unsterblichen gehört.“",
-  "ru": "Тогда сатана стал нашептывать им, чтобы открыть им их скрытую наготу. Он сказал: «Ваш Господь запретил вам это дерево только для того, чтобы вы не стали ангелами или бессмертными».",
-  "ref": "A'raf 7:20"
-},
-{
-  "arabic": "وَالَّذِينَ كَفَرُوا بَعْضُهُمْ أَوْلِيَاءُ بَعْضٍ ۚ إِلَّا تَفْعَلُوهُ تَكُن فِتْنَةٌ فِي الْأَرْضِ وَفَسَادٌ كَبِيرٌ",
-  "tr": "Küfredenler birbirlerinin velileridir. Eğer siz bunu yapmazsanız (birbirinize yardım etmez ve dost olmazsanız) yeryüzünde bir fitne ve büyük bir bozgunculuk (fesat) olur.",
-  "pl": "Niewierzący są wzajemnie swoimi opiekunami i sprzymierzeńcami. Jeśli wy nie będziecie postępować podobnie, nastąpi na ziemi zamęt i wielkie zepsucie.",
-  "en": "The disbelievers are allies of one another. If you do not act likewise, there will be turmoil and great corruption upon the earth.",
-  "de": "Die Ungläubigen sind einander Verbündete. Wenn ihr dies nicht tut, wird es auf der Erde Verwirrung und großes Unheil geben.",
-  "ru": "Неверующие являются союзниками друг друга. Если вы не будете поступать так же, на земле возникнут смута и великое нечестие.",
-  "ref": "Enfal 8:73"
-},
-{
-  "arabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا",
-  "tr": "Şüphesiz zorlukla beraber bir kolaylık vardır. Gerçekten zorlukla beraber bir kolaylık vardır.",
-  "pl": "Zaprawdę, wraz z trudnością przychodzi łatwość. Zaprawdę, wraz z trudnością przychodzi łatwość.",
-  "en": "Indeed, with hardship comes ease. Indeed, with hardship comes ease.",
-  "de": "Gewiss, mit der Erschwernis kommt Erleichterung. Gewiss, mit der Erschwernis kommt Erleichterung.",
-  "ru": "Воистину, за тягостью приходит облегчение. Воистину, за тягостью приходит облегчение.",
-  "ref": "İnşirah 94:5-6"
-},
-{
-  "arabic": "وَاللَّهُ خَيْرُ الرَّازِقِينَ",
-  "tr": "Allah rızık verenlerin en hayırlısıdır.",
-  "pl": "Allah jest najlepszym z dających zaopatrzenie.",
-  "en": "Allah is the Best of providers.",
-  "de": "Allah ist der beste Versorger.",
-  "ru": "Аллах — лучший из дарующих удел.",
-  "ref": "Cuma 62:11"
-},
-{
-  "arabic": "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ",
-  "tr": "Benim başarım ancak Allah'ın yardımıyladır.",
-  "pl": "Mój sukces jest tylko dzięki Allahowi.",
-  "en": "My success is only through Allah.",
-  "de": "Mein Erfolg kommt nur durch Allah.",
-  "ru": "Мой успех — только от Аллаха.",
-  "ref": "Hud 11:88"
-},
-{
-  "arabic": "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",
-  "tr": "Şüphesiz Allah sabredenlerle beraberdir.",
-  "pl": "Zaprawdę, Allah jest z cierpliwymi.",
-  "en": "Indeed, Allah is with the patient.",
-  "de": "Gewiss, Allah ist mit den Standhaften.",
-  "ru": "Воистину, Аллах с терпеливыми.",
-  "ref": "Bakara 2:153"
-},
-{
-  "arabic": "إِنَّ اللَّهَ يُحِبُّ الْمُحْسِنِينَ",
-  "tr": "Şüphesiz Allah iyilik yapanları sever.",
-  "pl": "Zaprawdę, Allah kocha czyniących dobro.",
-  "en": "Indeed, Allah loves those who do good.",
-  "de": "Gewiss, Allah liebt die Gutes Tuenden.",
-  "ru": "Воистину, Аллах любит творящих добро.",
-  "ref": "Bakara 2:195"
-},
-{
-  "arabic": "إِنَّ اللَّهَ يُحِبُّ الْمُتَّقِينَ",
-  "tr": "Şüphesiz Allah takva sahiplerini sever.",
-  "pl": "Zaprawdę, Allah kocha bogobojnych.",
-  "en": "Indeed, Allah loves the righteous.",
-  "de": "Gewiss, Allah liebt die Gottesfürchtigen.",
-  "ru": "Воистину, Аллах любит богобоязненных.",
-  "ref": "Tevbe 9:4"
-},
-{
-  "arabic": "إِنَّ اللَّهَ يُحِبُّ التَّوَّابِينَ وَيُحِبُّ الْمُتَطَهِّرِينَ",
-  "tr": "Şüphesiz Allah tövbe edenleri ve temizlenenleri sever.",
-  "pl": "Allah kocha pokutujących i dbających o czystość.",
-  "en": "Indeed, Allah loves those who repent and purify themselves.",
-  "de": "Allah liebt die Reuigen und die Reinen.",
-  "ru": "Воистину, Аллах любит кающихся и очищающихся.",
-  "ref": "Bakara 2:222"
-},
-{
-  "arabic": "إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ",
-  "tr": "Şüphesiz Allah iyilik yapanların mükâfatını zayi etmez.",
-  "pl": "Allah nie marnuje nagrody czyniących dobro.",
-  "en": "Indeed, Allah does not allow the reward of the doers of good to be lost.",
-  "de": "Allah lässt den Lohn der Gutes Tuenden nicht verloren gehen.",
-  "ru": "Воистину, Аллах не губит награду творящих добро.",
-  "ref": "Tevbe 9:120"
-},
-{
-  "arabic": "وَاللَّهُ غَفُورٌ رَحِيمٌ",
-  "tr": "Allah çok bağışlayandır, çok merhamet edendir.",
-  "pl": "Allah jest Przebaczający, Miłosierny.",
-  "en": "Allah is All-Forgiving, Most Merciful.",
-  "de": "Allah ist Allvergebend, Barmherzig.",
-  "ru": "Аллах — Прощающий, Милосердный.",
-  "ref": "Bakara 2:173"
-},
-{
-  "arabic": "وَاللَّهُ سَمِيعٌ عَلِيمٌ",
-  "tr": "Allah hakkıyla işitendir, hakkıyla bilendir.",
-  "pl": "Allah jest Wszystkosłyszący, Wszechwiedzący.",
-  "en": "Allah is All-Hearing, All-Knowing.",
-  "de": "Allah ist Allhörend, Allwissend.",
-  "ru": "Аллах — Слышащий, Знающий.",
-  "ref": "Bakara 2:181"
-},
-{
-  "arabic": "وَاللَّهُ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-  "tr": "Allah her şeye hakkıyla gücü yetendir.",
-  "pl": "Allah ma moc nad każdą rzeczą.",
-  "en": "Allah is Able to do all things.",
-  "de": "Allah hat Macht über alle Dinge.",
-  "ru": "Аллах способен на всякую вещь.",
-  "ref": "Bakara 2:20"
-},
-{
-  "arabic": "وَاللَّهُ وَلِيُّ الْمُؤْمِنِينَ",
-  "tr": "Allah müminlerin dostudur.",
-  "pl": "Allah jest Opiekunem wierzących.",
-  "en": "Allah is the Protector of the believers.",
-  "de": "Allah ist der Schutzherr der Gläubigen.",
-  "ru": "Аллах — Покровитель верующих.",
-  "ref": "Âl-i İmrân 3:68"
-},
-{
-  "arabic": "إِنَّ رَبِّي قَرِيبٌ مُجِيبٌ",
-  "tr": "Şüphesiz Rabbim çok yakındır, dualara cevap verendir.",
-  "pl": "Zaprawdę, mój Pan jest bliski i odpowiada na modlitwy.",
-  "en": "Indeed, my Lord is Near and Responsive.",
-  "de": "Mein Herr ist nahe und erhört die Gebete.",
-  "ru": "Воистину, мой Господь близок и отвечает на мольбы.",
-  "ref": "Hud 11:61"
-},
-{
-  "arabic": "وَهُوَ خَيْرُ الْحَاكِمِينَ",
-  "tr": "O hükmedenlerin en hayırlısıdır.",
-  "pl": "On jest najlepszym z sędziów.",
-  "en": "He is the Best of judges.",
-  "de": "Er ist der beste Richter.",
-  "ru": "Он — Лучший из судей.",
-  "ref": "Araf 7:87"
-},
-{
-  "arabic": "وَهُوَ أَرْحَمُ الرَّاحِمِينَ",
-  "tr": "O merhametlilerin en merhametlisidir.",
-  "pl": "On jest Najbardziej Miłosiernym z miłosiernych.",
-  "en": "He is the Most Merciful of the merciful.",
-  "de": "Er ist der Barmherzigste der Barmherzigen.",
-  "ru": "Он — Милостивейший из милостивых.",
-  "ref": "Yusuf 12:64"
-},
-{
-  "arabic": "إِنَّ رَحْمَتَ اللَّهِ قَرِيبٌ مِنَ الْمُحْسِنِينَ",
-  "tr": "Şüphesiz Allah'ın rahmeti iyilik yapanlara yakındır.",
-  "pl": "Miłosierdzie Allaha jest bliskie czyniącym dobro.",
-  "en": "Indeed, the mercy of Allah is near to those who do good.",
-  "de": "Die Barmherzigkeit Allahs ist den Gutes Tuenden nahe.",
-  "ru": "Воистину, милость Аллаха близка к творящим добро.",
-  "ref": "Araf 7:56"
-},
-{
-  "arabic": "لَا تَقْنَطُوا مِنْ رَحْمَةِ اللَّهِ",
-  "tr": "Allah'ın rahmetinden ümit kesmeyin.",
-  "pl": "Nie traćcie nadziei na miłosierdzie Allaha.",
-  "en": "Do not despair of the mercy of Allah.",
-  "de": "Verzweifelt nicht an der Barmherzigkeit Allahs.",
-  "ru": "Не отчаивайтесь в милости Аллаха.",
-  "ref": "Zümer 39:53"
-},
-{
-  "arabic": "وَمَنْ يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا",
-  "tr": "Kim Allah'a karşı gelmekten sakınırsa Allah ona bir çıkış yolu ihsan eder.",
-  "pl": "Kto boi się Allaha, temu On znajdzie wyjście.",
-  "en": "Whoever fears Allah, He will make for him a way out.",
-  "de": "Wer Allah fürchtet, dem schafft Er einen Ausweg.",
-  "ru": "Тому, кто боится Аллаха, Он дарует выход.",
-  "ref": "Talak 65:2"
-},
-{
-  "arabic": "وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",
-  "tr": "Ve ona ummadığı yerden rızık verir.",
-  "pl": "I zaopatrzy go z miejsca, którego się nie spodziewa.",
-  "en": "And He will provide for him from where he does not expect.",
-  "de": "Und Er versorgt ihn von dort, womit er nicht rechnet.",
-  "ru": "И дарует ему удел оттуда, откуда он не ожидает.",
-  "ref": "Talak 65:3"
-},
-{
-  "arabic": "وَمَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
-  "tr": "Kim Allah'a tevekkül ederse O ona yeter.",
-  "pl": "Kto zaufa Allahowi, temu On wystarczy.",
-  "en": "Whoever relies upon Allah, then He is sufficient for him.",
-  "de": "Wer auf Allah vertraut, dem genügt Er.",
-  "ru": "Тому, кто уповает на Аллаха, Его достаточно.",
-  "ref": "Talak 65:3"
-}
-
-    ],
-    dua: [
-        {arabic:'رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا، وَهَبْ لَنَا مِن لَّدُنكَ رَحْمَةً، وَاجْعَلْ فِي بُيُوتِنَا سَكِينَةً وَفِي أُمَّتِنَا وَحْدَةً. آمِين.', tr:'Rabbim, bizleri doğru yoldan ayırma. Ailemize huzur, dostlarımıza sadakat, ümmete birlik nasip et. Cuma gününün bereketi üzerimize olsun. Âmin.', pl:'Panie, nie oddalaj nas od właściwej drogi. Obdarz nasze rodziny spokojem, naszych przyjaciół lojalnością, a wspólnotę jednością. Niech błogosławieństwo piątku będzie nad nami. Amen.', en:'My Lord, do not let us stray from the right path. Grant peace to our families, loyalty to our friends, and unity to the Ummah. May the blessings of Friday be upon us. Amen.', de:'Mein Herr, lasse uns nicht vom rechten Weg abkommen. Schenke unseren Familien Frieden, unseren Freunden Treue und der Umma Einheit. Möge der Segen des Freitags auf uns sein. Amen.', ru:'Господь наш, не сбивай нас с истинного пути. Даруй нашим семьям покой, нашим друзьям верность, а умме — единство. Пусть благословение пятницы будет над нами. Аминь.', ref:'Dua'},
-        {arabic:'يَا أَرْحَمَ الرَّاحِمِينَ، بِحُرْمَةِ يَوْمِ الْجُمُعَةِ، حَقِّقْ لَنَا مَا فِي قُلُوبِنَا مِنْ خَيْرٍ، وَاشْفِ الْمَرْضَى، وَفَرِّجْ هَمَّ الْمَكْرُوبِينَ، وَيَسِّرْ أَمْرَ الْمَدِينِينَ. آمِين.', tr:'Ey merhametlilerin en merhametlisi olan Allah’ım, bu cuma hürmetine gönlümüzdeki hayırlı istekleri nasip et. Hastalara şifa, dertlilere deva, borçlulara kolaylık ver. Âmin.', pl:'O Allahu, Najbardziej Miłosierny z miłosiernych, przez wzgląd na ten piątek spełnij nasze dobre pragnienia. Daj uzdrowienie chorym, ulgę strapionym i łatwość zadłużonym. Amen.', en:'O Allah, Most Merciful of the merciful, by the virtue of this Friday grant the good desires in our hearts. Give healing to the sick, relief to the distressed, and ease to those in debt. Amen.', de:'O Allah, Barmherzigster der Barmherzigen, gewähre uns um dieses Freitags willen die guten Wünsche unserer Herzen. Gib den Kranken Heilung, den Bedrängten Erleichterung und den Verschuldeten Hilfe. Amen.', ru:'О Аллах, Милостивейший из милостивых, ради этой пятницы исполни благие желания наших сердец. Даруй исцеление больным, облегчение страдающим и помощь должникам. Аминь.', ref:'Dua'},
-        {arabic:'اللَّهُمَّ اجْعَلْنَا فِي هَذَا الْيَوْمِ الْمُبَارَكِ مِنْ أَهْلِ عَفْوِكَ وَرَحْمَتِكَ، وَارْزُقْ قُلُوبَنَا السَّلَامَ، وَحَيَاتَنَا الْبَرَكَةَ، وَأَلْسِنَتَنَا الْكَلَامَ الطَّيِّبَ. آمِين.', tr:'Allah’ım, bu mübarek cuma gününde bizleri affına mazhar olan kullarından eyle. Kalbimize huzur, hayatımıza bereket, dilimize güzel sözler nasip et. Âmin.', pl:'Allahu, w ten błogosławiony piątek uczyń nas spośród tych, którzy dostępują Twojego przebaczenia. Obdarz nasze serca spokojem, nasze życie błogosławieństwem i nasze języki pięknymi słowami. Amen.', en:'O Allah, on this blessed Friday make us among those who attain Your forgiveness. Grant peace to our hearts, blessings to our lives, and beautiful words to our tongues. Amen.', de:'O Allah, mache uns an diesem gesegneten Freitag zu jenen, die Deine Vergebung erlangen. Schenke unseren Herzen Frieden, unserem Leben Segen und unserer Zunge schöne Worte. Amen.', ru:'О Аллах, в эту благословенную пятницу сделай нас среди тех, кто удостоится Твоего прощения. Даруй нашим сердцам покой, нашей жизни благословение и нашим устам добрые слова. Аминь.', ref:'Dua'},
-        {arabic:'يَا رَبِّ، اجْعَلْ كُلَّ خُطْوَةٍ نَخْطُوهَا خَيْرًا وَبَرَكَةً، وَاحْفَظْنَا مِنَ الْبَلَاءِ وَالسُّوءِ وَشَرِّ النَّاسِ، وَامْلَأْ يَوْمَ الْجُمُعَةِ عَلَيْنَا بِرَحْمَتِكَ. آمِين.', tr:'Ya Rabbi, attığımız her adımı hayırla sonuçlandır. Bizleri kazadan, beladan, kötü insanlardan muhafaza eyle. Cuma günümüzü rahmetinle doldur. Âmin.', pl:'Panie, spraw, aby każdy nasz krok kończył się dobrem. Chroń nas od wypadków, nieszczęść i złych ludzi. Napełnij nasz piątek swoim miłosierdziem. Amen.', en:'O Lord, let every step we take end in goodness. Protect us from accidents, calamities, and evil people. Fill our Friday with Your mercy. Amen.', de:'O Herr, lasse jeden unserer Schritte im Guten enden. Beschütze uns vor Unglücken, Prüfungen und schlechten Menschen. Erfülle unseren Freitag mit Deiner Barmherzigkeit. Amen.', ru:'О Господь, пусть каждый наш шаг завершается благом. Защити нас от несчастий, бед и злых людей. Наполни нашу пятницу Своей милостью. Аминь.', ref:'Dua'},
-        {arabic:'اللَّهُمَّ تَقَبَّلْ مِنَّا كُلَّ نِيَّةٍ صَالِحَةٍ فِي قُلُوبِنَا، وَأَحْيِ فِينَا الْأَمَلَ، وَبَارِكْ لَنَا فِي أَرْزَاقِنَا وَمَوَائِدِنَا، وَاجْعَلْ دُعَاءَنَا مَقْبُولًا. آمِين.', tr:'Allah’ım, gönlümüzde taşıdığımız tüm güzel niyetleri kabul eyle. Umutlarımızı diri, sofralarımızı bereketli, dualarımızı makbul kıl. Âmin.', pl:'Allahu, przyjmij wszystkie dobre intencje, które nosimy w sercach. Zachowaj nasze nadzieje żywe, nasze stoły pełne błogosławieństwa, a nasze modlitwy przyjęte. Amen.', en:'O Allah, accept all the good intentions we carry in our hearts. Keep our hopes alive, bless our tables with abundance, and accept our prayers. Amen.', de:'O Allah, nimm all die guten Absichten an, die wir in unseren Herzen tragen. Halte unsere Hoffnung lebendig, segne unsere Tische und erhöre unsere Gebete. Amen.', ru:'О Аллах, прими все благие намерения, которые мы носим в своих сердцах. Сохрани наши надежды живыми, благослови наши столы и прими наши молитвы. Аминь.', ref:'Dua'},
-        {arabic:'رَبِّ ارْزُقْنَا عُمْرًا مُبَارَكًا، وَرِزْقًا حَلَالًا، وَإِيمَانًا قَوِيًّا، وَاجْعَلْنَا نَعِيشُ مَعَ أَحِبَّتِنَا فِي صِحَّةٍ وَسَلَامٍ. آمِين.', tr:'Rabbim, bizlere hayırlı ömür, helal kazanç ve güçlü iman nasip et. Sevdiklerimizle birlikte sağlık ve huzur içinde yaşamayı lütfet. Âmin.', pl:'Panie, obdarz nas dobrym życiem, halalnym zarobkiem i silną wiarą. Pozwól nam żyć ze swoimi bliskimi w zdrowiu i pokoju. Amen.', en:'My Lord, grant us a blessed life, lawful earnings, and strong faith. Allow us to live with our loved ones in health and peace. Amen.', de:'Mein Herr, schenke uns ein gesegnetes Leben, erlaubten Verdienst und einen starken Glauben. Lass uns mit unseren Liebsten in Gesundheit und Frieden leben. Amen.', ru:'Господь наш, даруй нам благую жизнь, дозволенный заработок и крепкую веру. Позволь нам жить с нашими близкими в здоровье и мире. Аминь.', ref:'Dua'},
-        {arabic:'اللَّهُمَّ بِبَرَكَةِ يَوْمِ الْجُمُعَةِ أَرِحْ قُلُوبَنَا، وَحَقِّقْ لَنَا أَمَانِينَا الصَّالِحَةَ، وَاحْفَظْنَا مِنْ كُلِّ مَا يُبْعِدُنَا عَنْكَ. آمِين.', tr:'Ey Rabbimiz, cuma gününün yüzü suyu hürmetine içimizi ferahlat, gönlümüzden geçen hayırlı dilekleri bizlere nasip et. Bizleri senden uzaklaştıracak her şeyden koru. Âmin.', pl:'O nasz Panie, przez błogosławieństwo piątku przynieś ukojenie naszym sercom i spełnij nasze dobre pragnienia. Chroń nas od wszystkiego, co oddala nas od Ciebie. Amen.', en:'Our Lord, by the blessing of Friday bring peace to our hearts and grant us the good wishes within us. Protect us from everything that distances us from You. Amen.', de:'Unser Herr, schenke unseren Herzen durch den Segen des Freitags Erleichterung und erfülle unsere guten Wünsche. Beschütze uns vor allem, was uns von Dir entfernt. Amen.', ru:'Господь наш, ради благословения пятницы даруй покой нашим сердцам и исполни наши благие желания. Защити нас от всего, что отдаляет нас от Тебя. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْ هَذَا الْيَوْمَ فَتْحًا وَخَيْرًا وَبَرَكَةً، وَاغْفِرْ لَنَا ذُنُوبَنَا، وَأَصْلِحْ لَنَا شَأْنَنَا كُلَّهُ. آمِين.', tr:'Allah’ım, bu günü bizler için hayır, bereket ve güzelliklerle doldur. Günahlarımızı bağışla, işlerimizi kolaylaştır ve sonumuzu hayırlı eyle. Âmin.', pl:'Allahu, uczyń ten dzień pełnym dobra i błogosławieństwa. Przebacz nasze grzechy, ułatw nasze sprawy i daj nam dobre zakończenie. Amen.', en:'O Allah, make this day full of goodness and blessings for us. Forgive our sins, ease our affairs, and grant us a good ending. Amen.', de:'O Allah, erfülle diesen Tag mit Gutem und Segen. Vergib uns unsere Sünden, erleichtere unsere Angelegenheiten und schenke uns ein gutes Ende. Amen.', ru:'О Аллах, наполни этот день добром и благословением. Прости наши грехи, облегчи наши дела и даруй нам благой конец. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا اجْعَلْ قُلُوبَنَا مُطْمَئِنَّةً بِذِكْرِكَ، وَأَلْسِنَتَنَا رَطْبَةً بِشُكْرِكَ، وَأَعْمَالَنَا خَالِصَةً لِوَجْهِكَ. آمِين.', tr:'Rabbimiz, kalplerimizi zikrinle huzurlu, dillerimizi şükrünle meşgul, amellerimizi ise rızana uygun eyle. Âmin.', pl:'Panie nasz, napełnij nasze serca spokojem dzięki Twojemu wspominaniu, nasze języki wdzięcznością, a nasze czyny szczerością dla Ciebie. Amen.', en:'Our Lord, make our hearts peaceful through Your remembrance, our tongues grateful, and our deeds sincere for Your sake. Amen.', de:'Unser Herr, erfülle unsere Herzen mit Frieden durch Dein Gedenken, unsere Zungen mit Dankbarkeit und unsere Taten mit Aufrichtigkeit. Amen.', ru:'Господь наш, наполни наши сердца покоем через поминание Тебя, наши уста благодарностью, а дела искренностью ради Тебя. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ احْفَظْ أَهْلَنَا وَأَوْلَادَنَا، وَبَارِكْ فِي أَعْمَارِنَا وَأَرْزَاقِنَا، وَاجْعَلْ بُيُوتَنَا مَلِيئَةً بِالسَّعَادَةِ وَالطُّمَأْنِينَةِ. آمِين.', tr:'Allah’ım, ailemizi ve evlatlarımızı koru. Ömrümüze ve rızkımıza bereket ver. Evlerimizi huzur ve mutlulukla doldur. Âmin.', pl:'Allahu, chroń nasze rodziny i dzieci. Pobłogosław nasze życie i zaopatrzenie. Napełnij nasze domy spokojem i szczęściem. Amen.', en:'O Allah, protect our families and children. Bless our lives and sustenance. Fill our homes with peace and happiness. Amen.', de:'O Allah, beschütze unsere Familien und Kinder. Segne unser Leben und unseren Lebensunterhalt. Erfülle unsere Häuser mit Frieden und Glück. Amen.', ru:'О Аллах, защити наши семьи и детей. Благослови нашу жизнь и удел. Наполни наши дома миром и счастьем. Аминь.', ref:'Dua'},
-{arabic:'يَا رَبِّ، اجْعَلْ لَنَا مِنْ كُلِّ هَمٍّ فَرَجًا، وَمِنْ كُلِّ ضِيقٍ مَخْرَجًا، وَارْزُقْنَا مِنْ حَيْثُ لَا نَحْتَسِبُ. آمِين.', tr:'Ya Rabbi, her sıkıntımızı ferahlığa, her darlığımızı genişliğe çevir. Bizleri ummadığımız yerlerden rızıklandır. Âmin.', pl:'Panie, zamień każdy nasz smutek w ulgę, a każdą trudność w łatwość. Obdarz nas zaopatrzeniem z nieoczekiwanych źródeł. Amen.', en:'O Lord, turn every worry into relief and every hardship into ease. Provide for us from where we do not expect. Amen.', de:'O Herr, verwandle jede Sorge in Erleichterung und jede Schwierigkeit in Leichtigkeit. Versorge uns von dort, wo wir es nicht erwarten. Amen.', ru:'О Господь, преврати каждую нашу тревогу в облегчение, а каждую трудность в лёгкость. Даруй нам удел оттуда, откуда мы не ожидаем. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ نَوِّرْ قُلُوبَنَا بِالْإِيمَانِ، وَزَيِّنْ أَخْلَاقَنَا بِالْإِحْسَانِ، وَاجْعَلْنَا مِنْ عِبَادِكَ الصَّالِحِينَ. آمِين.', tr:'Allah’ım, kalplerimizi iman nuruyla aydınlat, ahlakımızı güzelleştir ve bizleri salih kullarından eyle. Âmin.', pl:'Allahu, rozświetl nasze serca światłem wiary, upiększ nasz charakter i uczyń nas swoimi prawymi sługami. Amen.', en:'O Allah, illuminate our hearts with faith, beautify our character, and make us among Your righteous servants. Amen.', de:'O Allah, erhelle unsere Herzen mit Glauben, verschönere unseren Charakter und mache uns zu Deinen rechtschaffenen Dienern. Amen.', ru:'О Аллах, озари наши сердца верой, укрась наш нрав и сделай нас среди Своих праведных рабов. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا اغْفِرْ لَنَا وَلِوَالِدِينَا، وَارْحَمْ مَوْتَانَا، وَاجْمَعْنَا مَعَ مَنْ نُحِبُّ فِي جَنَّاتِ النَّعِيمِ. آمِين.', tr:'Rabbimiz, bizleri ve anne babalarımızı bağışla. Vefat edenlerimize rahmet eyle ve bizleri sevdiklerimizle cennette buluştur. Âmin.', pl:'Panie nasz, przebacz nam i naszym rodzicom. Okaż miłosierdzie naszym zmarłym i zgromadź nas z bliskimi w Raju. Amen.', en:'Our Lord, forgive us and our parents. Have mercy on our deceased and unite us with our loved ones in Paradise. Amen.', de:'Unser Herr, vergib uns und unseren Eltern. Erbarme Dich unserer Verstorbenen und vereine uns mit unseren Liebsten im Paradies. Amen.', ru:'Господь наш, прости нас и наших родителей. Помилуй наших умерших и собери нас с любимыми в Раю. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْ أَيَّامَنَا كُلَّهَا خَيْرًا، وَأَعْمَالَنَا صَالِحَةً، وَاخْتِمْ لَنَا بِالسَّعَادَةِ وَالرِّضْوَانِ. آمِين.', tr:'Allah’ım, bütün günlerimizi hayırlı, amellerimizi makbul eyle. Son nefesimizi imanla vermeyi nasip et. Âmin.', pl:'Allahu, uczyń wszystkie nasze dni dobrymi, a nasze czyny przyjętymi. Daj nam zakończyć życie w wierze. Amen.', en:'O Allah, make all our days good and our deeds accepted. Grant us a faithful ending. Amen.', de:'O Allah, mache all unsere Tage gut und unsere Taten angenommen. Schenke uns ein gläubiges Ende. Amen.', ru:'О Аллах, сделай все наши дни благими и прими наши дела. Даруй нам конец жизни с верой. Аминь.', ref:'Dua'},
-{arabic:'يَا رَبِّ، أَلِّفْ بَيْنَ قُلُوبِنَا، وَأَصْلِحْ ذَاتَ بَيْنِنَا، وَاجْعَلْنَا مِفْتَاحًا لِلْخَيْرِ مُغْلَقًا لِلشَّرِّ. آمِين.', tr:'Ya Rabbi, kalplerimizi birleştir, aramızdaki sevgiyi artır ve bizleri hayra vesile olan kullarından eyle. Âmin.', pl:'Panie, połącz nasze serca, zwiększ miłość między nami i uczyń nas przyczyną dobra. Amen.', en:'O Lord, unite our hearts, increase love among us, and make us keys to goodness. Amen.', de:'O Herr, vereine unsere Herzen, mehre die Liebe unter uns und mache uns zu Schlüsseln des Guten. Amen.', ru:'О Господь, объедини наши сердца, умножь любовь между нами и сделай нас причиной добра. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ ارْزُقْنَا حُسْنَ التَّوَكُّلِ عَلَيْكَ، وَحُسْنَ الظَّنِّ بِكَ، وَالثَّبَاتَ عَلَى دِينِكَ. آمِين.', tr:'Allah’ım, sana hakkıyla tevekkül etmeyi, sana karşı güzel zan beslemeyi ve dininde sabit kalmayı nasip et. Âmin.', pl:'Allahu, obdarz nas prawdziwym zaufaniem do Ciebie, dobrą opinią o Tobie i wytrwałością w Twojej religii. Amen.', en:'O Allah, grant us true reliance upon You, good expectations of You, and steadfastness in Your religion. Amen.', de:'O Allah, schenke uns wahres Vertrauen auf Dich, gute Hoffnung auf Dich und Standhaftigkeit in Deiner Religion. Amen.', ru:'О Аллах, даруй нам истинное упование на Тебя, добрые ожидания от Тебя и стойкость в Твоей религии. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا اجْعَلْنَا مِنَ الشَّاكِرِينَ لِنِعَمِكَ، وَالصَّابِرِينَ عَلَى ابْتِلَائِكَ، وَالْمُوَفَّقِينَ لِطَاعَتِكَ. آمِين.', tr:'Rabbimiz, nimetlerine şükreden, imtihanlarına sabreden ve sana itaat eden kullarından eyle. Âmin.', pl:'Panie nasz, uczyń nas wdzięcznymi za Twoje dary, cierpliwymi w próbach i posłusznymi Tobie. Amen.', en:'Our Lord, make us grateful for Your blessings, patient in trials, and obedient to You. Amen.', de:'Unser Herr, mache uns dankbar für Deine Gaben, geduldig in Prüfungen und gehorsam Dir gegenüber. Amen.', ru:'Господь наш, сделай нас благодарными за Твои дары, терпеливыми в испытаниях и покорными Тебе. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ بَارِكْ لَنَا فِي أَوْقَاتِنَا، وَفِي أَعْمَالِنَا، وَفِي أَهْلِنَا، وَاجْعَلْ كُلَّ مَا نَمْلِكُ عَوْنًا لَنَا عَلَى طَاعَتِكَ. آمِين.', tr:'Allah’ım, zamanımıza, işlerimize ve ailemize bereket ver. Sahip olduğumuz her şeyi sana kullukta vesile kıl. Âmin.', pl:'Allahu, pobłogosław nasz czas, nasze działania i nasze rodziny. Spraw, aby wszystko, co posiadamy, pomagało nam w posłuszeństwie Tobie. Amen.', en:'O Allah, bless our time, our work, and our families. Make everything we possess a means to obey You. Amen.', de:'O Allah, segne unsere Zeit, unsere Arbeit und unsere Familien. Mache alles, was wir besitzen, zu einem Mittel des Gehorsams Dir gegenüber. Amen.', ru:'О Аллах, благослови наше время, наши дела и наши семьи. Сделай всё, чем мы владеем, помощью в поклонении Тебе. Аминь.', ref:'Dua'},
-{arabic:'يَا رَبِّ، لَا تَدَعْ فِي قُلُوبِنَا حُزْنًا إِلَّا أَذْهَبْتَهُ، وَلَا هَمًّا إِلَّا فَرَّجْتَهُ، وَلَا دُعَاءً إِلَّا اسْتَجَبْتَهُ. آمِين.', tr:'Ya Rabbi, kalplerimizdeki hüznü gider, sıkıntılarımızı ferahlığa çevir ve dualarımızı kabul eyle. Âmin.', pl:'Panie, usuń smutek z naszych serc, zamień troski w ulgę i wysłuchaj naszych modlitw. Amen.', en:'O Lord, remove sadness from our hearts, turn our worries into relief, and answer our prayers. Amen.', de:'O Herr, nimm die Traurigkeit aus unseren Herzen, verwandle unsere Sorgen in Erleichterung und erhöre unsere Gebete. Amen.', ru:'О Господь, удали печаль из наших сердец, преврати тревоги в облегчение и ответь на наши молитвы. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْنَا سَبَبًا فِي نَشْرِ الْخَيْرِ وَالْمَحَبَّةِ، وَأَبْعِدْ عَنَّا الْفِتَنَ مَا ظَهَرَ مِنْهَا وَمَا بَطَنَ. آمِين.', tr:'Allah’ım, bizleri iyiliğin ve sevginin yayılmasına vesile kıl. Görünen ve görünmeyen fitnelerden bizleri muhafaza eyle. Âmin.', pl:'Allahu, uczyń nas przyczyną szerzenia dobra i miłości. Chroń nas przed wszelkimi pokusami i niezgodą. Amen.', en:'O Allah, make us a means of spreading goodness and love. Protect us from all visible and hidden trials. Amen.', de:'O Allah, mache uns zu einem Mittel zur Verbreitung von Güte und Liebe. Beschütze uns vor allen sichtbaren und verborgenen Versuchungen. Amen.', ru:'О Аллах, сделай нас причиной распространения добра и любви. Защити нас от явных и скрытых смут. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا هَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً، وَيَسِّرْ لَنَا مِنْ أَمْرِنَا رَشَدًا، وَاجْعَلْ عَاقِبَةَ أُمُورِنَا خَيْرًا. آمِين.', tr:'Rabbimiz, katından bize rahmet ihsan et. İşlerimizi kolaylaştır ve bütün işlerimizin sonunu hayır eyle. Âmin.', pl:'Panie nasz, obdarz nas swoim miłosierdziem. Ułatw nasze sprawy i spraw, aby ich koniec był dobry. Amen.', en:'Our Lord, grant us mercy from Yourself. Ease our affairs and make the outcome of all our matters good. Amen.', de:'Unser Herr, schenke uns Deine Barmherzigkeit. Erleichtere unsere Angelegenheiten und mache ihr Ende gut. Amen.', ru:'Господь наш, даруй нам Свою милость. Облегчи наши дела и сделай их исход благим. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْ آخِرَ كَلَامِنَا مِنَ الدُّنْيَا شَهَادَةَ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ. آمِين.', tr:'Allah’ım, son sözümüzü kelime-i şehadet eyle. Bizleri imanla yaşat, imanla huzuruna al. Âmin.', pl:'Allahu, spraw, aby naszym ostatnim słowem było świadectwo wiary. Pozwól nam żyć i umrzeć w wierze. Amen.', en:'O Allah, let our final words be the testimony of faith. Let us live and die with faith. Amen.', de:'O Allah, lasse unser letztes Wort das Glaubensbekenntnis sein. Lass uns im Glauben leben und sterben. Amen.', ru:'О Аллах, сделай нашими последними словами свидетельство веры. Позволь нам жить и умереть с верой. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ ارْزُقْنَا عِلْمًا نَافِعًا، وَرِزْقًا وَاسِعًا، وَعَمَلًا مُتَقَبَّلًا. آمِين.', tr:'Allah’ım, bize faydalı ilim, helal ve bol rızık, kabul edilmiş ameller nasip eyle. Âmin.', pl:'Allahu, obdarz nas pożyteczną wiedzą, obfitym halal zaopatrzeniem i przyjętymi uczynkami. Amen.', en:'O Allah, grant us beneficial knowledge, abundant lawful provision, and accepted deeds. Amen.', de:'O Allah, schenke uns nützliches Wissen, reichlichen erlaubten Lebensunterhalt und angenommene Taten. Amen.', ru:'О Аллах, даруй нам полезное знание, обильный дозволенный удел и принятые деяния. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا اجْعَلْنَا مِنْ أَهْلِ الْقُرْآنِ الَّذِينَ هُمْ أَهْلُكَ وَخَاصَّتُكَ. آمِين.', tr:'Rabbimiz, bizleri Kur’an ile yaşayan ve onu anlayıp uygulayan kullarından eyle. Âmin.', pl:'Panie nasz, uczyń nas ludźmi żyjącymi zgodnie z Koranem. Amen.', en:'Our Lord, make us among the people of the Qur’an who live by it. Amen.', de:'Unser Herr, mache uns zu den Menschen des Qur’ans, die nach ihm leben. Amen.', ru:'Господь наш, сделай нас людьми Корана, живущими по нему. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ طَهِّرْ قُلُوبَنَا مِنَ النِّفَاقِ، وَأَعْمَالَنَا مِنَ الرِّيَاءِ، وَأَلْسِنَتَنَا مِنَ الْكَذِبِ. آمِين.', tr:'Allah’ım, kalplerimizi nifaktan, amellerimizi riyadan, dillerimizi yalandan koru. Âmin.', pl:'Allahu, oczyść nasze serca z obłudy, czyny z pokazowości, a języki z kłamstwa. Amen.', en:'O Allah, purify our hearts from hypocrisy, our deeds from showing off, and our tongues from lies. Amen.', de:'O Allah, reinige unsere Herzen von Heuchelei, unsere Taten von Angeberei und unsere Zungen von Lügen. Amen.', ru:'О Аллах, очисти наши сердца от лицемерия, дела — от показухи, а язык — от лжи. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ ارْزُقْنَا الصِّدْقَ فِي الْقَوْلِ وَالْإِخْلَاصَ فِي الْعَمَلِ. آمِين.', tr:'Allah’ım, sözümüzde doğruluk, amellerimizde ihlas nasip eyle. Âmin.', pl:'Allahu, obdarz nas prawdomównością i szczerością w czynach. Amen.', en:'O Allah, grant us truthfulness in speech and sincerity in deeds. Amen.', de:'O Allah, schenke uns Wahrhaftigkeit im Wort und Aufrichtigkeit im Handeln. Amen.', ru:'О Аллах, даруй нам правдивость в словах и искренность в делах. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا لَا تَجْعَلِ الدُّنْيَا أَكْبَرَ هَمِّنَا، وَلَا مَبْلَغَ عِلْمِنَا. آمِين.', tr:'Rabbimiz, dünyayı en büyük gayemiz yapma. Gönüllerimizi ahiret sevgisiyle doldur. Âmin.', pl:'Panie nasz, nie czyń świata naszym największym celem. Amen.', en:'Our Lord, do not make this world our greatest concern. Amen.', de:'Unser Herr, mache diese Welt nicht zu unserer größten Sorge. Amen.', ru:'Господь наш, не делай этот мир нашей главной заботой. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْ أَرْزَاقَنَا حَلَالًا طَيِّبًا، وَأَغْنِنَا بِفَضْلِكَ عَمَّنْ سِوَاكَ. آمِين.', tr:'Allah’ım, rızkımızı helal ve bereketli eyle. Lütfunla bizi kimseye muhtaç bırakma. Âmin.', pl:'Allahu, uczyń nasze zaopatrzenie halal i pełnym błogosławieństwa. Amen.', en:'O Allah, make our provision lawful and blessed, and enrich us through Your bounty. Amen.', de:'O Allah, mache unseren Lebensunterhalt erlaubt und gesegnet und mache uns durch Deine Gnade unabhängig. Amen.', ru:'О Аллах, сделай наш удел дозволенным и благословенным и избавь нас от нужды. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ أَعِنَّا عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ. آمِين.', tr:'Allah’ım, seni zikretmekte, sana şükretmekte ve sana en güzel şekilde kulluk etmekte bize yardım et. Âmin.', pl:'Allahu, pomóż nam pamiętać o Tobie, dziękować Ci i dobrze Ci służyć. Amen.', en:'O Allah, help us remember You, thank You, and worship You in the best manner. Amen.', de:'O Allah, hilf uns, Deiner zu gedenken, Dir zu danken und Dich schön anzubeten. Amen.', ru:'О Аллах, помоги нам поминать Тебя, благодарить Тебя и поклоняться Тебе наилучшим образом. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا ثَبِّتْ أَقْدَامَنَا عَلَى الْحَقِّ، وَاهْدِنَا إِلَى صِرَاطِكَ الْمُسْتَقِيمِ. آمِين.', tr:'Rabbimiz, bizi hak üzerinde sabit kıl ve dosdoğru yoluna ilet. Âmin.', pl:'Panie nasz, umocnij nas na prawdzie i prowadź prostą drogą. Amen.', en:'Our Lord, keep us firm upon the truth and guide us to Your straight path. Amen.', de:'Unser Herr, festige uns auf der Wahrheit und leite uns auf Deinen geraden Weg. Amen.', ru:'Господь наш, укрепи нас на истине и веди прямым путём. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْنَا مِنَ الْمُتَوَاضِعِينَ، وَأَبْعِدْ عَنَّا الْكِبْرَ وَالْغُرُورَ. آمِين.', tr:'Allah’ım, bizleri mütevazı kullarından eyle. Kibir ve gururdan bizleri uzak tut. Âmin.', pl:'Allahu, uczyń nas pokornymi i chroń przed pychą. Amen.', en:'O Allah, make us humble servants and keep us away from pride. Amen.', de:'O Allah, mache uns demütig und halte uns fern von Hochmut. Amen.', ru:'О Аллах, сделай нас смиренными и убереги от гордыни. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ أَلْهِمْنَا رُشْدَنَا، وَقِنَا شَرَّ أَنْفُسِنَا. آمِين.', tr:'Allah’ım, bize doğruyu ilham et ve nefsimizin kötülüğünden bizi koru. Âmin.', pl:'Allahu, natchnij nas do właściwych decyzji i chroń przed złem naszych dusz. Amen.', en:'O Allah, inspire us to what is right and protect us from the evil within ourselves. Amen.', de:'O Allah, gib uns rechte Einsicht und bewahre uns vor dem Übel unserer selbst. Amen.', ru:'О Аллах, внуши нам правильный путь и защити от зла наших душ. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا ارْزُقْنَا قَلْبًا سَلِيمًا، وَلِسَانًا صَادِقًا، وَعَمَلًا صَالِحًا. آمِين.', tr:'Rabbimiz, bize temiz bir kalp, doğru bir dil ve salih ameller nasip eyle. Âmin.', pl:'Panie nasz, obdarz nas czystym sercem, prawdomównym językiem i dobrymi czynami. Amen.', en:'Our Lord, grant us a sound heart, a truthful tongue, and righteous deeds. Amen.', de:'Unser Herr, schenke uns ein reines Herz, eine wahrhaftige Zunge und rechtschaffene Taten. Amen.', ru:'Господь наш, даруй нам чистое сердце, правдивый язык и праведные дела. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اجْعَلْ خَيْرَ أَعْمَالِنَا خَوَاتِيمَهَا، وَخَيْرَ أَيَّامِنَا يَوْمَ لِقَائِكَ. آمِين.', tr:'Allah’ım, amellerimizin en hayırlısını son amellerimiz, günlerimizin en hayırlısını sana kavuşacağımız gün eyle. Âmin.', pl:'Allahu, spraw, aby nasze ostatnie uczynki były najlepsze, a najlepszym dniem był dzień spotkania z Tobą. Amen.', en:'O Allah, make our final deeds our best deeds and our best day the day we meet You. Amen.', de:'O Allah, mache unsere letzten Taten zu den besten und den Tag der Begegnung mit Dir zum schönsten Tag. Amen.', ru:'О Аллах, сделай наши последние дела лучшими, а лучшим днём — день встречи с Тобой. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ احْفَظْنَا مِنْ كُلِّ سُوءٍ فِي الدُّنْيَا وَالْآخِرَةِ. آمِين.', tr:'Allah’ım, bizi dünya ve ahirette her türlü kötülükten muhafaza eyle. Âmin.', pl:'Allahu, chroń nas przed wszelkim złem na tym świecie i w życiu przyszłym. Amen.', en:'O Allah, protect us from every evil in this world and the Hereafter. Amen.', de:'O Allah, beschütze uns vor allem Übel in dieser Welt und im Jenseits. Amen.', ru:'О Аллах, защити нас от всякого зла в этом мире и в Последней жизни. Аминь.', ref:'Dua'},
-{arabic:'رَبَّنَا اجْعَلْ فِي قُلُوبِنَا نُورًا، وَفِي أَبْصَارِنَا نُورًا، وَفِي أَعْمَالِنَا نُورًا. آمِين.', tr:'Rabbimiz, kalplerimize, gözlerimize ve amellerimize nur ihsan eyle. Âmin.', pl:'Panie nasz, napełnij światłem nasze serca, wzrok i czyny. Amen.', en:'Our Lord, place light in our hearts, our sight, and our deeds. Amen.', de:'Unser Herr, lege Licht in unsere Herzen, unsere Augen und unsere Taten. Amen.', ru:'Господь наш, даруй свет нашим сердцам, взору и делам. Аминь.', ref:'Dua'},
-{arabic:'اللَّهُمَّ اخْتِمْ لَنَا بِالْخَيْرِ، وَاجْعَلْ مَآلَنَا إِلَى رَحْمَتِكَ وَرِضْوَانِكَ. آمِين.', tr:'Allah’ım, ömrümüzü hayırla tamamlamayı nasip et. Sonumuzu rahmetin ve rızan ile güzelleştir. Âmin.', pl:'Allahu, pozwól nam zakończyć życie dobrem i obdarz nas swoim miłosierdziem. Amen.', en:'O Allah, grant us a good ending and let our final destination be Your mercy and pleasure. Amen.', de:'O Allah, schenke uns ein gutes Ende und führe uns zu Deiner Barmherzigkeit und Deinem Wohlgefallen. Amen.', ru:'О Аллах, даруй нам благой конец и приведи нас к Своей милости и довольству. Аминь.', ref:'Dua'},
-
-    ],
-    hadis: [
-        {arabic:'إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ', tr:'Ameller niyetlere göredir.', pl:'Czyny są oceniane według intencji.', en:'Actions are judged by intentions.', de:'Die Taten werden nach den Absichten beurteilt.', ru:'Поистине, дела оцениваются по намерениям.', ref:'Buhari 1, Müslim 1907'},
-        {arabic:'إِنَّ مِنْ خِيَارِكُمْ أَحْسَنَكُمْ أَخْلَاقًا', tr:'Sizin en hayırlınız, ahlakı en güzel olanınızdır.', pl:'Najlepsi spośród was są ci o najlepszym charakterze.', en:'The best among you are those with the best character.', de:'Die Besten unter euch sind diejenigen mit dem schönsten Charakter.', ru:'Лучшие из вас — обладающие наилучшим нравом.', ref:'Buhari 3559'},
-        {arabic:'يَسِّرُوا وَلَا تُعَسِّرُوا وَبَشِّرُوا وَلَا تُنَفِّرُوا', tr:'Kolaylaştırın, zorlaştırmayın; müjdeleyin, nefret ettirmeyin.', pl:'Ułatwiajcie, nie utrudniajcie; przekazujcie dobre wieści, nie zniechęcajcie.', en:'Make things easy, do not make them difficult; give glad tidings and do not drive people away.', de:'Erleichtert und erschwert nicht; verkündet frohe Botschaften und schreckt nicht ab.', ru:'Облегчайте, а не усложняйте; радуйте, а не отвращайте.', ref:'Buhari 69, Müslim 1734'},
-        {arabic:'لَا يُؤْمِنُ أَحَدُكُمْ حَتَّىٰ يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ', tr:'Kendisi için istediğini kardeşi için de istemedikçe iman etmiş olmaz.', pl:'Nikt z was nie uwierzy naprawdę, dopóki nie będzie pragnął dla swojego brata tego, czego pragnie dla siebie.', en:'None of you truly believes until he loves for his brother what he loves for himself.', de:'Keiner von euch glaubt wahrhaftig, bis er für seinen Bruder liebt, was er für sich selbst liebt.', ru:'Никто из вас не уверует по-настоящему, пока не пожелает своему брату того же, чего желает себе.', ref:'Buhari 13, Müslim 45'},
-        {arabic:'مَنْ لَا يَرْحَمُ لَا يُرْحَمُ', tr:'Merhamet etmeyene merhamet edilmez.', pl:'Temu, kto nie okazuje miłosierdzia, nie będzie okazane miłosierdzie.', en:'Whoever does not show mercy will not be shown mercy.', de:'Wer keine Barmherzigkeit zeigt, dem wird keine Barmherzigkeit erwiesen.', ru:'Кто не проявляет милосердия, к тому не будет проявлено милосердие.', ref:'Buhari 7376, Müslim 2319'},
-        {arabic:'لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ', tr:'Güçlü kimse güreşte yenen değil, öfkesine hakim olandır.', pl:'Silny nie jest ten, kto pokonuje innych w zapasach, lecz ten, kto panuje nad sobą w gniewie.', en:'The strong man is not the one who overpowers others in wrestling, but the one who controls himself when angry.', de:'Der Starke ist nicht derjenige, der im Ringen siegt, sondern derjenige, der sich im Zorn beherrscht.', ru:'Сильный не тот, кто побеждает в борьбе, а тот, кто владеет собой во время гнева.', ref:'Buhari 6114, Müslim 2609'},
-        {arabic:'الطُّهُورُ شَطْرُ الْإِيمَانِ', tr:'Temizlik imanın yarısıdır.', pl:'Czystość jest połową wiary.', en:'Cleanliness is half of faith.', de:'Reinheit ist die Hälfte des Glaubens.', ru:'Чистота — половина веры.', ref:'Müslim 223'},
-        {arabic:'مَنْ لَا يَشْكُرُ النَّاسَ لَا يَشْكُرُ اللَّهَ', tr:'İnsanlara teşekkür etmeyen Allah’a da şükretmez.', pl:'Kto nie dziękuje ludziom, nie dziękuje Allahowi.', en:'Whoever does not thank people does not thank Allah.', de:'Wer den Menschen nicht dankt, dankt Allah nicht.', ru:'Кто не благодарит людей, тот не благодарит Аллаха.', ref:'Tirmizi 1954'},
-        {arabic:'الْمُسْلِمُ مَنْ سَلِمَ النَّاسُ مِنْ لِسَانِهِ وَيَدِهِ', tr:'Müslüman, elinden ve dilinden insanların emin olduğu kişidir.', pl:'Muzułmanin to ten, od którego języka i rąk ludzie są bezpieczni.', en:'A Muslim is the one from whose tongue and hand people are safe.', de:'Ein Muslim ist derjenige, vor dessen Zunge und Hand die Menschen sicher sind.', ru:'Мусульманин — это тот, от чьего языка и рук люди находятся в безопасности.', ref:'Buhari 10, Müslim 40'},
-        {arabic:'إِنَّ اللَّهَ لَا يَنْظُرُ إِلَىٰ صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَٰكِنْ يَنْظُرُ إِلَىٰ قُلُوبِكُمْ وَأَعْمَالِكُمْ', tr:'Allah sizin suretlerinize ve mallarınıza değil, kalplerinize ve amellerinize bakar.', pl:'Allah nie patrzy na wasz wygląd ani majątek, lecz na wasze serca i uczynki.', en:'Allah does not look at your appearance or wealth, but at your hearts and deeds.', de:'Allah schaut nicht auf euer Aussehen oder euren Besitz, sondern auf eure Herzen und Taten.', ru:'Аллах смотрит не на ваш внешний вид и имущество, а на ваши сердца и дела.', ref:'Müslim 2564'},
-{arabic:'الدِّينُ النَّصِيحَةُ', tr:'Din nasihattir.', pl:'Religia to szczera rada.', en:'Religion is sincere advice.', de:'Die Religion ist aufrichtiger Rat.', ru:'Религия — это искренний совет.', ref:'Müslim 55'},
-{arabic:'خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ', tr:'Sizin en hayırlınız Kur’an’ı öğrenen ve öğreteninizdir.', pl:'Najlepsi z was są ci, którzy uczą się Koranu i nauczają go innych.', en:'The best of you are those who learn the Quran and teach it.', de:'Die Besten unter euch sind diejenigen, die den Quran lernen und lehren.', ru:'Лучшие из вас — те, кто изучает Коран и обучает ему других.', ref:'Buhari 5027'},
-{arabic:'مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ', tr:'Allah’a ve ahiret gününe iman eden ya hayır söylesin ya da sussun.', pl:'Kto wierzy w Allaha i Dzień Ostateczny, niech mówi dobro albo milczy.', en:'Whoever believes in Allah and the Last Day should speak good or remain silent.', de:'Wer an Allah und den Jüngsten Tag glaubt, soll Gutes sprechen oder schweigen.', ru:'Кто верует в Аллаха и Судный день, пусть говорит благое или молчит.', ref:'Buhari 6018, Müslim 47'},
-{arabic:'تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ', tr:'Kardeşine tebessüm etmen sadakadır.', pl:'Uśmiech do brata jest jałmużną.', en:'Your smile to your brother is charity.', de:'Dein Lächeln gegenüber deinem Bruder ist Almosen.', ru:'Твоя улыбка брату — это милостыня.', ref:'Tirmizi 1956'},
-{arabic:'الْمَرْءُ مَعَ مَنْ أَحَبَّ', tr:'Kişi sevdiği ile beraberdir.', pl:'Człowiek będzie z tymi, których kocha.', en:'A person will be with those whom he loves.', de:'Der Mensch wird mit denen sein, die er liebt.', ru:'Человек будет с теми, кого любит.', ref:'Buhari 6169, Müslim 2640'},
-{arabic:'لَا تَغْضَبْ', tr:'Öfkelenme.', pl:'Nie gniewaj się.', en:'Do not become angry.', de:'Werde nicht zornig.', ru:'Не гневайся.', ref:'Buhari 6116'},
-{arabic:'مِنْ حُسْنِ إِسْلَامِ الْمَرْءِ تَرْكُهُ مَا لَا يَعْنِيهِ', tr:'Kişinin gereksiz şeyleri terk etmesi, İslamının güzelliğindendir.', pl:'Piękno islamu człowieka polega na pozostawieniu tego, co go nie dotyczy.', en:'Part of a person’s good Islam is leaving what does not concern him.', de:'Zur Schönheit des Islam eines Menschen gehört es, das zu lassen, was ihn nichts angeht.', ru:'Признак хорошего ислама человека — оставление того, что его не касается.', ref:'Tirmizi 2317'},
-{arabic:'إِنَّ اللَّهَ رَفِيقٌ يُحِبُّ الرِّفْقَ', tr:'Allah yumuşaktır, yumuşaklığı sever.', pl:'Allah jest łagodny i kocha łagodność.', en:'Allah is gentle and loves gentleness.', de:'Allah ist sanft und liebt Sanftmut.', ru:'Аллах мягок и любит мягкость.', ref:'Buhari 6927, Müslim 2165'},
-{arabic:'مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ', tr:'Kim ilim öğrenmek için bir yola girerse Allah ona cennetin yolunu kolaylaştırır.', pl:'Kto podąża drogą zdobywania wiedzy, temu Allah ułatwi drogę do Raju.', en:'Whoever follows a path seeking knowledge, Allah will make a path to Paradise easy for him.', de:'Wer einen Weg einschlägt, um Wissen zu suchen, dem erleichtert Allah den Weg ins Paradies.', ru:'Кто встал на путь поиска знаний, тому Аллах облегчит путь в Рай.', ref:'Müslim 2699'},
-{arabic:'الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ', tr:'Merhamet edenlere Rahman merhamet eder.', pl:'Miłosiernym okaże miłosierdzie Najmiłosierniejszy.', en:'The merciful are shown mercy by the Most Merciful.', de:'Den Barmherzigen erbarmt sich der Allerbarmer.', ru:'Милостивых помилует Милостивейший.', ref:'Tirmizi 1924'},
-{arabic:'أَفْضَلُ الصَّدَقَةِ سَقْيُ الْمَاءِ', tr:'Sadakanın en faziletlisi su vermektir.', pl:'Najlepszą jałmużną jest podanie wody.', en:'The best charity is giving water to drink.', de:'Die beste Almosengabe ist, Wasser zu geben.', ru:'Лучшая милостыня — напоить водой.', ref:'Ebu Davud 1679'},
-{arabic:'إِنَّ اللَّهَ كَتَبَ الْإِحْسَانَ عَلَى كُلِّ شَيْءٍ', tr:'Allah her işte ihsanı (güzelliği) emretmiştir.', pl:'Allah nakazał dobroć we wszystkim.', en:'Allah has prescribed excellence in all things.', de:'Allah hat Güte in allen Dingen vorgeschrieben.', ru:'Аллах предписал совершенство во всём.', ref:'Müslim 1955'},
-{arabic:'أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ', tr:'Allah katında amellerin en sevimlisi az da olsa devamlı olanıdır.', pl:'Najbardziej umiłowane przez Allaha czyny to te wykonywane regularnie, nawet jeśli są niewielkie.', en:'The most beloved deeds to Allah are those done regularly, even if they are small.', de:'Die Allah liebsten Taten sind die beständigen, auch wenn sie gering sind.', ru:'Самые любимые для Аллаха дела — постоянные, даже если они малы.', ref:'Buhari 6464, Müslim 783'},
-{arabic:'مَنْ غَشَّنَا فَلَيْسَ مِنَّا', tr:'Bizi aldatan bizden değildir.', pl:'Kto nas oszukuje, nie jest z nas.', en:'Whoever deceives us is not one of us.', de:'Wer uns betrügt, gehört nicht zu uns.', ru:'Кто обманывает нас, тот не из нас.', ref:'Müslim 102'},
-{arabic:'الْيَدُ الْعُلْيَا خَيْرٌ مِنَ الْيَدِ السُّفْلَى', tr:'Veren el, alan elden hayırlıdır.', pl:'Ręka dająca jest lepsza od ręki biorącej.', en:'The upper hand is better than the lower hand.', de:'Die gebende Hand ist besser als die nehmende Hand.', ru:'Дающая рука лучше берущей.', ref:'Buhari 1429, Müslim 1033'},
-{arabic:'مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ', tr:'Kim ilim öğrenmek için bir yola girerse Allah ona cennetin yolunu kolaylaştırır.', pl:'Kto podąża drogą zdobywania wiedzy, temu Allah ułatwi drogę do Raju.', en:'Whoever follows a path seeking knowledge, Allah will make a path to Paradise easy for him.', de:'Wer einen Weg einschlägt, um Wissen zu suchen, dem erleichtert Allah den Weg ins Paradies.', ru:'Кто встал на путь поиска знаний, тому Аллах облегчит путь в Рай.', ref:'Müslim 2699'},
-{arabic:'أَحَبُّ الْبِلَادِ إِلَى اللَّهِ مَسَاجِدُهَا، وَأَبْغَضُ الْبِلَادِ إِلَى اللَّهِ أَسْوَاقُهَا', tr:'Allah katında yerlerin en sevimlisi mescitler, en sevimsizi ise çarşılardır.', pl:'Najbardziej umiłowanymi miejscami u Allaha są meczety, a najmniej lubianymi są targowiska.', en:'The most beloved places to Allah are the mosques, and the most disliked places are the marketplaces.', de:'Die Allah liebsten Orte sind die Moscheen, die unbeliebtesten die Märkte.', ru:'Самые любимые Аллахом места — мечети, а самые нелюбимые — рынки.', ref:'Müslim 671'},
-{arabic:'الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ', tr:'Güzel söz sadakadır.', pl:'Dobre słowo jest jałmużną.', en:'A good word is charity.', de:'Ein gutes Wort ist Almosen.', ru:'Доброе слово — это милостыня.', ref:'Buhari 2989, Müslim 1009'},
-{arabic:'السَّاعِي عَلَى الْأَرْمَلَةِ وَالْمِسْكِينِ كَالْمُجَاهِدِ فِي سَبِيلِ اللَّهِ', tr:'Dul ve yoksula yardım eden kimse Allah yolunda cihad eden gibidir.', pl:'Kto troszczy się o wdowę i ubogiego, jest jak walczący na drodze Allaha.', en:'The one who cares for a widow and the poor is like one striving in the cause of Allah.', de:'Wer sich um eine Witwe oder einen Armen kümmert, ist wie einer, der sich auf Allahs Weg einsetzt.', ru:'Заботящийся о вдове и бедном подобен сражающемуся на пути Аллаха.', ref:'Buhari 5353, Müslim 2982'},
-{arabic:'مَنْ كَظَمَ غَيْظًا وَهُوَ قَادِرٌ عَلَى أَنْ يُنْفِذَهُ دَعَاهُ اللَّهُ عَلَى رُءُوسِ الْخَلَائِقِ', tr:'Öfkesini yenebildiği hâlde yutan kimseyi Allah kıyamet günü insanların önünde çağırır.', pl:'Kto powstrzyma gniew mimo możliwości okazania go, tego Allah wyróżni w Dniu Sądu.', en:'Whoever suppresses anger while able to act upon it, Allah will honor him on the Day of Judgment.', de:'Wer seinen Zorn beherrscht, obwohl er ihn ausleben könnte, den ehrt Allah am Jüngsten Tag.', ru:'Кто сдержит гнев, имея возможность его проявить, того Аллах почтит в День суда.', ref:'Tirmizi 2021'},
-{arabic:'إِنَّ أَحَبَّكُمْ إِلَيَّ وَأَقْرَبَكُمْ مِنِّي مَجْلِسًا يَوْمَ الْقِيَامَةِ أَحَاسِنُكُمْ أَخْلَاقًا', tr:'Kıyamet günü bana en yakın olanlarınız, ahlakı en güzel olanlarınızdır.', pl:'Najbliżej mnie w Dniu Sądu będą ci z was, którzy mają najlepszy charakter.', en:'The closest to me on the Day of Resurrection will be those with the best character.', de:'Am nächsten bei mir am Tag der Auferstehung werden diejenigen mit dem besten Charakter sein.', ru:'Ближе всех ко мне в День воскресения будут обладающие наилучшим нравом.', ref:'Tirmizi 2018'},
-{arabic:'مَنْ لَزِمَ الِاسْتِغْفَارَ جَعَلَ اللَّهُ لَهُ مِنْ كُلِّ ضِيقٍ مَخْرَجًا', tr:'İstiğfara devam edene Allah her darlıktan bir çıkış yolu verir.', pl:'Kto często prosi o przebaczenie, temu Allah da wyjście z każdej trudności.', en:'Whoever constantly seeks forgiveness, Allah will provide a way out of every hardship.', de:'Wer regelmäßig um Vergebung bittet, dem schenkt Allah aus jeder Bedrängnis einen Ausweg.', ru:'Кто постоянно просит прощения, тому Аллах даст выход из каждой трудности.', ref:'Ebu Davud 1518'},
-{arabic:'إِذَا أَحَبَّ اللَّهُ عَبْدًا رَفَقَ بِهِ', tr:'Allah bir kulunu sevdiğinde ona yumuşaklık ihsan eder.', pl:'Gdy Allah kocha swojego sługę, obdarza go łagodnością.', en:'When Allah loves a servant, He grants him gentleness.', de:'Wenn Allah einen Diener liebt, schenkt Er ihm Sanftmut.', ru:'Когда Аллах любит раба, Он дарует ему мягкость.', ref:'Müslim 2593'},
-{arabic:'مَنْ دَلَّ عَلَى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ', tr:'Bir hayra vesile olan, onu yapan kadar sevap alır.', pl:'Kto wskazuje drogę do dobra, otrzymuje nagrodę jak ten, kto je czyni.', en:'Whoever guides to good will have a reward like the one who does it.', de:'Wer zum Guten führt, erhält den gleichen Lohn wie der Handelnde.', ru:'Указавший на добро получит награду, подобную награде совершившего его.', ref:'Müslim 1893'},
-{arabic:'الْمَاهِرُ بِالْقُرْآنِ مَعَ السَّفَرَةِ الْكِرَامِ الْبَرَرَةِ', tr:'Kur’an’ı güzel okuyan kimse seçkin meleklerle beraberdir.', pl:'Biegły w recytacji Koranu będzie z szlachetnymi aniołami.', en:'The one proficient in the Qur’an will be with the noble angels.', de:'Wer den Qur’an meisterhaft rezitiert, wird mit den edlen Engeln sein.', ru:'Искусный чтец Корана будет с благородными ангелами.', ref:'Buhari 4937, Müslim 798'},
-{arabic:'إِنَّ الرِّفْقَ لَا يَكُونُ فِي شَيْءٍ إِلَّا زَانَهُ', tr:'Yumuşaklık bulunduğu şeyi güzelleştirir.', pl:'Łagodność upiększa każdą sprawę.', en:'Gentleness beautifies everything it is found in.', de:'Sanftmut verschönert jede Angelegenheit.', ru:'Мягкость украшает всё, в чём присутствует.', ref:'Müslim 2594'},
-{arabic:'مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ', tr:'Sadaka malı eksiltmez.', pl:'Jałmużna nie umniejsza majątku.', en:'Charity does not decrease wealth.', de:'Almosen mindern den Besitz nicht.', ru:'Милостыня не уменьшает имущество.', ref:'Müslim 2588'},
-{arabic:'الْمُؤْمِنُ لِلْمُؤْمِنِ كَالْبُنْيَانِ يَشُدُّ بَعْضُهُ بَعْضًا', tr:'Mümin mümine karşı, birbirini destekleyen bir bina gibidir.', pl:'Wierzący dla wierzącego jest jak budowla wzmacniająca się nawzajem.', en:'A believer to another believer is like a building whose parts support one another.', de:'Ein Gläubiger ist für den anderen wie ein Bauwerk, dessen Teile sich gegenseitig stützen.', ru:'Верующий для верующего подобен строению, части которого поддерживают друг друга.', ref:'Buhari 6026, Müslim 2585'},
-{arabic:'مَنْ لَا يَرْحَمِ الصَّغِيرَ وَيُوَقِّرِ الْكَبِيرَ فَلَيْسَ مِنَّا', tr:'Küçüğe merhamet etmeyen ve büyüğe saygı göstermeyen bizden değildir.', pl:'Nie jest z nas ten, kto nie okazuje miłosierdzia młodszym i szacunku starszym.', en:'He is not one of us who does not show mercy to the young and respect to the elders.', de:'Nicht zu uns gehört, wer den Jungen keine Barmherzigkeit und den Älteren keinen Respekt zeigt.', ru:'Не из нас тот, кто не милует младших и не уважает старших.', ref:'Tirmizi 1920'},
-{arabic:'إِنَّ اللَّهَ يُحِبُّ إِذَا عَمِلَ أَحَدُكُمْ عَمَلًا أَنْ يُتْقِنَهُ', tr:'Allah, biriniz bir iş yaptığında onu sağlam ve güzel yapmasını sever.', pl:'Allah kocha, gdy ktoś wykonuje swoją pracę starannie.', en:'Allah loves that when one of you does a job, he perfects it.', de:'Allah liebt es, wenn jemand seine Arbeit sorgfältig verrichtet.', ru:'Аллах любит, когда человек выполняет своё дело качественно.', ref:'İbn Mace 2443'},
-{arabic:'بَشِّرُوا وَلَا تُنَفِّرُوا', tr:'Müjdeleyin, nefret ettirmeyin.', pl:'Przekazujcie dobre wieści, nie zniechęcajcie.', en:'Give glad tidings and do not drive people away.', de:'Verkündet frohe Botschaften und schreckt die Menschen nicht ab.', ru:'Радуйте людей и не отвращайте их.', ref:'Buhari 6125, Müslim 1732'}
-
-    ]
+// MANEVİ KÜTÜPHANE (Dinamik Sunucu + Önbellek + Acil Durum Yedeği)
+let MANEVI_DATA = {
+    ayet: [{ arabic: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ", tr: "Öyleyse beni anın ki ben de sizi anayım. Bana şükredin; sakın bana nankörlük etmeyin.", pl: "Wspominajcie Mnie, to i Ja was wspomnę! Dziękujcie Mi i nie bądźcie wobec Mnie niewdzięczni!", en: "So remember Me; I will remember you. And be grateful to Me and do not deny Me.", de: "So gedenkt Meine, dann gedenke Ich eurer. Und seid Mir dankbar und seid nicht undankbar gegen Mich.", ru: "Поминайте Меня, и Я буду помнить о вас. Благодарите Меня и не будьте неблагодарны Мне.", fr: "Souvenez-vous de Moi donc, Je vous récompenserai. Remerciez-Moi et ne soyez pas ingrats envers Moi!", ref: "Bakara 2:152" }],
+    dua: [{ arabic: "اللَّهُمَّ بَارِكْ لَنَا فِي أَوْقَاتِنَا، وَفِي أَعْمَالِنَا، وَفِي أَهْلِنَا، وَاجْعَلْ كُلَّ مَا نَمْلِكُ عَوْنًا لَنَا عَلَى طَاعَتِكَ. آمِين.", tr: "Allah’ım, zamanımıza, işlerimize ve ailemize bereket ver. Sahip olduğumuz her şeyi sana kullukta vesile kıl. Âmin.", pl: "Allahu, pobłogosław nasz czas, nasze działania i nasze rodziny. Spraw, aby wszystko, co posiadamy, pomagało nam w posłuszeństwie Tobie. Amen.", en: "O Allah, bless our time, our work, and our families. Make everything we possess a means to obey You. Amen.", de: "O Allah, segne unsere Zeit, unsere Arbeit und unsere Familien. Mache alles, was wir besitzen, zu einem Mittel des Gehorsams Dir gegenüber. Amen.", ru: "О Аллах, благослови наше время, наши дела и наши семьи. Сделай всё, чем мы владеем, помощью в поклонении Тебе. Аминь.", fr: "Ô Allah, bénis notre temps, notre travail et nos familles. Fais que tout ce que nous possédons soit un moyen de T'adorer. Amen.", ref: "Dua" }],
+    hadis: [{ arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ", tr: "Ameller niyetlere göredir.", pl: "Czyny są oceniane według intencji.", en: "Actions are judged by intentions.", de: "Die Taten werden nach den Absichten beurteilt.", ru: "Поистине, дела оцениваются по намерениям.", fr: "Les actes ne valent que par les intentions.", ref: "Buhari 1" }]
 };
 
+async function fetchManeviData() {
+    const endpoints = {
+        ayet: "https://goksay.com/Balaban/ayet.php",
+        hadis: "https://goksay.com/Balaban/hadis.php",
+        dua: "https://goksay.com/Balaban/dua.php"
+    };
+    
+    let fetchedData = { ayet: [], hadis: [], dua: [] };
+    let successCount = 0;
+
+    // 3 dosyayı paralel ve birbirinden bağımsız olarak çek (Biri çökse diğeri etkilenmez)
+    await Promise.allSettled(Object.keys(endpoints).map(async (key) => {
+        try {
+            const res = await fetchWithTimeout(endpoints[key], 4000);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    fetchedData[key] = data;
+                    successCount++;
+                }
+            }
+        } catch(e) {}
+    }));
+
+    // Eğer üçü de başarıyla çekildiyse, önbelleği güncelle ve kullan
+    if (successCount === 3) {
+        MANEVI_DATA = fetchedData;
+        await setPref('bManeviCache', JSON.stringify(MANEVI_DATA));
+        return;
+    }
+
+    // İnternet yoksa, yavaşsa veya bir API çöktüyse cihazdaki son başarılı kaydı (cache) kullan
+    let cached = await getPref('bManeviCache', null);
+    if (cached) {
+        try {
+            let parsed = JSON.parse(cached);
+            if (parsed.ayet && parsed.ayet.length > 0) {
+                MANEVI_DATA = parsed;
+            }
+        } catch(err) {}
+    }
+}
+
+// --- SURE VE HADİS KAYNAKLARI ÇEVİRİ MOTORU ---
+const REF_DICT = {
+    'Bakara': { en: 'Al-Baqarah', pl: 'Al-Baqara', de: 'Al-Baqara', ru: 'Аль-Бакара', ar: 'البقرة', fr: 'Al-Baqarah' },
+    'Tevbe': { en: 'At-Tawbah', pl: 'At-Taubah', de: 'At-Tauba', ru: 'Ат-Тауба', ar: 'التوبة', fr: 'At-Tawbah' },
+    'Zariyat': { en: 'Ad-Dhariyat', pl: 'Az-Zarijat', de: 'Ad-Dhariyat', ru: 'Аз-Зарият', ar: 'الذاريات', fr: 'Ad-Dhariyat' },
+    'İsra': { en: 'Al-Isra', pl: 'Al-Isra', de: 'Al-Isra', ru: 'Аль-Исра', ar: 'الإسراء', fr: 'Al-Isra' },
+    'Nur': { en: 'An-Nur', pl: 'An-Nur', de: 'An-Nur', ru: 'Ан-Нур', ar: 'النور', fr: 'An-Nur' },
+    'Maide': { en: "Al-Ma'idah", pl: 'Al-Ma’ida', de: 'Al-Ma’ida', ru: 'Аль-Маида', ar: 'المائدة', fr: "Al-Ma'idah" },
+    'Enam': { en: "Al-An'am", pl: 'Al-An’am', de: 'Al-An’am', ru: 'Аль-Анам', ar: 'الأنعام', fr: "Al-An'am" },
+    'Al-i İmran': { en: "Ali 'Imran", pl: 'Al Imran', de: 'Al Imran', ru: 'Али Имран', ar: 'آل عمران', fr: "Ali 'Imran" },
+    'Âl-i İmrân': { en: "Ali 'Imran", pl: 'Al Imran', de: 'Al Imran', ru: 'Али Имран', ar: 'آل عمران', fr: "Ali 'Imran" },
+    'Nisa': { en: 'An-Nisa', pl: 'An-Nisa', de: 'An-Nisa', ru: 'Ан-Ниса', ar: 'النساء', fr: 'An-Nisa' },
+    'Araf': { en: "Al-A'raf", pl: 'Al-A’raf', de: 'Al-A’raf', ru: 'Аль-Араф', ar: 'الأعراف', fr: "Al-A'raf" },
+    'Rad': { en: "Ar-Ra'd", pl: 'Ar-Ra’d', de: 'Ar-Ra’d', ru: 'Ар-Раад', ar: 'الرعد', fr: "Ar-Ra'd" },
+    'İbrahim': { en: 'Ibrahim', pl: 'Ibrahim', de: 'Ibrahim', ru: 'Ибрахим', ar: 'إبراهيم', fr: 'Ibrahim' },
+    'Zilzal': { en: 'Az-Zalzalah', pl: 'Az-Zalzala', de: 'Az-Zalzala', ru: 'Аз-Залзала', ar: 'الزلزلة', fr: 'Az-Zalzalah' },
+    'Fatiha': { en: 'Al-Fatihah', pl: 'Al-Fatiha', de: 'Al-Fatiha', ru: 'Аль-Фатиха', ar: 'الفاتحة', fr: 'Al-Fatihah' },
+    'İhlas': { en: 'Al-Ikhlas', pl: 'Al-Ichlas', de: 'Al-Ikhlas', ru: 'Аль-Ихляс', ar: 'الإخلاص', fr: 'Al-Ikhlas' },
+    'Taha': { en: 'Ta-Ha', pl: 'Ta-Ha', de: 'Ta-Ha', ru: 'Та Ха', ar: 'طه', fr: 'Ta-Ha' },
+    'Rahman': { en: 'Ar-Rahman', pl: 'Ar-Rahman', de: 'Ar-Rahman', ru: 'Ар-Рахман', ar: 'الرحمن', fr: 'Ar-Rahman' },
+    'Enbiya': { en: 'Al-Anbiya', pl: 'Al-Anbija', de: 'Al-Anbiya', ru: 'Аль-Анбия', ar: 'الأنبياء', fr: 'Al-Anbiya' },
+    'Mümin': { en: 'Ghafir', pl: 'Ghafir', de: 'Ghafir', ru: 'Гафир', ar: 'غافر', fr: 'Ghafir' },
+    'Kalem': { en: 'Al-Qalam', pl: 'Al-Kalam', de: 'Al-Qalam', ru: 'Аль-Калям', ar: 'القلم', fr: 'Al-Qalam' },
+    'Haşr': { en: 'Al-Hashr', pl: 'Al-Haszr', de: 'Al-Hashr', ru: 'Аль-Хашр', ar: 'الحشر', fr: 'Al-Hashr' },
+    'İnşirah': { en: 'Ash-Sharh', pl: 'Asz-Szarh', de: 'Asch-Scharh', ru: 'Аш-Шарх', ar: 'الشرح', fr: 'Ash-Sharh' },
+    'Meryem': { en: 'Maryam', pl: 'Marjam', de: 'Maryam', ru: 'Марьям', ar: 'مريم', fr: 'Maryam' },
+    'Zümer': { en: 'Az-Zumar', pl: 'Az-Zumar', de: 'Az-Zumar', ru: 'Аз-Зумар', ar: 'الزمر', fr: 'Az-Zumar' },
+    'Zumer': { en: 'Az-Zumar', pl: 'Az-Zumar', de: 'Az-Zumar', ru: 'Аз-Зумар', ar: 'الزمر', fr: 'Az-Zumar' },
+    'Enfal': { en: 'Al-Anfal', pl: 'Al-Anfal', de: 'Al-Anfal', ru: 'Аль-Анфаль', ar: 'الأنفال', fr: 'Al-Anfal' },
+    'Cuma': { en: "Al-Jumu'ah", pl: 'Al-Dżumua', de: 'Al-Dschumu\'a', ru: 'Аль-Джумуа', ar: 'الجمعة', fr: "Al-Jumu'ah" },
+    'Hud': { en: 'Hud', pl: 'Hud', de: 'Hud', ru: 'Худ', ar: 'هود', fr: 'Hud' },
+    'Yusuf': { en: 'Yusuf', pl: 'Jusuf', de: 'Yusuf', ru: 'Юсуф', ar: 'يوسف', fr: 'Yusuf' },
+    'Talak': { en: 'At-Talaq', pl: 'At-Talak', de: 'At-Talaq', ru: 'Ат-Талак', ar: 'الطلاق', fr: 'At-Talaq' },
+    'Buhari': { en: 'Bukhari', pl: 'Buchari', de: 'Buchari', ru: 'Бухари', ar: 'البخاري', fr: 'Boukhari' },
+    'Müslim': { en: 'Muslim', pl: 'Muslim', de: 'Muslim', ru: 'Муслим', ar: 'مسلم', fr: 'Mouslim' },
+    'Tirmizi': { en: 'Tirmidhi', pl: 'Tirmidhi', de: 'Tirmidhi', ru: 'Тирмизи', ar: 'الترمذي', fr: 'Tirmidhi' },
+    'Ebu Davud': { en: 'Abu Dawud', pl: 'Abu Dawud', de: 'Abu Dawud', ru: 'Абу Дауд', ar: 'أبو داود', fr: 'Abou Daoud' },
+    'İbn Mace': { en: 'Ibn Majah', pl: 'Ibn Madża', de: 'Ibn Madscha', ru: 'Ибн Маджа', ar: 'ابن ماجه', fr: 'Ibn Majah' }
+};
+
+function trRef(refStr, targetLang) {
+    if (!refStr || targetLang === 'tr') return refStr;
+    let out = refStr;
+    for (let k in REF_DICT) {
+        if (out.includes(k)) {
+            out = out.replace(k, REF_DICT[k][targetLang] || k);
+        }
+    }
+    return out;
+}
 // Ana Ekrandaki İkonları Çizen Fonksiyon
 function renderManeviIcons() {
     const isFriday = new Date().getDay() === 5;
@@ -1496,7 +798,8 @@ function renderManeviIcons() {
         en: { c: 'Friday', a: 'Verse', h: 'Hadith', d: 'Supplication' },
         de: { c: 'Freitag', a: 'Vers', h: 'Hadith', d: 'Bittgebet' },
         ru: { c: 'Пятница', a: 'Аят', h: 'Хадис', d: 'Мольба' },
-        ar: { c: 'الجمعة', a: 'آية', h: 'حديث', d: 'دعاء' }
+        ar: { c: 'الجمعة', a: 'آية', h: 'حديث', d: 'دعاء' },
+        fr: { c: 'Vendredi', a: 'Verset', h: 'Hadith', d: 'Prière' }
     };
     
     const l = titles[lang] || titles['tr'];
@@ -1518,6 +821,12 @@ function renderManeviIcons() {
 let currentShareText = "";
 
 function openManevi(type) {
+        if (typeof FirebaseAnalytics !== 'undefined') {
+        FirebaseAnalytics.logEvent({ 
+            name: 'manevi_opened', 
+            params: { content_type: type } 
+        });
+    }
     let sourceArray = [];
     let titleStr = "";
 
@@ -1527,7 +836,8 @@ function openManevi(type) {
         en: { a: 'Holy Verse', h: 'Noble Hadith', d: 'Supplication', c: 'Blessed Friday', ref: 'Supplication', btn: 'SHARE' },
         de: { a: 'Heiliger Vers', h: 'Edler Hadith', d: 'Bittgebet', c: 'Gesegneter Freitag', ref: 'Bittgebet', btn: 'TEILEN' },
         ru: { a: 'Священный Аят', h: 'Священный Хадис', d: 'Дуа Дня', c: 'Благословенной Пятницы', ref: 'Мольба', btn: 'ПОДЕЛИТЬСЯ' },
-        ar: { a: 'آية كريمة', h: 'حديث شريف', d: 'دعاء اليوم', c: 'جمعة مباركة', ref: 'دعاء', btn: 'مشاركة' }
+        ar: { a: 'آية كريمة', h: 'حديث شريف', d: 'دعاء اليوم', c: 'جمعة مباركة', ref: 'دعاء', btn: 'مشاركة' },
+        fr: { a: 'Saint Verset', h: 'Noble Hadith', d: 'Prière du Jour', c: 'Bon Vendredi', ref: 'Prière', btn: 'PARTAGER' }
     };
     const tlText = tL[lang] || tL['tr'];
 
@@ -1541,7 +851,7 @@ function openManevi(type) {
     const randomItem = sourceArray[Math.floor(Math.random() * sourceArray.length)];
     let translatedText = (lang === 'ar') ? "" : (randomItem[lang] || randomItem['tr']);
 
-    let refStr = (randomItem.ref === 'Dua') ? tlText.ref : randomItem.ref;
+    let refStr = (randomItem.ref === 'Dua') ? tlText.ref : (randomItem['ref_'+lang] || trRef(randomItem.ref, lang));
 
     document.getElementById('mMTitle').textContent = titleStr;
     document.getElementById('mMArabic').textContent = randomItem.arabic;
@@ -1605,13 +915,14 @@ function fallbackCopy(text, successMsg) {
 
 // ── CAPACITOR NATIVE ENTEGRASYONU ──
 const isNative = typeof Capacitor !== 'undefined';
-let Preferences, Geolocation, LocalNotifications, AppPlugin;
+let Preferences, Geolocation, LocalNotifications, AppPlugin, FirebaseAnalytics;
 
 if (isNative) {
     Preferences = Capacitor.Plugins.Preferences;
     Geolocation = Capacitor.Plugins.Geolocation;
     LocalNotifications = Capacitor.Plugins.LocalNotifications;
     if(Capacitor.Plugins.App) AppPlugin = Capacitor.Plugins.App;
+    if(Capacitor.Plugins.FirebaseAnalytics) FirebaseAnalytics = Capacitor.Plugins.FirebaseAnalytics;
 }
 
 const fetchWithTimeout = (url, ms = 5000) => {
@@ -1626,7 +937,8 @@ async function getPref(key, defaultValue) {
         const { value } = await Preferences.get({ key });
         return value !== null ? value : defaultValue;
     }
-    return localStorage.getItem(key) || defaultValue;
+    const val = localStorage.getItem(key);
+    return val !== null ? val : defaultValue;
 }
 
 async function setPref(key, value) {
@@ -1685,29 +997,117 @@ function renderWeather(daily) {
     wWrap.style.opacity = '1'; 
 }
 
-const SPECIAL_DAYS = [
+// --- DİNAMİK ÖZEL GÜNLER (KANDİL VE BAYRAM) MOTORU ---
+let SPECIAL_DAYS = []; // Başlangıçta boş bırakıyoruz, sistem dolduracak
 
-    { d: "2026-12-10", tr: "Regaib Kandili", pl: "Noc Ragaib", en: "Regaib Night", de: "Regaib-Nacht", ru: "Ночь Рагаиб", ar: "ليلة الرغائب" },
-    { d: "2027-02-04", tr: "Miraç Kandili", pl: "Miraj", en: "Isra and Mi'raj", de: "Isra und Mi'radsch", ru: "Мирадж", ar: "الإسراء والمعراج" },
-    { d: "2027-02-22", tr: "Berat Kandili", pl: "Noc Bara'at", en: "Mid-Sha'ban", de: "Nacht von Bara'at", ru: "Ночь Бараат", ar: "ليلة النصف من شعبان" },
-    { d: "2027-03-08", tr: "Ramazan Başlangıcı", pl: "Początek Ramadanu", en: "Start of Ramadan", de: "Beginn des Ramadan", ru: "Начало Рамадана", ar: "بداية شهر رمضان" },
-    { d: "2027-03-05", tr: "Kadir Gecesi", pl: "Noc Przeznaczenia", en: "Night of Decree", de: "Nacht der Bestimmung", ru: "Ляйлятуль-кадр", ar: "ليلة القدر" },
-    { d: "2027-03-08", tr: "Ramazan Bayramı Arifesi", pl: "Wigilia Id al-Fitr", en: "Eve of Eid al-Fitr", de: "Vorabend von Eid al-Fitr", ru: "Канун Ураза-байрама", ar: "عشية عيد الفطر" },
-    { d: "2027-04-09", tr: "Ramazan Bayramı (1. Gün)", pl: "Id al-Fitr (1. Dzień)", en: "Eid al-Fitr (Day 1)", de: "Eid al-Fitr (Tag 1)", ru: "Ураза-байрам (День 1)", ar: "عيد الفطر (اليوم الأول)" },
-    { d: "2027-04-10", tr: "Ramazan Bayramı (2. Gün)", pl: "Id al-Fitr (2. Dzień)", en: "Eid al-Fitr (Day 2)", de: "Eid al-Fitr (Tag 2)", ru: "Ураза-байрам (День 2)", ar: "عيد الفطر (اليوم الثاني)", onlyToday: true },
-    { d: "2027-04-11", tr: "Ramazan Bayramı (3. Gün)", pl: "Id al-Fitr (3. Dzień)", en: "Eid al-Fitr (Day 3)", de: "Eid al-Fitr (Tag 3)", ru: "Ураза-байрам (День 3)", ar: "عيد الفطر (اليوم الثالث)", onlyToday: true },
-    { d: "2027-05-15", tr: "Kurban Bayramı Arifesi", pl: "Wigilia Id al-Adha", en: "Eve of Eid al-Adha", de: "Vorabend von Eid al-Adha", ru: "Канун Курбан-байрама", ar: "عشية عيد الأضحى" },
-    { d: "2027-05-16", tr: "Kurban Bayramı (1. Gün)", pl: "Id al-Adha (1. Dzień)", en: "Eid al-Adha (Day 1)", de: "Eid al-Adha (Tag 1)", ru: "Курбан-байрам (День 1)", ar: "عيد الأضحى (اليوم الأول)" },
-    { d: "2027-05-17", tr: "Kurban Bayramı (2. Gün)", pl: "Id al-Adha (2. Dzień)", en: "Eid al-Adha (Day 2)", de: "Eid al-Adha (Tag 2)", ru: "Курбан-байрам (День 2)", ar: "عيد الأضحى (اليوم الثاني)", onlyToday: true },
-    { d: "2027-05-18", tr: "Kurban Bayramı (3. Gün)", pl: "Id al-Adha (3. Dzień)", en: "Eid al-Adha (Day 3)", de: "Eid al-Adha (Tag 3)", ru: "Курбан-байрам (День 3)", ar: "عيد الأضحى (اليوم الثالث)", onlyToday: true },
-    { d: "2027-05-19", tr: "Kurban Bayramı (4. Gün)", pl: "Id al-Adha (4. Dzień)", en: "Eid al-Adha (Day 4)", de: "Eid al-Adha (Tag 4)", ru: "Курбан-байрам (День 4)", ar: "عيد الأضحى (اليوم الرابع)", onlyToday: true },
-    { d: "2027-06-06", tr: "Hicri Yılbaşı", pl: "Islamski Nowy Rok", en: "Islamic New Year", de: "Islamisches Neujahr", ru: "Исламский Новый Год", ar: "رأس السنة الهجرية" },
-    { d: "2027-06-15", tr: "Aşure Günü", pl: "Dzień Aszura", en: "Day of Ashura", de: "Tag von Aschura", ru: "День Ашура", ar: "يوم عاشوراء" },
-    { d: "2027-08-13", tr: "Mevlid Kandili", pl: "Mawlid", en: "Mawlid", de: "Mawlid", ru: "Мавлид", ar: "المولد النبوي" },
-    { d: "2027-11-29", tr: "Üç Ayların Başlangıcı", pl: "Początek Trzech Miesięcy", en: "Beginning of the Three Sacred Months", de: "Beginn der drei heiligen Monate", ru: "Начало трёх священных месяцев", ar: "بداية الأشهر الثلاثة المقدسة" },
-    { d: "2027-12-02", tr: "Regaib Kandili", pl: "Noc Ragaib", en: "Regaib Night", de: "Regaib-Nacht", ru: "Ночь Рагаиб", ar: "ليلة الرغائب" },
-    { d: "2027-12-24", tr: "Miraç Kandili", pl: "Miraj", en: "Isra and Mi'raj", de: "Isra und Mi'radsch", ru: "Мирадж", ar: "الإسراء والمعراج" }
+const HIJRI_EVENTS = [
+    { hm: 1, hd: 1, tr: "Hicri Yılbaşı", pl: "Islamski Nowy Rok", en: "Islamic New Year", de: "Islamisches Neujahr", ru: "Исламский Новый Год", ar: "رأس السنة الهجرية", fr: "Nouvel An Hégirien" },
+    { hm: 1, hd: 10, tr: "Aşure Günü", pl: "Dzień Aszura", en: "Day of Ashura", de: "Tag von Aschura", ru: "День Ашура", ar: "يوم عاشوراء", fr: "Jour d'Achoura" },
+    { hm: 3, hd: 12, tr: "Mevlid Kandili", pl: "Mawlid", en: "Mawlid", de: "Mawlid", ru: "Мавлид", ar: "المولد النبوي", fr: "Mawlid" },
+    { hm: 7, hd: 1, tr: "Üç Ayların Başlangıcı", pl: "Początek Trzech Miesięcy", en: "Beginning of the 3 Months", de: "Beginn der 3 Monate", ru: "Начало 3 месяцев", ar: "بداية الأشهر الثلاثة", fr: "Début des 3 Mois" },
+    { hm: 7, hd: 27, tr: "Miraç Kandili", pl: "Miraj", en: "Isra and Mi'raj", de: "Isra und Mi'radsch", ru: "Мирадж", ar: "الإسراء والمعراج", fr: "Isra et Mi'raj" },
+    { hm: 8, hd: 15, tr: "Berat Kandili", pl: "Noc Bara'at", en: "Mid-Sha'ban", de: "Nacht von Bara'at", ru: "Ночь Бараат", ar: "ليلة النصف من شعبان", fr: "Nuit de Bara'at" },
+    { hm: 9, hd: 1, tr: "Ramazan Başlangıcı", pl: "Początek Ramadanu", en: "Start of Ramadan", de: "Beginn des Ramadan", ru: "Начало Рамадана", ar: "بداية شهر رمضان", fr: "Début du Ramadan" },
+    { hm: 9, hd: 27, tr: "Kadir Gecesi", pl: "Noc Przeznaczenia", en: "Night of Decree", de: "Nacht der Bestimmung", ru: "Ляйлятуль-кадр", ar: "ليلة القدر", fr: "Nuit du Destin" },
+    { hm: 10, hd: 1, tr: "Ramazan Bayramı (1. Gün)", pl: "Id al-Fitr (1. Dzień)", en: "Eid al-Fitr (Day 1)", de: "Eid al-Fitr (Tag 1)", ru: "Ураза-байрам (День 1)", ar: "عيد الفطر (اليوم 1)", fr: "Aïd al-Fitr (1er Jour)", isEve: true },
+    { hm: 10, hd: 2, tr: "Ramazan Bayramı (2. Gün)", pl: "Id al-Fitr (2. Dzień)", en: "Eid al-Fitr (Day 2)", de: "Eid al-Fitr (Tag 2)", ru: "Ураза-байрам (День 2)", ar: "عيد الفطر (اليوم 2)", fr: "Aïd al-Fitr (2e Jour)", onlyToday: true },
+    { hm: 10, hd: 3, tr: "Ramazan Bayramı (3. Gün)", pl: "Id al-Fitr (3. Dzień)", en: "Eid al-Fitr (Day 3)", de: "Eid al-Fitr (Tag 3)", ru: "Ураза-байрам (День 3)", ar: "عيد الفطر (اليوم 3)", fr: "Aïd al-Fitr (3e Jour)", onlyToday: true },
+    { hm: 12, hd: 9, tr: "Kurban Bayramı Arifesi", pl: "Wigilia Id al-Adha", en: "Eve of Eid al-Adha", de: "Vorabend von Eid al-Adha", ru: "Канун Курбан-байрама", ar: "عشية عيد الأضحى", fr: "Veille de l'Aïd al-Adha" },
+    { hm: 12, hd: 10, tr: "Kurban Bayramı (1. Gün)", pl: "Id al-Adha (1. Dzień)", en: "Eid al-Adha (Day 1)", de: "Eid al-Adha (Tag 1)", ru: "Курбан-байрам (День 1)", ar: "عيد الأضحى (اليوم 1)", fr: "Aïd al-Adha (1er Jour)" },
+    { hm: 12, hd: 11, tr: "Kurban Bayramı (2. Gün)", pl: "Id al-Adha (2. Dzień)", en: "Eid al-Adha (Day 2)", de: "Eid al-Adha (Tag 2)", ru: "Курбан-байрам (День 2)", ar: "عيد الأضحى (اليوم 2)", fr: "Aïd al-Adha (2e Jour)", onlyToday: true },
+    { hm: 12, hd: 12, tr: "Kurban Bayramı (3. Gün)", pl: "Id al-Adha (3. Dzień)", en: "Eid al-Adha (Day 3)", de: "Eid al-Adha (Tag 3)", ru: "Курбан-байрам (День 3)", ar: "عيد الأضحى (اليوم 3)", fr: "Aïd al-Adha (3e Jour)", onlyToday: true },
+    { hm: 12, hd: 13, tr: "Kurban Bayramı (4. Gün)", pl: "Id al-Adha (4. Dzień)", en: "Eid al-Adha (Day 4)", de: "Eid al-Adha (Tag 4)", ru: "Курбан-байрам (День 4)", ar: "عيد الأضحى (اليوم 4)", fr: "Aïd al-Adha (4e Jour)", onlyToday: true }
 ];
+
+function generateDynamicSpecialDays() {
+    let generated = [];
+    let now = new Date();
+    // İçinde bulunduğumuz yıl ve bir sonraki yıl için hesapla
+    let years = [now.getFullYear(), now.getFullYear() + 1];
+
+    years.forEach(y => {
+        let foundRegaib = false;
+        let currentHijriYear = 0;
+        
+        // Yılın 365 gününü tarayarak Hicri karşılıklarını buluyoruz
+        for (let d = new Date(y, 0, 1); d.getFullYear() === y; d.setDate(d.getDate() + 1)) {
+            let h = toHijri(d.getFullYear(), d.getMonth() + 1, d.getDate());
+            
+            // Regaib Kandili İstisnası: Receb ayının ilk Perşembe günü
+            if (h.month === 7) {
+                if (currentHijriYear !== h.year) {
+                    foundRegaib = false;
+                    currentHijriYear = h.year;
+                }
+                if (!foundRegaib && d.getDay() === 4) {
+                    let dateStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,'0') + "-" + String(d.getDate()).padStart(2,'0');
+                    generated.push({ d: dateStr, tr: "Regaib Kandili", pl: "Noc Ragaib", en: "Regaib Night", de: "Regaib-Nacht", ru: "Ночь Рагаиб", ar: "ليلة الرغائب", fr: "Nuit de Regaib" });
+                    foundRegaib = true;
+                }
+            }
+
+            // Sabit tarihli diğer günleri eşleştirme
+            HIJRI_EVENTS.forEach(ev => {
+                if (ev.hm === h.month && ev.hd === h.day) {
+                    // Ramazan Bayramı Arifesi kuralı (1 Şevval'den 1 gün öncesi)
+                    if (ev.isEve) {
+                        let arife = new Date(d);
+                        arife.setDate(arife.getDate() - 1);
+                        let arifeStr = arife.getFullYear() + "-" + String(arife.getMonth()+1).padStart(2,'0') + "-" + String(arife.getDate()).padStart(2,'0');
+                        generated.push({ d: arifeStr, tr: "Ramazan Bayramı Arifesi", pl: "Wigilia Id al-Fitr", en: "Eve of Eid al-Fitr", de: "Vorabend von Eid al-Fitr", ru: "Канун Ураза-байрама", ar: "عشية عيد الفطر" });
+                    }
+                    
+                    let copy = { ...ev };
+                    delete copy.hm; delete copy.hd; delete copy.isEve;
+                    copy.d = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,'0') + "-" + String(d.getDate()).padStart(2,'0');
+                    generated.push(copy);
+                }
+            });
+        }
+    });
+    
+    generated.sort((a,b) => a.d.localeCompare(b.d));
+    return generated;
+}
+
+async function fetchSpecialDays() {
+    try {
+        const url = "https://goksay.com/Balaban/special_days.php"; 
+        const res = await fetchWithTimeout(url, 4000);
+        
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data.length > 0) {
+                SPECIAL_DAYS = data;
+                SPECIAL_DAYS.sort((a,b) => a.d.localeCompare(b.d));
+                await setPref('bSpecialDaysCache', JSON.stringify(SPECIAL_DAYS));
+                return; // Sunucudan başarılı liste alındıysa çık
+            }
+        }
+    } catch (e) {
+        console.warn("Özel günler sunucudan çekilemedi, yedeğe geçiliyor.");
+    }
+
+    // Sunucu hata verirse, cihazdaki en son kayıtlı listeyi kontrol et
+    let cached = await getPref('bSpecialDaysCache', null);
+    if (cached) {
+        try {
+            let parsed = JSON.parse(cached);
+            let currentYear = new Date().getFullYear().toString();
+            // Cache'teki liste içinde bulunduğumuz yıla ait veriler içeriyor mu?
+            let hasCurrentYear = parsed.some(item => item.d.startsWith(currentYear));
+            
+            if (parsed && parsed.length > 0 && hasCurrentYear) {
+                SPECIAL_DAYS = parsed;
+                SPECIAL_DAYS.sort((a,b) => a.d.localeCompare(b.d));
+                return; // Cache güncelse onu kullan ve çık
+            }
+        } catch(err) {}
+    }
+    
+    // EĞER sunucu çökerse VE cache boş/eski ise: DİNAMİK HESAPLA!
+    SPECIAL_DAYS = generateDynamicSpecialDays();
+}
 
 let lang;
 const T={
@@ -1716,14 +1116,14 @@ const T={
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler (Arka Plan)',
       thL:'Ayet/Hadis Teması (Koyu)',stPreAlarms: 'Vakitlerden Önce Uyarılar', minsBefore: 'dk. önce', sysSound: 'Sistem Sesi',      
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir', mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
-      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.5.2', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.6.2', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',tlTitle:'Zaman Çizelgesi', ker:'Kerahat',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et', ns:'Yeni konum aranacak...', sg:'Öneri: ',
       cp:'Kıble Pusulası', tl:'← Sola dönün', tr:'Sağa dönün →', tp:'🕋 Harika! Kıbleye döndünüz', ch:'Şu anki Yön', cw:'Telefonu yere paralel tutun. Yön hatalıysa cihazınızla havada 8 çizin.',
       spcTitle:'Yaklaşan Özel Gün', today:'Bugün!', daysL:'gün kaldı',
       copied:'Metin panoya kopyalandı!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ İpucu:</span> Uyarıyı <b>"Sistem Sesi"</b> yaparsanız, cihazınızın <b>Ayarlar > Uygulamalar > Balaban > Bildirimler</b> menüsünden dilediğiniz melodiyi seçebilirsiniz.',
       pr:['İmsak','Güneş','Öğle','İkindi','Akşam','Yatsı'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Nafile Vakitler', nfWarn:'⚠️ Kerahat vakti — şu an namaz kılınmaz',
-      nf:{israk:'İşrak',duha:'Duha',evvabin:'Evvabin',gece13:'Gece 1/3',gece12:'Gece 2/3',gece23:'Gece 2/3',seher:'Seher'},
+      nf:{israk:'İşrak',duha:'Duha',evvabin:'Evvabin',gece13:'Gece 1/3',gece12:'Gece 1/2',gece23:'Gece 2/3',seher:'Seher'},
       dy:['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'],
       mo:['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
       vl:'Ayet yükleniyor...',gc:'Konum araştırılıyor...',ge:'Konum bulunamadı.',ph:'Şehir adı...',
@@ -1736,7 +1136,7 @@ const T={
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       thL:'Motyw Wersetu (Ciemny)',stPreAlarms: 'Alerty Przed Czasem', minsBefore: 'min przed', sysSound: 'Dźwięk Systemu',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień', mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
-      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.5.2', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.6.2', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',tlTitle:'Oś Czasu', ker:'Kerahat',
       volLbl:'Głośność',testLbl:'Test Dźwięku', ns:'Wyszuka nową lokalizację...', sg:'Sugestia: ',
       cp:'Kompas Qibla', tl:'← Skręć w lewo', tr:'Skręć w prawo →', tp:'🕋 Jesteś na Qibli!', ch:'Obecny kierunek', cw:'Trzymaj telefon płasko. Jeśli kierunek jest błędny, zrób ósemkę w powietrzu.',
@@ -1756,7 +1156,7 @@ nf:{israk:'Iszrak',duha:'Duha',evvabin:'Evvabin',gece13:'Noc 1/3',gece12:'Noc 1/
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       thL:'Verse Theme (Dark)',stPreAlarms: 'Pre-Prayer Alerts', minsBefore: 'mins before', sysSound: 'System Sound',
       ll:'Language / Dil',lol:'Location',chg:'Change', mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
-      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.5.2', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.6.2', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
       sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',tlTitle:'Timeline', ker:'Karahat',
       volLbl:'Volume',testLbl:'Test Sound', ns:'Will search new location...', sg:'Suggestion: ',
       cp:'Qibla Compass', tl:'← Turn Left', tr:'Turn Right →', tp:'🕋 You are on Qibla!', ch:'Current Heading', cw:'Hold phone flat. If direction is wrong, draw an 8 in the air.',
@@ -1776,7 +1176,7 @@ nf:{israk:'Ishraq',duha:'Duha',evvabin:'Awwabin',gece13:'Night 1/3',gece12:'Nigh
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       thL:'Vers-Design (Dunkel)',stPreAlarms: 'Vorab-Warnungen', minsBefore: 'Min. vorher', sysSound: 'Systemton',
       ll:'Sprache',lol:'Standort',chg:'Ändern', mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
-      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.5.2', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.6.2', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
       sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',tlTitle:'Zeitachse', ker:'Karahat',
       volLbl:'Lautstärke',testLbl:'Ton testen', ns:'Neuer Standort wird gesucht...', sg:'Vorschlag: ',
       cp:'Qibla Kompass', tl:'← Nach links drehen', tr:'Nach rechts drehen →', tp:'🕋 Sie sind auf Qibla!', ch:'Aktuelle Richtung', cw:'Halten Sie das Telefon flach. Wenn die Richtung falsch ist, zeichnen Sie eine 8.',
@@ -1796,7 +1196,7 @@ nf:{israk:'Ischrak',duha:'Duha',evvabin:'Awwabin',gece13:'Nacht 1/3',gece12:'Nac
       tw:'Время на эту неделю',st:'Настройки',ml:'Метод расчета',nl:'Уведомления',
       thL:'Тема Аята (Темная)',stPreAlarms: 'Предварительные оповещения', minsBefore: 'мин до', sysSound: 'Системный звук',
       ll:'Язык / Language',lol:'Местоположение',chg:'Изменить', mt:'Выберите место',ms1:'Популярных городов:',ms2:'Введите название города:',
-      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.5.2', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
+      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.6.2', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
       sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',tlTitle:'Шкала времени', ker:'Карахат',
       volLbl:'Громкость',testLbl:'Проверка звука', ns:'Будет найден новый адрес...', sg:'Предложение: ',
       cp:'Компас Киблы', tl:'← Поверните налево', tr:'Поверните направо →', tp:'🕋 Вы на Кибле!', ch:'Текущее направление', cw:'Держите телефон ровно. Если направление неверное, нарисуйте в воздухе 8.',
@@ -1816,7 +1216,7 @@ nf:{israk:'Ишрак',duha:'Духа',evvabin:'Аввабин',gece13:'Ночь
       tw:'أوقات هذا الأسبوع',st:'الإعدادات',ml:'طريقة الحساب',nl:'الإشعارات (الخلفية)',
       thL:'الآية (داكن)',stPreAlarms: 'تنبيهات قبل الوقت', minsBefore: 'دقيقة قبل', sysSound: 'صوت النظام',
       ll:'اللغة / Language',lol:'الموقع',chg:'تغيير', mt:'اختر الموقع',ms1:'المدن الشهيرة:',ms2:'أدخل اسم المدينة:',
-      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.5.2', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
+      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.6.2', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
       sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',tlTitle:'الخط الزمني', ker:'الكراهة',
       volLbl:'مستوى الصوت',testLbl:'اختبار الصوت', ns:'سيتم البحث عن موقع جديد...', sg:'اقتراح: ',
       cp:'بوصلة القبلة', tl:'← اتجه يساراً', tr:'اتجه يميناً →', tp:'🕋 أنت في اتجاه القبلة!', ch:'الاتجاه الحالي', cw:'احمل الهاتف بشكل مسطح. إذا كان الاتجاه خاطئًا، ارسم رقم 8 في الهواء.',
@@ -1830,7 +1230,27 @@ nf:{israk:'الإشراق',duha:'الضحى',evvabin:'الأوابين',gece13:'
       batWarn:'هام: لضمان تشغيل الأذان في وقته عندما تكون الشاشة مغلقة، يرجى تعيين استخدام البطارية لهذا التطبيق إلى "غير مقيد" في إعدادات جهازك.',
       nagNotif:'تنبيه: لسماع الأذان في وقته، يرجى تفعيل "الإشعارات" في علامة تبويب الإعدادات.',
       rTitle:"إذاعة القرآن الكريم", rSub:"بث مباشر على مدار الساعة", rStatPlay:"تستمع الآن (مباشر)", rStatStop:"اضغط للاستماع", rStatLd:"جاري الاتصال...", rStatErr:"خطأ في الاتصال!",
-      magWarn: "⚠️ إذا كان هناك الكثير من التداخل المغناطيسي حولك (مباني، حديد)، يرجى استخدام الخريطة."}
+      magWarn: "⚠️ إذا كان هناك الكثير من التداخل المغناطيسي حولك (مباني، حديد)، يرجى استخدام الخريطة."},
+  fr:{mapBtn:'Carte', h:'Accueil',c:'Calendrier',s:'Paramètres',pt:'Heures de Prière',vd:'Verset du Jour',stop: 'Arrêter',
+      qbl:'Direction de la Qibla',qfr:'Dans le sens horaire du Nord',np:'Prochaine Prière',act:'Maintenant',sVib: 'Vibration Uniquement',
+      tw:'Heures de cette semaine',st:'Paramètres',ml:'Méthode de Calcul',nl:'Notifications',
+      thL:'Thème du Verset (Sombre)',stPreAlarms: 'Alertes Avant l\'Heure', minsBefore: 'min avant', sysSound: 'Son du Système',
+      ll:'Langue / Language',lol:'Emplacement',chg:'Changer', mt:'Choisir l\'emplacement',ms1:'Villes populaires:',ms2:'Nom de la ville:',
+      ok:'OK',gps:'📍 Trouver GPS',ver:'Temps de Prière V1.6.2', pa:'Alertes de Prière',sOff:'Désactivé',sBeep:'Bip',sAzan:'Adhan',
+      sA1:'Alerte 1', sA2:'Alerte 2', sA3:'Alerte 3',tlTitle:'Chronologie', ker:'Makrouh',
+      volLbl:'Volume',testLbl:'Tester le Son', ns:'Recherche d\'un nouveau lieu...', sg:'Suggestion: ',
+      cp:'Boussole Qibla', tl:'← Tournez à gauche', tr:'Tournez à droite →', tp:'🕋 Vous êtes sur la Qibla!', ch:'Cap actuel', cw:'Tenez le téléphone à plat. Si la direction est mauvaise, dessinez un 8.',
+      spcTitle:'Jour Spécial à Venir', today:'Aujourd\'hui!', daysL:'jours restants',
+      copied:'Texte copié dans le presse-papiers!',sysHint: '<span style="color:var(--teal); font-weight:700;">ℹ️ Astuce:</span> Si vous sélectionnez <b>"Son du Système"</b>, vous pouvez choisir n\'importe quelle mélodie dans les <b>Paramètres > Applications > Balaban > Notifications</b>.',
+      pr:['Fajr','Lever du soleil','Dhuhr','Asr','Maghrib','Isha'], ic:['🌙','🌅','☀️','🌤️','🌇','🌃'],nfTitle:'Prières Optionnelles', nfWarn:'⚠️ Temps Makrouh — la prière n\'est pas effectuée maintenant',
+      nf:{israk:'Ishraq',duha:'Duha',evvabin:'Awwabin',gece13:'Nuit 1/3',gece12:'Nuit 1/2',gece23:'Nuit 2/3',seher:'Sahar'},
+      dy:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+      mo:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+      vl:'Chargement du verset...',gc:'Recherche d\'emplacement...',ge:'Emplacement introuvable.',ph:'Nom de la ville...',
+      batWarn:'IMPORTANT: Pour que l\'Adhan retentisse à l\'heure l\'écran éteint, réglez la batterie sur "Non restreint" pour cette appli.',
+      nagNotif:'ATTENTION: Pour entendre l\'Adhan à l\'heure, activez les "Notifications" dans Paramètres.',
+      rTitle:"Radio Coran", rSub:"Diffusion 24/7", rStatPlay:"En cours (En direct)", rStatStop:"Touchez pour écouter", rStatLd:"Connexion...", rStatErr:"Erreur de connexion!",
+      magWarn: "⚠️ S\'il y a trop d\'interférences magnétiques, utilisez la Carte."}
 };
 
 const ANCHORS = [
@@ -1840,11 +1260,11 @@ const ANCHORS = [
   { n: 'Gdańsk', la: 54.352, lo: 18.6466, did: 15880 },
   { n: 'Białystok', la: 53.1275, lo: 23.074, did: 15883 },
   { n: 'Kielce', la: 50.8541, lo: 20.5301, did: 15859 },
-  { n: 'Poznan', la: 52.4005, lo: 16.7368, did: 15846 },
+  { n: 'Poznań', la: 52.4005, lo: 16.7368, did: 15846 },
   { n: 'Radom', la: 51.4168, lo: 20.8607, did: 15866 },
   { n: 'Viyana', la: 48.2201, lo: 16.2148, did: 11618 },
   { n: 'Graz', la: 47.0731, lo: 15.3595, did: 11600 },
-  { n: 'Slazburg', la: 47.8027, lo: 12.9741, did: 11617 },
+  { n: 'Salzburg', la: 47.8027, lo: 12.9741, did: 11617 },
   { n: 'Berlin', la: 52.5064, lo: 13.0951, did: 11002 },
   { n: 'Hamburg', la: 53.5511, lo: 9.9937, did: 11012 },
   { n: 'Münih', la: 48.1351, lo: 11.5820, did: 11022 },
@@ -1859,7 +1279,7 @@ const ANCHORS = [
   { n: 'Bursa', la: 40.1826, lo: 29.0669, did: 9335 },
   { n: 'İzmir', la: 38.4192, lo: 27.1287, did: 9560 },
   { n: 'Antalya', la: 36.8978, lo: 30.5532, did: 9225 },
-  { n: 'Malatya', la: 38.4192, lo: 27.1287, did: 9703 },
+  { n: 'Malatya', la: 38.3552, lo: 38.3095, did: 9703 },
   { n: 'Arapgir', la: 39.0394, lo: 38.4685, did: 9695 },
   { n: 'Trabzon', la: 40.9929, lo: 39.6488, did: 9905 },
   { n: 'Kayseri', la: 38.7219, lo: 34.8792, did: 9620 },
@@ -1876,7 +1296,6 @@ const ANCHORS = [
 { n: 'Zurich', la: 47.3769, lo: 8.5417, did: 14547 },
 { n: 'Basel', la: 47.5596, lo: 7.5886, did: 14525 },
 { n: 'Londra', la: 51.5072, lo: -0.1276, did: 14096 },
-{ la: 52.2297, lo: 21.0122, did: '11125' }
 ];
 
 const CITIES = [
@@ -1886,11 +1305,11 @@ const CITIES = [
   { n: 'Gdańsk', la: 54.352, lo: 18.6466},
   { n: 'Białystok', la: 53.1275, lo: 23.074},
   { n: 'Kielce', la: 50.8541, lo: 20.5301},
-  { n: 'Poznan', la: 52.4005, lo: 16.7368},
+  { n: 'Poznań', la: 52.4005, lo: 16.7368},
   { n: 'Radom', la: 51.4168, lo: 20.8607},
   { n: 'Viyana', la: 48.2201, lo: 16.2148},
   { n: 'Graz', la: 47.0731, lo: 15.3595},
-  { n: 'Slazburg', la: 47.8027, lo: 12.9741},
+  { n: 'Salzburg', la: 47.8027, lo: 12.9741},
   { n: 'Berlin', la: 52.5064, lo: 13.0951},
   { n: 'Hamburg', la: 53.5511, lo: 9.9937},
   { n: 'Münih', la: 48.1351, lo: 11.5820},
@@ -1905,7 +1324,7 @@ const CITIES = [
   { n: 'Bursa', la: 40.1826, lo: 29.0669},
   { n: 'İzmir', la: 38.4192, lo: 27.1287},
   { n: 'Antalya', la: 36.8978, lo: 30.5532},
-  { n: 'Malatya', la: 38.4192, lo: 27.1287},
+  { n: 'Malatya', la: 38.4192, lo: 38.3095},
   { n: 'Arapgir', la: 39.0394, lo: 38.4685},
   { n: 'Trabzon', la: 40.9929, lo: 39.6488},
   { n: 'Kayseri', la: 38.7219, lo: 34.8792},
@@ -1940,8 +1359,7 @@ let qiblaAngle = 0;
 let gcTimer = null;
 let globalMonthData = null; 
 let globalDid = null;
-let isDiyanetDown = false; 
-setInterval(() => { isDiyanetDown = false; globalMonthData = null; }, 3600000);
+// Saatlik önbellek silme iptal edildi. Veriler artık sadece gece yarısı gün dönümünde yenileniyor.
 
 let defaultPrefs = {fajr:'off', sunrise:'off', dhuhr:'ogle', asr:'ikindi', maghrib:'aksam', isha:'yatsi'};
 let preSoundPrefs = {
@@ -1957,7 +1375,10 @@ async function updateGPSLocationSilently() {
         let pos;
         if (isNative && Geolocation) {
             const perm = await Geolocation.checkPermissions();
-            if (perm.location !== 'granted') return; 
+            if (perm.location !== 'granted') {
+                const req = await Geolocation.requestPermissions();
+                if (req.location !== 'granted') return;
+            }
             pos = await Geolocation.getCurrentPosition();
         } else {
             pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:5000}));
@@ -1972,6 +1393,7 @@ async function updateGPSLocationSilently() {
         await setPref('bLa', uLa); await setPref('bLo', uLo); await setPref('bCity', uCity);
     } catch(e) { console.warn("Sessiz GPS güncellemesi başarısız oldu", e); }
 }
+
 
 async function checkSpecialDays() {
     const today = new Date();
@@ -2009,7 +1431,7 @@ async function checkSpecialDays() {
         
         // YENİ ZEKÂ: Geri sayım varsa "Yaklaşan", gün bugüne geldiyse "Günün Önemi" yazar ve rengi değiştirir.
         if (diffDays === 0) {
-            const todayTitles = { tr:'Günün Önemi', pl:'Wydarzenie Dziś', en:'Today\'s Event', de:'Heutiges Ereignis', ru:'Событие дня', ar:'حدث اليوم' };
+            const todayTitles = { tr:'Günün Önemi', pl:'Wydarzenie Dziś', en:'Today\'s Event', de:'Heutiges Ereignis', ru:'Событие дня', ar:'حدث اليوم', fr:'Événement d\'aujourd\'hui' };
             document.getElementById('spcTitle').textContent = todayTitles[lang] || todayTitles['tr'];
             document.getElementById('spcRem').textContent = t.today || "Bugün!";
             cardEl.classList.add('is-today'); // Kartı ALTIN SARISINA çeviren komut
@@ -2032,6 +1454,19 @@ async function closeSpc() {
 }
 
 // ── BAŞLATMA (NATIVE) ──
+async function initAnalytics() {
+    if (isNative && FirebaseAnalytics) {
+        try {
+            await FirebaseAnalytics.setCollectionEnabled({ enabled: true });
+            await FirebaseAnalytics.logEvent({
+                name: 'app_opened',
+                params: { method_used: method || 13 }
+            });
+        } catch (e) {
+            console.warn("Analytics başlatılamadı:", e);
+        }
+    }
+}
 async function initApp() {
     try {
         let savedLang = await getPref('bL', null); 
@@ -2040,7 +1475,7 @@ async function initApp() {
         } else {
             let sysLang = navigator.language || navigator.userLanguage || 'en';
             sysLang = sysLang.substring(0, 2).toLowerCase();
-            if (['tr', 'pl', 'en', 'de', 'ru', 'ar'].includes(sysLang)) { lang = sysLang; }
+            if (['tr', 'pl', 'en', 'de', 'ru', 'ar', 'fr'].includes(sysLang)) { lang = sysLang; }
             else { lang = 'en'; }
             await setPref('bL', lang);
         }
@@ -2051,13 +1486,22 @@ async function initApp() {
     try { loadVerse(false); } catch(e){}
 
     try {
-        uLa = parseFloat(await getPref('bLa', 41.0082));
-if (isNaN(uLa)) uLa = 41.0082;
+        let savedCity = await getPref('bCity', null);
+        let isFirstInstall = (savedCity === null);
 
-uLo = parseFloat(await getPref('bLo', 28.9784));
-if (isNaN(uLo)) uLo = 28.9784;
-
-uCity = await getPref('bCity', 'İstanbul');
+        if (isFirstInstall) {
+            uLa = 41.0082; 
+            uLo = 28.9784; 
+            uCity = 'İstanbul';
+            isAutoGPS = true; 
+            await setPref('bAutoGPS', 'true');
+        } else {
+            uCity = savedCity;
+            uLa = parseFloat(await getPref('bLa', 41.0082));
+            if (isNaN(uLa)) uLa = 41.0082;
+            uLo = parseFloat(await getPref('bLo', 28.9784));
+            if (isNaN(uLo)) uLo = 28.9784;
+        }
         method = parseInt(await getPref('bM', 13));
         volume = parseFloat(await getPref('bVol', 80)) / 100;
         
@@ -2089,7 +1533,7 @@ notifOn = (await getPref('bNotif', 'off')) === 'on';
             document.getElementById('temkinToggleRow').style.display = 'flex';
             document.getElementById('temkinWrap').style.display = 'none'; // İlk açılışta kapalı ve derli toplu başlar
         }
-        soundPrefs = sp ? JSON.parse(sp) : defaultPrefs;
+        try { soundPrefs = sp ? JSON.parse(sp) : defaultPrefs; } catch(e) { soundPrefs = defaultPrefs; }
 
         document.getElementById('mSel').value = method;
         document.getElementById('volRange').value = Math.round(volume * 100);
@@ -2102,19 +1546,19 @@ notifOn = (await getPref('bNotif', 'off')) === 'on';
 if (isNative && LocalNotifications) {
             try {
                 await LocalNotifications.requestPermissions();
-                await LocalNotifications.createChannel({ id: 'kanal_azan1_v4', name: 'Ezan 1', sound: 'azan1.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_sabah_v4', name: 'Sabah Ezanı', sound: 'sabah.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_ogle_v4', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v4', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_aksam_v4', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v4', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                await LocalNotifications.createChannel({ id: 'kanal_alert1_v3', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert1_v4', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert2_v4', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert3_v4', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_alert4_v4', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_beep_v4', name: 'Bip Sesi', sound: 'beep.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_system_v4', name: 'Sistem Sesi', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_vibrate_v4', name: 'Sadece Titreşim', sound: 'sessiz.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_azan1_v5', name: 'Ezan 1', sound: 'azan1.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_sabah_v5', name: 'Sabah Ezanı', sound: 'sabah.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ogle_v5', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v5', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_aksam_v5', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v5', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                
+                await LocalNotifications.createChannel({ id: 'kanal_alert1_v5', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert2_v5', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert3_v5', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_alert4_v5', name: 'Uyarı 4', sound: 'ft.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_beep_v5', name: 'Bip Sesi', sound: 'beep.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_system_v5', name: 'Sistem Sesi', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_vibrate_v5', name: 'Sadece Titreşim', importance: 5, visibility: 1, vibration: true });
             } catch(e) {}
 // Android 14+ Tam Zamanlı Alarm İzni Kontrolü
         if (Capacitor.Plugins.Alarm && typeof Capacitor.Plugins.Alarm.checkExactAlarmPermission === 'function') {
@@ -2142,7 +1586,9 @@ if (isNative && LocalNotifications) {
     try { renderChips(); } catch(e){}
     try { updateTxt(); } catch(e){}
     
-    await checkSpecialDays(); 
+    await fetchSpecialDays(); // Önce internetten güncel listeyi çek
+    await checkSpecialDays(); // Sonra ekrana bas
+    await fetchManeviData();  // YENİ: Manevi verileri sunucudan veya önbellekten al
     renderManeviIcons();
 
     // DİYANET CACHE'İNİ HAFIZADAN HIZLICA OKU
@@ -2150,6 +1596,7 @@ if (isNative && LocalNotifications) {
     if (savedDiyanet) { try { let pd = JSON.parse(savedDiyanet); globalMonthData = pd.data; globalDid = pd.did; } catch(e){} }
 
     // EKRANI İNTERNET VEYA GPS BEKLEMEDEN ANINDA AÇ!
+    initAnalytics();
     loadAll(); 
 
     // EĞER "DİNAMİK GPS" SEÇİLİYSE, KULLANICIYI BEKLETMEDEN SESSİZCE ARKA PLANDA ARA, BULUNCA YENİLE
@@ -2212,12 +1659,24 @@ function calcPTLocal(date, la, lo, mth) {
   function ha(alt, ccw) {
     const v = Math.sin(rad(alt)) - Math.sin(rad(la)) * Math.sin(rad(d));
     const c = Math.cos(rad(la)) * Math.cos(rad(d));
-    if (Math.abs(v / c) > 1) return ccw ? 0 : 24;
+    if (Math.abs(v / c) > 1) return NaN; // 0 veya 24 yerine tanımsız (NaN) dönüyoruz
     return ccw ? tr - (deg(Math.acos(v / c)) / 15) : tr + (deg(Math.acos(v / c)) / 15);
   }
-  const fj = ha(-m.f, true), sr = ha(-0.833, true), dh = tr;
+  
+  let sr = ha(-0.833, true);
+  let ss = ha(-0.833, false);
+  const dh = tr;
   const asrAlt = deg(Math.atan(1 / (1 + Math.tan(rad(Math.abs(la - d))))));
-  const as = ha(asrAlt, false), ss = ha(-0.833, false), is = m.i === 90 ? ss + 1.5 : ha(-m.i, false);
+  const as = ha(asrAlt, false);
+  
+  // Gece süresini hesaplayarak yüksek enlem (Angle-based) yedeğini oluşturuyoruz
+  const night = (sr + 24) - ss;
+  
+  let fj = ha(-m.f, true);
+  if (isNaN(fj)) fj = sr - night * (m.f / 60); // İmsak hesaplanamazsa geceye oranla
+  
+  let is = m.i === 90 ? ss + 1.5 : ha(-m.i, false);
+  if (isNaN(is)) is = ss + night * (m.i / 60); // Yatsı hesaplanamazsa geceye oranla
   function fmt(h) {
     let t = fxH(h), hh = Math.floor(t), mm = Math.round((t - hh) * 60);
     if (mm >= 60) { hh+=1; mm=0; } if(hh===24) hh=0;
@@ -2235,7 +1694,9 @@ async function fetchDiyanetTimes(date, la, lo) {
         let bestAnchor = null;
         let minDist = Infinity;
         for (let c of ANCHORS) {
-            let d = Math.pow(la - c.la, 2) + Math.pow(lo - c.lo, 2);
+            let dx = (lo - c.lo) * Math.cos(la * Math.PI / 180);
+            let dy = la - c.la;
+            let d = dx * dx + dy * dy;
             if (d < minDist) { minDist = d; bestAnchor = c; }
         }
 
@@ -2370,7 +1831,9 @@ async function loadAll(){
               let currentDid = null;
               let minDist = Infinity;
               for (let c of ANCHORS) {
-                  let d = Math.pow(uLa - c.la, 2) + Math.pow(uLo - c.lo, 2);
+                  let dx = (uLo - c.lo) * Math.cos(uLa * Math.PI / 180);
+                  let dy = uLa - c.la;
+                  let d = dx * dx + dy * dy;
                   if (d < minDist) { minDist = d; currentDid = c.did; }
               }
               if (minDist >= 50.0) currentDid = null;
@@ -2398,6 +1861,7 @@ async function loadAll(){
       }
 
       // 2. Cache yoksa, Widget JSON'dan kurtar
+      let isFromWidget = false;
       if (!hasValidCache) {
           let wj = await getPref('widget_json', null);
           if (wj && wj !== '') { 
@@ -2406,6 +1870,7 @@ async function loadAll(){
                   if (parsed && parsed.city === uCity && parsed.v0 && !parsed.v0.includes('--')) {
                       tempTimes = { fajr: parsed.v0, sunrise: parsed.v1, dhuhr: parsed.v2, asr: parsed.v3, maghrib: parsed.v4, isha: parsed.v5 };
                       hasValidCache = true;
+                      isFromWidget = true; // Widget'tan gelen veri zaten temkinlidir
                   }
               } catch(e){}
           }
@@ -2415,7 +1880,8 @@ async function loadAll(){
           tempTimes = { fajr: '--:--', sunrise: '--:--', dhuhr: '--:--', asr: '--:--', maghrib: '--:--', isha: '--:--' };
       }
 
-      pT = applyTemkin(tempTimes);
+      // Widget'tan kurtarılan veriye ikinci kez temkin uygulama
+      pT = isFromWidget ? tempTimes : applyTemkin(tempTimes);
       try { renderPrayers(); updateCD(); } catch(e){} 
 
       // 4. ARKA PLANDA YENİ VERİYİ ÇEK
@@ -2444,22 +1910,32 @@ async function loadAll(){
 }
 
 // ── UYARI MESAJLARI ──
-async function scheduleAndroidNotifications(ignoredTimes) {
-    if (!isNative || !LocalNotifications || !notifOn) return;
+let schedChain = Promise.resolve();
+const scheduleAndroidNotifications = (ignoredTimes) => { 
+    // Gelen bildirim kurma taleplerini sıraya (kuyruğa) alıyoruz ki birbirlerini ezmesinler
+    schedChain = schedChain.then(() => doScheduleNotifications(ignoredTimes)).catch(e => console.warn(e)); 
+};
+
+async function doScheduleNotifications(ignoredTimes) {
+    // 1. Eklenti yoksa çık (notifOn kontrolünü buradan sildik)
+    if (!isNative || !LocalNotifications) return;
     
-    // Eski tüm alarmları tamamen temizle (15 günlük kuyruğu sıfırlar)
+    // 2. ÖNCE eski tüm alarmları tamamen temizle (Şalter kapalı olsa bile bu temizliğin yapılması şarttır)
     const pending = await LocalNotifications.getPending();
     if (pending.notifications.length > 0) {
         await LocalNotifications.cancel(pending);
     }
+
+    // 3. TEMİZLİKTEN SONRA şalteri kontrol et. Eğer kapalıysa yeni alarm kurmadan hemen çık!
+    if (!notifOn) return;
 
     const keys = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
     const t = T[lang] || T['tr'];
     const names = t.pr; 
     const title = t.pt || 'Namaz Vakti';
     
-    const ENTRY_MSGS = { tr:(n)=>`${n} vakti girdi.`, pl:(n)=>`Nadszedł czas na: ${n}.`, en:(n)=>`It is time for ${n}.`, de:(n)=>`Es ist Zeit für ${n}.`, ru:(n)=>`Наступило время: ${n}.`, ar:(n)=>`حان وقت ${n}.` };
-    const PRE_MSGS = { tr:(n,m)=>`${n} vaktine ${m} dakika kaldı.`, pl:(n,m)=>`Do modlitwy ${n} pozostało ${m} minut.`, en:(n,m)=>`${m} minutes left until ${n} prayer.`, de:(n,m)=>`Noch ${m} Minuten bis zum ${n}-Gebet.`, ru:(n,m)=>`До намаза ${n} осталось ${m} минут.`, ar:(n,m)=>`بقي ${m} دقيقة على صلاة ${n}.` };
+    const ENTRY_MSGS = { tr:(n)=>`${n} vakti girdi.`, pl:(n)=>`Nadszedł czas na: ${n}.`, en:(n)=>`It is time for ${n}.`, de:(n)=>`Es ist Zeit für ${n}.`, ru:(n)=>`Наступило время: ${n}.`, ar:(n)=>`حان وقت ${n}.`, fr:(n)=>`Il est l'heure de ${n}.` };
+    const PRE_MSGS = { tr:(n,m)=>`${n} vaktine ${m} dakika kaldı.`, pl:(n,m)=>`Do modlitwy ${n} pozostało ${m} minut.`, en:(n,m)=>`${m} minutes left until ${n} prayer.`, de:(n,m)=>`Noch ${m} Minuten bis zum ${n}-Gebet.`, ru:(n,m)=>`До намаза ${n} осталось ${m} минут.`, ar:(n,m)=>`بقي ${m} دقيقة على صلاة ${n}.`, fr:(n,m)=>`Il reste ${m} minutes avant ${n}.` };
     
     // --- MANEVİ SÖZLER HAVUZU ---
     const QUOTES = {
@@ -2468,7 +1944,8 @@ async function scheduleAndroidNotifications(ignoredTimes) {
         en: ["Prayer is the peace of the heart.",  "Prayer keeps a person away from evil.",  "Every prayer is a new beginning.",  "Prayer is the gate of patience and surrender.",  "The adhan is a call of mercy to hearts.",  "A heart in prostration finds peace.",  "Prayer is the nourishment of the soul.",  "The most beautiful closeness to Allah is through prayer.",  "Prayer is a light in darkness.",  "Timely prayer brings blessings."],
         de: ["Das Gebet ist der Frieden des Herzens.",  "Das Gebet hält den Menschen vom Bösen fern.",  "Jedes Gebet ist ein neuer Anfang.",  "Das Gebet ist das Tor zu Geduld und Hingabe.",  "Der Adhan ist ein Ruf der Barmherzigkeit für die Herzen.",  "Ein Herz in der Niederwerfung findet Frieden.",  "Das Gebet ist die Nahrung der Seele.",  "Die schönste Nähe zu Allah ist durch das Gebet.",  "Das Gebet ist ein Licht in der Dunkelheit.",  "Das pünktliche Gebet bringt Segen."],
         ru: ["Молитва — это покой сердца.",  "Молитва удерживает человека от зла.",  "Каждая молитва — это новое начало.",  "Молитва — врата терпения и покорности.",  "Азан — это призыв милости к сердцам.",  "Сердце в земном поклоне находит покой.",  "Молитва — пища для души.",  "Самая прекрасная близость к Аллаху — через молитву.",  "Молитва — это свет во тьме.",  "Своевременная молитва приносит благословение."],
-        ar: ["الصلاة راحة للقلوب.",  "الصلاة تنهى عن الفحشاء والمنكر.",  "كل صلاة بداية جديدة.",  "الصلاة باب الصبر والتسليم.",  "الأذان نداء رحمة للقلوب.",  "القلب الساجد يجد الطمأنينة.",  "الصلاة غذاء الروح.",  "أجمل قرب من الله يكون بالصلاة.",  "الصلاة نور في الظلمات.",  "المحافظة على الصلاة تجلب البركة."]
+        ar: ["الصلاة راحة للقلوب.",  "الصلاة تنهى عن الفحشاء والمنكر.",  "كل صلاة بداية جديدة.",  "الصلاة باب الصبر والتسليم.",  "الأذان نداء رحمة للقلوب.",  "القلب الساجد يجد الطمأنينة.",  "الصلاة غذاء الروح.",  "أجمل قرب من الله يكون بالصلاة.",  "الصلاة نور في الظلمات.",  "المحافظة على الصلاة تجلب البركة."],
+        fr: ["La prière est la paix du cœur.", "La prière éloigne du mal.", "Chaque prière est un nouveau départ.", "La prière est la porte de la patience.", "L'adhan est un appel de miséricorde.", "Un cœur prosterné trouve la paix.", "La prière est la nourriture de l'âme.", "La plus belle proximité avec Allah est la prière.", "La prière est une lumière dans l'obscurité.", "La prière à l'heure apporte des bénédictions."]
     };
 
     const msgFormatter = ENTRY_MSGS[lang] || ENTRY_MSGS['tr'];
@@ -2485,7 +1962,7 @@ async function scheduleAndroidNotifications(ignoredTimes) {
 
         // O günün vakitlerini belirle (Diyanet Cache veya Matematiksel)
         let ptForDay = {};
-        if (method === 13 && globalMonthData) {
+        if (globalMonthData) { // method === 13 kısıtlaması kaldırıldı, artık tüm yöntemlerde API verisi baz alınacak
             const dd = String(targetDate.getDate()).padStart(2, '0');
             const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
             const yyyy = targetDate.getFullYear();
@@ -2517,26 +1994,26 @@ async function scheduleAndroidNotifications(ignoredTimes) {
 
             // GEÇMİŞ VAKİTLERİ ALARMA EKLEME! Sadece gelecekte olanları kur
             if(d > now) {
-                let cId = 'kanal_beep_v4';
-                if (pref === 'azan1') cId = 'kanal_azan1_v4';
-                else if (pref === 'sabah') cId = 'kanal_sabah_v4';
-                else if (pref === 'ogle') cId = 'kanal_ogle_v4';
-                else if (pref === 'ikindi') cId = 'kanal_ikindi_v4';
-                else if (pref === 'aksam') cId = 'kanal_aksam_v4';
-                else if (pref === 'yatsi') cId = 'kanal_yatsi_v4';
-                else if (pref === 'alert1') cId = 'kanal_alert1_v4'; 
-                else if (pref === 'alert2') cId = 'kanal_alert2_v4'; 
-                else if (pref === 'alert3') cId = 'kanal_alert3_v4';
-                else if (pref === 'alert4') cId = 'kanal_alert4_v4'; 
-                else if (pref === 'system') cId = 'kanal_system_v4';
-                else if (pref === 'vibrate') cId = 'kanal_vibrate_v4'; 
+                let cId = 'kanal_beep_v5';
+                if (pref === 'azan1') cId = 'kanal_azan1_v5';
+                else if (pref === 'sabah') cId = 'kanal_sabah_v5';
+                else if (pref === 'ogle') cId = 'kanal_ogle_v5';
+                else if (pref === 'ikindi') cId = 'kanal_ikindi_v5';
+                else if (pref === 'aksam') cId = 'kanal_aksam_v5';
+                else if (pref === 'yatsi') cId = 'kanal_yatsi_v5';
+                else if (pref === 'alert1') cId = 'kanal_alert1_v5'; 
+                else if (pref === 'alert2') cId = 'kanal_alert2_v5'; 
+                else if (pref === 'alert3') cId = 'kanal_alert3_v5';
+                else if (pref === 'alert4') cId = 'kanal_alert4_v5'; 
+                else if (pref === 'system') cId = 'kanal_system_v5';
+                else if (pref === 'vibrate') cId = 'kanal_vibrate_v5';
 
                 const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
                 const dynamicTitle = msgFormatter(names[i]); 
                 const dynamicBody = randomQuote;             
 
                 let uniqueId = (dayOffset * 100) + (i + 1);
-                scheduled.push({ id: uniqueId, title: dynamicTitle, body: dynamicBody, schedule: { at: d, allowWhileIdle: true }, channelId: cId });    
+                scheduled.push({ id: uniqueId, title: dynamicTitle, body: dynamicBody, schedule: { at: d, allowWhileIdle: true }, channelId: cId, group: 'balaban_vakit' });    
             }
         }
 
@@ -2556,22 +2033,22 @@ async function scheduleAndroidNotifications(ignoredTimes) {
                 d.setMinutes(d.getMinutes() - prePref.min); 
                 
                 if(d > now) {
-                    let cId = 'kanal_beep_v4';
-                    if (prePref.snd === 'alert1') cId = 'kanal_alert1_v4';
-                    else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v4';
-                    else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v4';
-                    else if (prePref.snd === 'system') cId = 'kanal_system_v4'; 
-                    else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v4';
-                    else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v4'; 
-                    else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v4'; 
-                    else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v4'; 
-                    else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v4'; 
-                    else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v4'; 
-                    else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v4'; 
-                    else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v4';
+                    let cId = 'kanal_beep_v5';
+                    if (prePref.snd === 'alert1') cId = 'kanal_alert1_v5';
+                    else if (prePref.snd === 'alert2') cId = 'kanal_alert2_v5';
+                    else if (prePref.snd === 'alert3') cId = 'kanal_alert3_v5';
+                    else if (prePref.snd === 'alert4') cId = 'kanal_alert4_v5'; 
+                    else if (prePref.snd === 'system') cId = 'kanal_system_v5'; 
+                    else if (prePref.snd === 'vibrate') cId = 'kanal_vibrate_v5';
+                    else if (prePref.snd === 'azan1') cId = 'kanal_azan1_v5'; 
+                    else if (prePref.snd === 'sabah') cId = 'kanal_sabah_v5'; 
+                    else if (prePref.snd === 'ogle') cId = 'kanal_ogle_v5'; 
+                    else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v5'; 
+                    else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v5'; 
+                    else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v5';
                     
                     let uniquePreId = (dayOffset * 100) + 10 + (i + 1);
-                    scheduled.push({ id: uniquePreId, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId });
+                    scheduled.push({ id: uniquePreId, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId, group: 'balaban_vakit' });
                 }
             }
         }
@@ -2743,8 +2220,12 @@ const SEARCH_MSGS = {
     en: { s1:'Searching...', s2:'Suggested Cities:', s3:'World Map Results:', s4:'City not found (Try typing fully)', s5:'Search error. Check your internet.', s6:'Please click a location from the results.'},
     de: { s1:'Suchen...', s2:'Empfohlene Städte:', s3:'Weltkarten-Ergebnisse:', s4:'Stadt nicht gefunden (Voll ausschreiben)', s5:'Suchfehler. Internetverbindung prüfen.', s6:'Bitte klicken Sie auf einen Ort in den Ergebnissen.'},
     ru: { s1:'Поиск...', s2:'Предлагаемые города:', s3:'Результаты на карте мира:', s4:'Город не найден (Напишите полностью)', s5:'Ошибка поиска. Проверьте интернет.', s6:'Пожалуйста, выберите место из результатов.'},
-    ar: { s1:'جاري البحث...', s2:'المدن المقترحة:', s3:'نتائج خريطة العالم:', s4:'لم يتم العثور على المدينة (اكتب الاسم كاملاً)', s5:'خطأ في البحث. تحقق من الإنترنت.', s6:'يرجى النقر على موقع من النتائج.'}
+    ar: { s1:'جاري البحث...', s2:'المدن المقترحة:', s3:'نتائج خريطة العالم:', s4:'لم يتم العثور على المدينة (اكتب الاسم كاملاً)', s5:'خطأ في البحث. تحقق من الإنترنت.', s6:'يرجى النقر على موقع من النتائج.'},
+    fr: { s1:'Recherche...', s2:'Villes suggérées:', s3:'Résultats de la carte:', s4:'Ville introuvable (écrivez en entier)', s5:'Erreur. Vérifiez Internet.', s6:'Veuillez cliquer sur un lieu.'}
 };
+
+// Şehir adlarındaki aksanları ve Türkçe karakterleri temizleyen evrensel fonksiyon
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g,'i').replace(/ł/g,'l').toLowerCase();
 
 function onInput() {
     const val = document.getElementById('cInput').value.trim();
@@ -2762,11 +2243,8 @@ function onInput() {
     stat.innerHTML = `<span style="color:var(--mx)">${m.s1}</span>`;
 
     // 1. Önce Kendi Listemizde Ara
-    const lower = val.toLowerCase().replace(/ı/g,'i').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ö/g,'o').replace(/ü/g,'u');
-    const localMatches = CITIES.filter(c => {
-        const cn = c.n.toLowerCase().replace(/ı/g,'i').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ö/g,'o').replace(/ü/g,'u');
-        return cn.startsWith(lower);
-    });
+    const lower = norm(val);
+    const localMatches = CITIES.filter(c => norm(c.n).startsWith(lower));
 
     if (localMatches.length > 0) {
         stat.innerHTML = `<span style="color:var(--teal)">${m.s2}</span>`;
@@ -2791,9 +2269,12 @@ function onInput() {
                     let desc = item.country || '';
                     if (item.admin1 && item.admin1 !== item.name) desc = item.admin1 + ', ' + desc;
                     
+                    const safeName = item.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    const safeDesc = desc.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    
                     return `<div class="sr-item" onclick="selAndApply(${item.latitude}, ${item.longitude}, '${item.name.replace(/'/g, "\\'")}')">
-                        <div class="sr-n">📍 ${item.name}</div>
-                        <div class="sr-d">${desc}</div>
+                        <div class="sr-n">📍 ${safeName}</div>
+                        <div class="sr-d">${safeDesc}</div>
                     </div>`;
                 }).join('');
             } else {
@@ -2847,11 +2328,8 @@ async function applyLoc(){
   // YENİ ZEKÂ: Eğer kutuda yazan şehir, bizim popüler listemizde tam olarak varsa doğrudan kabul et!
   const val = document.getElementById('cInput').value.trim();
   if (val) {
-      const lower = val.toLowerCase().replace(/ı/g,'i').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ö/g,'o').replace(/ü/g,'u');
-      const match = CITIES.find(c => {
-          const cn = c.n.toLowerCase().replace(/ı/g,'i').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ö/g,'o').replace(/ü/g,'u');
-          return cn === lower;
-      });
+      const lower = norm(val);
+      const match = CITIES.find(c => norm(c.n) === lower);
       
       // Şehri tanıdıysa, sanki listeden seçilmiş gibi doğrudan uygula ve kapat
       if (match) {
@@ -3019,7 +2497,8 @@ const HIJRI_MONTHS = {
   en: ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Akhira','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu al-Qi'dah","Dhu al-Hijjah"],
   de: ['Muharram','Safar',"Rabi' al-Awwal","Rabi' al-Achir","Dschumada l-ula","Dschumada l-achira","Radschab","Scha'ban",'Ramadan','Schawwal',"Dhu l-Qa'da","Dhu l-Hiddscha"],
   ru: ['Мухаррам','Сафар','Раби аль-Авваль','Раби ас-Сани','Джумада аль-Уля','Джумада ас-Сания','Раджаб','Шаабан','Рамадан','Шавваль','Зуль-Каада','Зуль-Хиджа'],
-  ar: ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة']
+  ar: ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'],
+  fr: ['Muharram','Safar','Rabi al-Awwal','Rabi ath-Thani','Joumada al-Oula','Joumada al-Akhira','Rajab','Chaabane','Ramadan','Chawwal','Dhou al-Qi\'dah','Dhou al-Hijjah']
 
 };
 function toHijri(y, m, d) {
@@ -3177,10 +2656,10 @@ function renderVerse(){
           <button class="vtab${vtab==='en'?' on':''}" onclick="setVTab('en')">EN</button>
           <button class="vtab${vtab==='de'?' on':''}" onclick="setVTab('de')">DE</button>
           <button class="vtab${vtab==='ru'?' on':''}" onclick="setVTab('ru')">RU</button>
-
+          <button class="vtab${vtab==='fr'?' on':''}" onclick="setVTab('fr')">FR</button>
         </div>
-        <div class="vtxt" ${vtab==='ar'?'style="direction:rtl; text-align:right;"':''}>${vtab==='tr'?v.tr:(vtab==='pl'?v.pl:(vtab==='de'?v.de:(vtab==='ru'?v.ru:(vtab==='ar'?v.arabic:v.en))))}</div>
-        <div class="vref">${v.ref}</div>`;
+        <div class="vtxt" ${vtab==='ar'?'style="direction:rtl; text-align:right;"':''}>${vtab==='tr'?v.tr:(vtab==='pl'?v.pl:(vtab==='de'?v.de:(vtab==='ru'?v.ru:(vtab==='fr'?(v.fr||v.en):(vtab==='ar'?v.arabic:v.en)))))}</div>
+        <div class="vref">${v['ref_'+vtab] || trRef(v.ref, vtab)}</div>`;
   } catch(e){}
 }
 function setVTab(t){vtab=t;renderVerse();}
@@ -3477,75 +2956,86 @@ function updateSunPosition() {
     } catch(e) { console.warn("Güneş konumu hesaplanamadı", e); }
 }
 
-// Açık Kaynak Uydu Haritasını Çizen Fonksiyon
-function initQiblaMapBg() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                let cLat = pos.coords.latitude;
-                let cLng = pos.coords.longitude;
-                
-                const KAABA_LAT = 21.4225;
-                const KAABA_LON = 39.8262;
+// Açık Kaynak Uydu Haritasını Çizen Fonksiyon (Capacitor GPS Uyumlu)
+async function initQiblaMapBg() {
+    try {
+        let pos;
+        // 1. Önce Native (Mobil Uygulama) ortamı kontrol ediliyor
+        if (isNative && Geolocation) {
+            const perm = await Geolocation.checkPermissions();
+            // İzin yoksa sistem izin ekranını çıkart
+            if (perm.location !== 'granted') await Geolocation.requestPermissions();
+            pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 6000 });
+        } else {
+            // 2. Eğer web tarayıcısından giriliyorsa standart Web API'yi kullan
+            pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 6000 }));
+        }
 
-                if (typeof updateSunPosition === 'function') updateSunPosition();
+        let cLat = pos.coords.latitude;
+        let cLng = pos.coords.longitude;
+        
+        const KAABA_LAT = 21.4225;
+        const KAABA_LON = 39.8262;
 
-                // Kıble Çizgisi
-                let cAngle = qibla(cLat, cLng);
-                let d = 0.02; 
-                let cLat2 = cLat + d * Math.cos(rad(cAngle));
-                let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
+        if (typeof updateSunPosition === 'function') updateSunPosition();
 
-                // Güneşin Gerçek Azimut Açısıyla Haritada Konumlandırılması
-                let az = globalSunAzimuth || 0;
-                let sunDist = 0.00035; 
-                let sLat = cLat + sunDist * Math.cos(rad(az));
-                let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
+        // Kıble Çizgisi
+        let cAngle = qibla(cLat, cLng);
+        let d = 0.02; 
+        let cLat2 = cLat + d * Math.cos(rad(cAngle));
+        let cLng2 = cLng + (d * Math.sin(rad(cAngle))) / Math.cos(rad(cLat));
 
-                if (!qMap) {
-                    qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: false }).setView([cLat, cLng], 18);
-                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(qMap);
-                    
-                    // 1. Güneş İkonu
-                    const sunIconHTML = L.divIcon({ 
-                        className: '', 
-                        html: '<div style="font-size:26px; text-shadow: 0px 0px 8px rgba(241,196,15,1);">☀️</div>', 
-                        iconSize: [30, 30], 
-                        iconAnchor: [15, 15] 
-                    });
-                    qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML, zIndexOffset: 1000 }).addTo(qMap);
+        // Güneşin Gerçek Azimut Açısıyla Haritada Konumlandırılması
+        let az = globalSunAzimuth || 0;
+        let sunDist = 0.00035; 
+        let sLat = cLat + sunDist * Math.cos(rad(az));
+        let sLng = cLng + (sunDist * Math.sin(rad(az))) / Math.cos(rad(cLat));
 
-                    // 2. Kıble Çizgisi
-                    qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '5, 8' }).addTo(qMap);
-                    
-                    // 3. Kullanıcı Konumu
-                    qMarker = L.circleMarker([cLat, cLng], { radius: 8, fillColor: "#4285F4", color: "#fff", weight: 3, opacity: 1, fillOpacity: 1 }).addTo(qMap);
-                } else {
-                    qMap.setView([cLat, cLng], 18);
-                    qMarker.setLatLng([cLat, cLng]);
-                    qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
-                    qSunMarker.setLatLng([sLat, sLng]);
-                }
+        if (!qMap) {
+            qMap = L.map('qiblaMapBg', { zoomControl: false, attributionControl: true }).setView([cLat, cLng], 18);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+                 maxZoom: 19,
+                 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            }).addTo(qMap);
+            
+            // 1. Güneş İkonu
+            const sunIconHTML = L.divIcon({ 
+                className: '', 
+                html: '<div style="font-size:26px; text-shadow: 0px 0px 8px rgba(241,196,15,1);">☀️</div>', 
+                iconSize: [30, 30], 
+                iconAnchor: [15, 15] 
+            });
+            qSunMarker = L.marker([sLat, sLng], { icon: sunIconHTML, zIndexOffset: 1000 }).addTo(qMap);
 
-                if (globalSunAltitude > -5) {
-                    qSunMarker.setOpacity(1);
-                } else {
-                    qSunMarker.setOpacity(0);
-                }
+            // 2. Kıble Çizgisi
+            qLine = L.polyline([[cLat, cLng], [cLat2, cLng2]], { color: '#4285F4', weight: 4, opacity: 0.9, dashArray: '5, 8' }).addTo(qMap);
+            
+            // 3. Kullanıcı Konumu
+            qMarker = L.circleMarker([cLat, cLng], { radius: 8, fillColor: "#4285F4", color: "#fff", weight: 3, opacity: 1, fillOpacity: 1 }).addTo(qMap);
+        } else {
+            qMap.setView([cLat, cLng], 18);
+            qMarker.setLatLng([cLat, cLng]);
+            qLine.setLatLngs([[cLat, cLng], [cLat2, cLng2]]);
+            qSunMarker.setLatLng([sLat, sLng]);
+        }
 
-                let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
-                let distKm = (distMeters / 1000).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                let haEl = document.getElementById('cHA');
-                if(haEl) haEl.textContent = distKm + " km";
+        if (globalSunAltitude > -5) {
+            qSunMarker.setOpacity(1);
+        } else {
+            qSunMarker.setOpacity(0);
+        }
 
-                setTimeout(() => qMap.invalidateSize(), 300);
-            },
-            (err) => {
-                alert("📍 GPS kapalı veya konum izni verilmedi.");
-                if (isMapMode) toggleMap(); 
-            }, 
-            { enableHighAccuracy: true, timeout: 6000 }
-        );
+        let distMeters = qMap.distance([cLat, cLng], [KAABA_LAT, KAABA_LON]);
+        let distKm = (distMeters / 1000).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        let haEl = document.getElementById('cHA');
+        if(haEl) haEl.textContent = distKm + " km";
+
+        setTimeout(() => qMap.invalidateSize(), 300);
+
+    } catch (err) {
+        // İzin verilmezse veya GPS kapalıysa zarifçe harita modundan çık
+        alert("📍 GPS kapalı veya konum izni verilmedi.");
+        if (isMapMode) toggleMap(); 
     }
 }
 
@@ -3561,12 +3051,14 @@ function handleHeading(e) {
     if (e.type === 'deviceorientation' && usingAbsoluteHeading) return;
 
     let heading;
+    const DECLINATION_OFFSET = 5.5; // Türkiye, Polonya ve Orta Avrupa için yaklaşık manyetik sapma
+
     if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) {
-        heading = e.webkitCompassHeading; 
+        heading = (e.webkitCompassHeading + DECLINATION_OFFSET) % 360; 
     } else if (e.absolute && e.alpha !== null) {
-        heading = (360 - e.alpha + 360) % 360; 
+        heading = (360 - e.alpha + DECLINATION_OFFSET + 360) % 360; 
     } else if (e.alpha !== null && !usingAbsoluteHeading) {
-        heading = (360 - e.alpha + 360) % 360; 
+        heading = (360 - e.alpha + DECLINATION_OFFSET + 360) % 360; 
     } else { return; }
 
     if (lastRawHeading === null) {
@@ -3675,6 +3167,9 @@ function releaseWakeLock() {
 // PUSULAYI AÇAN FONKSİYONA GÜNEŞ TETİKLEYİCİSİ EKLENDİ
 function openCompass() {
     document.getElementById('compassMov').classList.add('open');
+if (typeof FirebaseAnalytics !== 'undefined') {
+        FirebaseAnalytics.logEvent({ name: 'qibla_opened' });
+    }
     lastRawHeading = null;
     usingAbsoluteHeading = false; 
     
@@ -3876,10 +3371,29 @@ function toggleQuranRadio() {
 
             quranAudio.play().then(() => {
                 isQuranPlaying = true;
+                if (typeof FirebaseAnalytics !== 'undefined') {
+                    FirebaseAnalytics.logEvent({ name: 'radio_played' });
+                }
                 btn.innerHTML = '⏹';
-                btn.style.color = '#d94848'; // CANLI KIRMIZI: Çalarken dikkat çeken durdurma rengi
+                btn.style.color = '#d94848';
                 stat.textContent = t.rStatPlay;
                 dot.style.display = 'block';
+
+                // YENİ: Kilit Ekranı ve Bildirim Çubuğu Medya Kontrolü
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: t.rTitle || "Kur'an-ı Kerim Radyosu",
+                        artist: t.rSub || "7/24 Kesintisiz Yayın",
+                        artwork: [{ src: 'icon.png', sizes: '512x512', type: 'image/png' }]
+                    });
+                    // Kullanıcı kilit ekranında "Durdur"a basarsa radyoyu kapat
+                    navigator.mediaSession.setActionHandler('pause', () => {
+                        toggleQuranRadio();
+                    });
+                    navigator.mediaSession.setActionHandler('stop', () => {
+                        toggleQuranRadio();
+                    });
+                }
             }).catch(err => {
                 console.warn("Sunucu yanıt vermedi, diğerine geçiliyor:", streams[streamIndex]);
                 streamIndex++;
@@ -3905,6 +3419,9 @@ function checkPrayerAlarm(){
   
   if(nowSec > 30 || nowSec < 0) return; 
   if(nowMin === lastAlarmMinute) return;
+
+  // ANA ŞALTER KONTROLÜ: Şalter kapalıysa uygulama açıkken bile hiçbir uyarı verme, doğrudan çık!
+  if (!notifOn) return; 
 
   let triggered = false;
 
@@ -3937,12 +3454,13 @@ function checkPrayerAlarm(){
               en: (name, min) => `${min} minutes left until ${name} prayer.`,
               de: (name, min) => `Noch ${min} Minuten bis zum ${name}-Gebet.`,
               ru: (name, min) => `До намаза ${name} осталось ${min} минут.`,
-              ar: (name, min) => `بقي ${min} دقيقة على صلاة ${name}.`
+              ar: (name, min) => `بقي ${min} دقيقة على صلاة ${name}.`,
+              fr: (name, min) => `Il reste ${min} minutes avant ${name}.`
           }[lang] || ((name, min) => `${name} vaktine ${min} dakika kaldı.`);
 
-const preTitleFmt = {
+          const preTitleFmt = {
               tr: 'Vakit Yaklaşıyor', pl: 'Zbliża się czas', en: 'Time is Approaching', 
-              de: 'Zeit nähert sich', ru: 'Время приближается', ar: 'اقترب الوقت'
+              de: 'Zeit nähert sich', ru: 'Время приближается', ar: 'اقترب الوقت', fr: 'L\'heure approche'
           }[lang] || 'Vakit Yaklaşıyor';
  // Eski bannerları temizle
 document.querySelectorAll('.prayer-flash-banner').forEach(el => el.remove());
@@ -3988,10 +3506,11 @@ document.querySelectorAll('.prayer-flash-banner').forEach(el => el.remove());
 }
 
 // --- TEMKİN (OFFSET) SİSTEMİ BURADAN BAŞLIYOR ---
-let offsets = {fajr:0, sunrise:-7, dhuhr:5, asr:4, maghrib:6, isha:-10};
+let offsets = {fajr:0, sunrise:0, dhuhr:0, asr:0, maghrib:0, isha:0};
 
 function addMinutesToTime(timeStr, mins) {
-    if (!timeStr || isNaN(mins) || mins == 0) return timeStr;
+    // Sadece "14:30" formatındaysa işlem yap, "--:--" ise dokunma
+    if (!timeStr || isNaN(mins) || mins == 0 || !/^\d{1,2}:\d{2}$/.test(timeStr)) return timeStr;
     let [h, m] = timeStr.split(':').map(Number);
     let d = new Date(); d.setHours(h, m + parseInt(mins), 0, 0);
     return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
@@ -4076,7 +3595,8 @@ function renderNafile() {
     const v = keys.map(k => { const p = (pT[k] || '0:0').split(':').map(Number); return p[0] * 60 + p[1]; });
     const n = hesapNafile(v, uLa);
     const now = new Date();
-    const cur = now.getHours() * 60 + now.getMinutes();
+    let cur = now.getHours() * 60 + now.getMinutes();
+    if (cur < v[0]) cur += 1440; // Gece yarısından sonra sabah ezanına kadar olan süreyi düzeltir
     const windows = [
         ['seher', n.seher, v[0]], ['israk', n.israk, n.duha], ['duha', n.duha, v[2] - 10],
         ['evvabin', n.evvabin, v[5]], ['gece13', n.gece13, n.gece12],
@@ -4225,7 +3745,7 @@ function renderTimeline() {
             banStyle += ' background:transparent; color:var(--kirmizi); box-shadow:none; overflow:visible; text-shadow:0 1px 4px rgba(0,0,0,0.8);';
         }
         
-        html += `<div class="z-ban" style="${banStyle}">${actL.toUpperCase()}</div>`;
+        html += `<div class="z-ban" style="${banStyle}">${actL.toLocaleUpperCase(lang === 'tr' ? 'tr-TR' : 'en-US')}</div>`;
     }
 
     // Anlık kırmızı çizgi
@@ -4239,6 +3759,14 @@ async function handleAppResume() {
     updateDate();
     updateSunPosition();
     
+    // YENİ: Uygulama ekrana geldiğinde bildirim çubuğunda biriken eski bildirimleri temizle
+    if (isNative && LocalNotifications) {
+        try { await LocalNotifications.removeAllDeliveredNotifications(); } catch(e){}
+    }
+
+    if (typeof FirebaseAnalytics !== 'undefined') {
+        FirebaseAnalytics.logEvent({ name: 'app_resumed' });
+    }
     if (isAutoGPS) {
         updateGPSLocationSilently().then(() => {
             loadAll();
@@ -4262,9 +3790,20 @@ if (typeof AppPlugin !== 'undefined' && AppPlugin) {
     });
 }
 
+let lastDayStr = new Date().toDateString();
+
 setInterval(()=>{
   updateCD(); checkPrayerAlarm();
   if(new Date().getSeconds()===0) renderPrayers();
+  
+  // Gece yarısı gün dönüşünü yakala ve tüm veriyi yenile
+  const currentDayStr = new Date().toDateString();
+  if (currentDayStr !== lastDayStr) {
+      lastDayStr = currentDayStr;
+      updateDate();
+      checkSpecialDays();
+      loadAll();
+  }
 },1000);
 
 // --- UYGULAMA AÇIKKEN NATIVE BİLDİRİMLERİ SUSTURMA MOTORU ---
