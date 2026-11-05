@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0d1b2a">
 <title>Balaban Namaz Vakti</title>
+<link rel="icon" type="image/png" href="icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <!-- AÇIK KAYNAK HARİTA KODLARI BURAYA (STYLE ETİKETİNİN ÜZERİNE) GELECEK -->
@@ -482,9 +483,11 @@ select option {
     <div class="sgrp">
 <div class="si"><span class="slbl" id="mLbl">Hesap Yöntemi</span>
         <select class="sel" id="mSel" onchange="chgMethod()">
-          <option value="2">ISNA</option><option value="3">MWL</option>
-          <option value="4">Makkah</option><option value="5">Egypt</option>
-          <option value="13">Diyanet</option>
+          <option id="optIsna" value="2">ISNA</option>
+          <option id="optMwl" value="3">MWL</option>
+          <option id="optMakkah" value="4">Makkah</option>
+          <option id="optEgypt" value="5">Egypt</option>
+          <option id="optDiyanet" value="13">Diyanet</option>
         </select>
       </div>
 
@@ -541,6 +544,9 @@ select option {
             <option id="tOptIkindi" value="ikindi">İkindi Ezanı</option>
             <option id="tOptAksam" value="aksam">Akşam Ezanı</option>
             <option id="tOptYatsi" value="yatsi">Yatsı Ezanı</option>
+            <option id="tOptOgle2" value="ogle_v2">Öğle Ezanı v2</option>
+            <option id="tOptIkindi2" value="ikindi_v2">İkindi Ezanı v2</option>
+            <option id="tOptYatsi2" value="yatsi_v2">Yatsı Ezanı v2</option>
           </select>
 <button id="testAzanBtn" onclick="testAzanToggle(document.getElementById('testAzanSel').value, 'testAzanBtn')" style="background:var(--surf); color:var(--gl); border:none; border-left:0.5px solid var(--br); padding:8px 15px; cursor:pointer; font-size:12px; font-weight:700;">▶</button>
         </div>
@@ -562,7 +568,7 @@ select option {
     </div>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:'Amiri',serif;font-size:30px;color:var(--gold);margin-bottom:6px">☽ Balaban</div>
-      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.6.2</div>
+      <div style="font-size:12px;color:var(--mx)" id="verTxt">Namaz Vakti V1.6.4</div>
     </div>
   </div>
 </div>
@@ -1116,7 +1122,7 @@ const T={
       tw:'Bu Haftanın Vakitleri',st:'Ayarlar',ml:'Hesap Yöntemi',nl:'Bildirimler (Arka Plan)',
       thL:'Ayet/Hadis Teması (Koyu)',stPreAlarms: 'Vakitlerden Önce Uyarılar', minsBefore: 'dk. önce', sysSound: 'Sistem Sesi',      
       ll:'Dil / Language',lol:'Konum',chg:'Değiştir', mt:'Konum Seç',ms1:'Popüler şehirler:',ms2:'Şehir adı gir:',
-      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.6.2', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
+      ok:'Tamam',gps:'📍 GPS Bul',ver:'Namaz Vakti V1.6.4', pa:'Vakit Uyarıları',sOff:'Kapalı',sBeep:'Bip Sesi',sAzan:'Ezan',
       sA1:'Uyarı 1', sA2:'Uyarı 2', sA3:'Uyarı 3',tlTitle:'Zaman Çizelgesi', ker:'Kerahat',
       volLbl:'Ses Seviyesi',testLbl:'Sesi Test Et', ns:'Yeni konum aranacak...', sg:'Öneri: ',
       cp:'Kıble Pusulası', tl:'← Sola dönün', tr:'Sağa dönün →', tp:'🕋 Harika! Kıbleye döndünüz', ch:'Şu anki Yön', cw:'Telefonu yere paralel tutun. Yön hatalıysa cihazınızla havada 8 çizin.',
@@ -1136,7 +1142,7 @@ const T={
       tw:'Czasy Na Ten Tydzień',st:'Ustawienia',ml:'Metoda Obliczeń',nl:'Powiadomienia',
       thL:'Motyw Wersetu (Ciemny)',stPreAlarms: 'Alerty Przed Czasem', minsBefore: 'min przed', sysSound: 'Dźwięk Systemu',
       ll:'Język / Language',lol:'Lokalizacja',chg:'Zmień', mt:'Wybierz Lokalizację',ms1:'Popularne miasta:',ms2:'Wpisz nazwę miasta:',
-      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.6.2', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
+      ok:'OK',gps:'📍 GPS',ver:'Czas Modlitwy V1.6.4', pa:'Alerty Modlitewne',sOff:'Wyłączony',sBeep:'Sygnał',sAzan:'Ezan',
       sA1:'Dźwięk 1', sA2:'Dźwięk 2', sA3:'Dźwięk 3',tlTitle:'Oś Czasu', ker:'Kerahat',
       volLbl:'Głośność',testLbl:'Test Dźwięku', ns:'Wyszuka nową lokalizację...', sg:'Sugestia: ',
       cp:'Kompas Qibla', tl:'← Skręć w lewo', tr:'Skręć w prawo →', tp:'🕋 Jesteś na Qibli!', ch:'Obecny kierunek', cw:'Trzymaj telefon płasko. Jeśli kierunek jest błędny, zrób ósemkę w powietrzu.',
@@ -1156,7 +1162,7 @@ nf:{israk:'Iszrak',duha:'Duha',evvabin:'Evvabin',gece13:'Noc 1/3',gece12:'Noc 1/
       tw:'Times for This Week',st:'Settings',ml:'Calculation Method',nl:'Notifications',
       thL:'Verse Theme (Dark)',stPreAlarms: 'Pre-Prayer Alerts', minsBefore: 'mins before', sysSound: 'System Sound',
       ll:'Language / Dil',lol:'Location',chg:'Change', mt:'Select Location',ms1:'Popular cities:',ms2:'Enter city name:',
-      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.6.2', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Prayer Times V1.6.4', pa:'Prayer Alerts',sOff:'Off',sBeep:'Beep',sAzan:'Adhan',
       sA1:'Alert 1', sA2:'Alert 2', sA3:'Alert 3',tlTitle:'Timeline', ker:'Karahat',
       volLbl:'Volume',testLbl:'Test Sound', ns:'Will search new location...', sg:'Suggestion: ',
       cp:'Qibla Compass', tl:'← Turn Left', tr:'Turn Right →', tp:'🕋 You are on Qibla!', ch:'Current Heading', cw:'Hold phone flat. If direction is wrong, draw an 8 in the air.',
@@ -1176,7 +1182,7 @@ nf:{israk:'Ishraq',duha:'Duha',evvabin:'Awwabin',gece13:'Night 1/3',gece12:'Nigh
       tw:'Zeiten dieser Woche',st:'Einstellungen',ml:'Berechnungsmethode',nl:'Benachrichtigungen',
       thL:'Vers-Design (Dunkel)',stPreAlarms: 'Vorab-Warnungen', minsBefore: 'Min. vorher', sysSound: 'Systemton',
       ll:'Sprache',lol:'Standort',chg:'Ändern', mt:'Standort auswählen',ms1:'Beliebte Städte:',ms2:'Stadtname eingeben:',
-      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.6.2', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
+      ok:'OK',gps:'📍 GPS',ver:'Gebetszeit V1.6.4', pa:'Gebetsalarme',sOff:'Aus',sBeep:'Piepton',sAzan:'Adhan',
       sA1:'Ton 1', sA2:'Ton 2', sA3:'Ton 3',tlTitle:'Zeitachse', ker:'Karahat',
       volLbl:'Lautstärke',testLbl:'Ton testen', ns:'Neuer Standort wird gesucht...', sg:'Vorschlag: ',
       cp:'Qibla Kompass', tl:'← Nach links drehen', tr:'Nach rechts drehen →', tp:'🕋 Sie sind auf Qibla!', ch:'Aktuelle Richtung', cw:'Halten Sie das Telefon flach. Wenn die Richtung falsch ist, zeichnen Sie eine 8.',
@@ -1196,7 +1202,7 @@ nf:{israk:'Ischrak',duha:'Duha',evvabin:'Awwabin',gece13:'Nacht 1/3',gece12:'Nac
       tw:'Время на эту неделю',st:'Настройки',ml:'Метод расчета',nl:'Уведомления',
       thL:'Тема Аята (Темная)',stPreAlarms: 'Предварительные оповещения', minsBefore: 'мин до', sysSound: 'Системный звук',
       ll:'Язык / Language',lol:'Местоположение',chg:'Изменить', mt:'Выберите место',ms1:'Популярных городов:',ms2:'Введите название города:',
-      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.6.2', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
+      ok:'ОК',gps:'📍 Найти GPS',ver:'Время Намаза V1.6.4', pa:'Оповещения о Намазе',sOff:'Выкл',sBeep:'Сигнал',sAzan:'Азан',
       sA1:'Звук 1', sA2:'Звук 2', sA3:'Звук 3',tlTitle:'Шкала времени', ker:'Карахат',
       volLbl:'Громкость',testLbl:'Проверка звука', ns:'Будет найден новый адрес...', sg:'Предложение: ',
       cp:'Компас Киблы', tl:'← Поверните налево', tr:'Поверните направо →', tp:'🕋 Вы на Кибле!', ch:'Текущее направление', cw:'Держите телефон ровно. Если направление неверное, нарисуйте в воздухе 8.',
@@ -1216,7 +1222,7 @@ nf:{israk:'Ишрак',duha:'Духа',evvabin:'Аввабин',gece13:'Ночь
       tw:'أوقات هذا الأسبوع',st:'الإعدادات',ml:'طريقة الحساب',nl:'الإشعارات (الخلفية)',
       thL:'الآية (داكن)',stPreAlarms: 'تنبيهات قبل الوقت', minsBefore: 'دقيقة قبل', sysSound: 'صوت النظام',
       ll:'اللغة / Language',lol:'الموقع',chg:'تغيير', mt:'اختر الموقع',ms1:'المدن الشهيرة:',ms2:'أدخل اسم المدينة:',
-      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.6.2', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
+      ok:'حسناً',gps:'📍 تحديد GPS',ver:'Namaz Vakti V1.6.4', pa:'تنبيهات الصلاة',sOff:'مغلق',sBeep:'صوت تنبيه',sAzan:'أذان',
       sA1:'صوت 1', sA2:'صوت 2', sA3:'صوت 3',tlTitle:'الخط الزمني', ker:'الكراهة',
       volLbl:'مستوى الصوت',testLbl:'اختبار الصوت', ns:'سيتم البحث عن موقع جديد...', sg:'اقتراح: ',
       cp:'بوصلة القبلة', tl:'← اتجه يساراً', tr:'اتجه يميناً →', tp:'🕋 أنت في اتجاه القبلة!', ch:'الاتجاه الحالي', cw:'احمل الهاتف بشكل مسطح. إذا كان الاتجاه خاطئًا، ارسم رقم 8 في الهواء.',
@@ -1236,7 +1242,7 @@ nf:{israk:'الإشراق',duha:'الضحى',evvabin:'الأوابين',gece13:'
       tw:'Heures de cette semaine',st:'Paramètres',ml:'Méthode de Calcul',nl:'Notifications',
       thL:'Thème du Verset (Sombre)',stPreAlarms: 'Alertes Avant l\'Heure', minsBefore: 'min avant', sysSound: 'Son du Système',
       ll:'Langue / Language',lol:'Emplacement',chg:'Changer', mt:'Choisir l\'emplacement',ms1:'Villes populaires:',ms2:'Nom de la ville:',
-      ok:'OK',gps:'📍 Trouver GPS',ver:'Temps de Prière V1.6.2', pa:'Alertes de Prière',sOff:'Désactivé',sBeep:'Bip',sAzan:'Adhan',
+      ok:'OK',gps:'📍 Trouver GPS',ver:'Temps de Prière V1.6.4', pa:'Alertes de Prière',sOff:'Désactivé',sBeep:'Bip',sAzan:'Adhan',
       sA1:'Alerte 1', sA2:'Alerte 2', sA3:'Alerte 3',tlTitle:'Chronologie', ker:'Makrouh',
       volLbl:'Volume',testLbl:'Tester le Son', ns:'Recherche d\'un nouveau lieu...', sg:'Suggestion: ',
       cp:'Boussole Qibla', tl:'← Tournez à gauche', tr:'Tournez à droite →', tp:'🕋 Vous êtes sur la Qibla!', ch:'Cap actuel', cw:'Tenez le téléphone à plat. Si la direction est mauvaise, dessinez un 8.',
@@ -1319,15 +1325,15 @@ const CITIES = [
   { n: 'Düsseldorf', la: 51.2277, lo: 6.7735},
   { n: 'Dortmund', la: 51.5136, lo: 7.4653},
   { n: 'Duisburg', la: 51.4344, lo: 6.7623},
-  { n: 'İstanbul', la: 41.0082, lo: 28.9784},
-  { n: 'Ankara', la: 39.9334, lo: 32.8597},
-  { n: 'Bursa', la: 40.1826, lo: 29.0669},
-  { n: 'İzmir', la: 38.4192, lo: 27.1287},
-  { n: 'Antalya', la: 36.8978, lo: 30.5532},
-  { n: 'Malatya', la: 38.4192, lo: 38.3095},
-  { n: 'Arapgir', la: 39.0394, lo: 38.4685},
-  { n: 'Trabzon', la: 40.9929, lo: 39.6488},
-  { n: 'Kayseri', la: 38.7219, lo: 34.8792},
+  { n: 'İstanbul', la: 41.0082, lo: 28.9784, cc: 'tr'},
+  { n: 'Ankara', la: 39.9334, lo: 32.8597, cc: 'tr'},
+  { n: 'Bursa', la: 40.1826, lo: 29.0669, cc: 'tr'},
+  { n: 'İzmir', la: 38.4192, lo: 27.1287, cc: 'tr'},
+  { n: 'Antalya', la: 36.8978, lo: 30.5532, cc: 'tr'},
+  { n: 'Malatya', la: 38.4192, lo: 38.3095, cc: 'tr'},
+  { n: 'Arapgir', la: 39.0394, lo: 38.4685, cc: 'tr'},
+  { n: 'Trabzon', la: 40.9929, lo: 39.6488, cc: 'tr'},
+  { n: 'Kayseri', la: 38.7219, lo: 34.8792, cc: 'tr'},
   { n: 'Paris', la: 48.8566, lo: 2.3522},
   { n: 'Strazburg', la: 48.5687, lo: 7.4667},
   { n: 'Lyon', la: 45.7640, lo: 4.8357},
@@ -1370,6 +1376,26 @@ let preSoundPrefs = {
     maghrib: { on: true, min: 15, snd: 'alert1' },
     isha: { on: true, min: 15, snd: 'alert1' }
 };
+// --- TÜRKİYE İÇİN OTOMATİK DİYANET SEÇİCİ ---
+async function autoSetDiyanetIfTurkey(countryCode) {
+    if (!countryCode) return;
+    let c = countryCode.toLowerCase().trim();
+    // Gelen veri TR, Turkey veya Türkiye ise ve mevcut metot Diyanet değilse
+    if (c === 'tr' || c === 'turkey' || c === 'türkiye') {
+        if (method !== 13) {
+            method = 13;
+            await setPref('bM', 13);
+            
+            // Arayüzü güncel tut
+            let mSel = document.getElementById('mSel');
+            if (mSel) mSel.value = "13";
+            let ttr = document.getElementById('temkinToggleRow');
+            let tw = document.getElementById('temkinWrap');
+            if (ttr) ttr.style.display = 'none';
+            if (tw) tw.style.display = 'none';
+        }
+    }
+}
 async function updateGPSLocationSilently() {
     try {
         let pos;
@@ -1389,6 +1415,7 @@ async function updateGPSLocationSilently() {
             const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${uLa}&lon=${uLo}&format=json&addressdetails=1`,{headers:{'Accept-Language':lang}});
             const d = await r.json(); const a = d.address||{};
             uCity = a.city || a.town || a.village || a.county || d.display_name.split(',')[0];
+            await autoSetDiyanetIfTurkey(a.country_code || a.country); // YENİ: Türkiye ise otomatik geçir
         } catch(e) {}
         await setPref('bLa', uLa); await setPref('bLo', uLo); await setPref('bCity', uCity);
     } catch(e) { console.warn("Sessiz GPS güncellemesi başarısız oldu", e); }
@@ -1551,7 +1578,10 @@ if (isNative && LocalNotifications) {
                 await LocalNotifications.createChannel({ id: 'kanal_ogle_v5', name: 'Öğle Ezanı', sound: 'ogle.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_ikindi_v5', name: 'İkindi Ezanı', sound: 'ikindi.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_aksam_v5', name: 'Akşam Ezanı', sound: 'aksam.mp3', importance: 5, visibility: 1, vibration: true });
-                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v5', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });                
+                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v5', name: 'Yatsı Ezanı', sound: 'yatsi.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ogle_v2_v5', name: 'Öğle Ezanı v2', sound: 'ogle_v2.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_ikindi_v2_v5', name: 'İkindi Ezanı v2', sound: 'ikindi_v2.mp3', importance: 5, visibility: 1, vibration: true });
+                await LocalNotifications.createChannel({ id: 'kanal_yatsi_v2_v5', name: 'Yatsı Ezanı v2', sound: 'yatsi_v2.mp3', importance: 5, visibility: 1, vibration: true });                
                 await LocalNotifications.createChannel({ id: 'kanal_alert1_v5', name: 'Uyarı 1', sound: 'kus.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert2_v5', name: 'Uyarı 2', sound: 'ucgenzil.mp3', importance: 5, visibility: 1, vibration: true });
                 await LocalNotifications.createChannel({ id: 'kanal_alert3_v5', name: 'Uyarı 3', sound: 'piano.mp3', importance: 5, visibility: 1, vibration: true });
@@ -2001,6 +2031,9 @@ async function doScheduleNotifications(ignoredTimes) {
                 else if (pref === 'ikindi') cId = 'kanal_ikindi_v5';
                 else if (pref === 'aksam') cId = 'kanal_aksam_v5';
                 else if (pref === 'yatsi') cId = 'kanal_yatsi_v5';
+                else if (pref === 'ogle_v2') cId = 'kanal_ogle_v2_v5';
+                else if (pref === 'ikindi_v2') cId = 'kanal_ikindi_v2_v5';
+                else if (pref === 'yatsi_v2') cId = 'kanal_yatsi_v2_v5';
                 else if (pref === 'alert1') cId = 'kanal_alert1_v5'; 
                 else if (pref === 'alert2') cId = 'kanal_alert2_v5'; 
                 else if (pref === 'alert3') cId = 'kanal_alert3_v5';
@@ -2046,6 +2079,9 @@ async function doScheduleNotifications(ignoredTimes) {
                     else if (prePref.snd === 'ikindi') cId = 'kanal_ikindi_v5'; 
                     else if (prePref.snd === 'aksam') cId = 'kanal_aksam_v5'; 
                     else if (prePref.snd === 'yatsi') cId = 'kanal_yatsi_v5';
+                    else if (prePref.snd === 'ogle_v2') cId = 'kanal_ogle_v2_v5';
+                    else if (prePref.snd === 'ikindi_v2') cId = 'kanal_ikindi_v2_v5';
+                    else if (prePref.snd === 'yatsi_v2') cId = 'kanal_yatsi_v2_v5';
                     
                     let uniquePreId = (dayOffset * 100) + 10 + (i + 1);
                     scheduled.push({ id: uniquePreId, title: title, body: preMsgFormatter(names[i], prePref.min), schedule: { at: d, allowWhileIdle: true }, channelId: cId, group: 'balaban_vakit' });
@@ -2120,18 +2156,39 @@ renderPreAlarmsUI(); // Dil değiştiğinde içeriklerin de çevrilmesi için ye
       }
   }
 
+// Hesap Yöntemleri Dinamik Çevirisi
+  const METH_NAMES = {
+      tr: { i:'ISNA (Kuzey Amerika)', m:'Dünya İslam Birliği (MWL)', k:'Mekke (Umm al-Qura)', e:'Mısır (Genel İftaa Kurumu)', d:'Diyanet İşleri (Türkiye)' },
+      pl: { i:'ISNA (Ameryka Północna)', m:'Liga Świata Islamskiego (MWL)', k:'Mekka (Umm al-Qura)', e:'Egipt (Urząd ds. Fatw)', d:'Diyanet (Urząd ds. Religii, Turcja)' },
+      en: { i:'ISNA (North America)', m:'Muslim World League (MWL)', k:'Makkah (Umm al-Qura)', e:'Egypt (General Authority of Survey)', d:'Diyanet (Religious Affairs, Turkey)' },
+      de: { i:'ISNA (Nordamerika)', m:'Islamische Weltliga (MWL)', k:'Mekka (Umm al-Qura)', e:'Ägypten (Allgemeine Fatwa-Behörde)', d:'Diyanet (Religionsbehörde, Türkei)' },
+      ru: { i:'ISNA (Северная Америка)', m:'Всемирная исламская лига (MWL)', k:'Мекка (Умм аль-Кура)', e:'Египет (Главное управление по фетвам)', d:'Diyanet (Управление по делам религий, Турция)' },
+      ar: { i:'ISNA (أمريكا الشمالية)', m:'رابطة العالم الإسلامي (MWL)', k:'مكة (أم القرى)', e:'مصر (الهيئة المصرية العامة للمساحة)', d:'ديانت (الشؤون الدينية، تركيا)' },
+      fr: { i:'ISNA (Amérique du Nord)', m:'Ligue Islamique Mondiale (MWL)', k:'La Mecque (Umm al-Qura)', e:'Égypte (Autorité Générale des Fatwas)', d:'Diyanet (Affaires Religieuses, Turquie)' }
+  };
+
+  const mn = METH_NAMES[lang] || METH_NAMES['tr'];
+  if(document.getElementById('optIsna')) document.getElementById('optIsna').textContent = mn.i;
+  if(document.getElementById('optMwl')) document.getElementById('optMwl').textContent = mn.m;
+  if(document.getElementById('optMakkah')) document.getElementById('optMakkah').textContent = mn.k;
+  if(document.getElementById('optEgypt')) document.getElementById('optEgypt').textContent = mn.e;
+  if(document.getElementById('optDiyanet')) document.getElementById('optDiyanet').textContent = mn.d;
+
   // Test açılır menülerinin dinamik dil çevirileri
   if(document.getElementById('tOptB')) document.getElementById('tOptB').textContent = t.sBeep;
   if(document.getElementById('tOptA1')) document.getElementById('tOptA1').textContent = t.sA1;
   if(document.getElementById('tOptA2')) document.getElementById('tOptA2').textContent = t.sA2;
   if(document.getElementById('tOptA3')) document.getElementById('tOptA3').textContent = t.sA3;
-if(document.getElementById('tOptA4')) document.getElementById('tOptA4').textContent = (lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4')))));
-if(document.getElementById('tOptZ1')) document.getElementById('tOptZ1').textContent = t.sAzan + ' 1';
-  if(document.getElementById('tOptSabah')) document.getElementById('tOptSabah').textContent = (lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':'أذان الفجر')))));
-  if(document.getElementById('tOptOgle')) document.getElementById('tOptOgle').textContent = (lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':'أذان الظهر')))));
-  if(document.getElementById('tOptIkindi')) document.getElementById('tOptIkindi').textContent = (lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':'أذان العصر')))));
-  if(document.getElementById('tOptAksam')) document.getElementById('tOptAksam').textContent = (lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':'أذان المغرب')))));
-  if(document.getElementById('tOptYatsi')) document.getElementById('tOptYatsi').textContent = (lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':'أذان العشاء')))));
+  if(document.getElementById('tOptA4')) document.getElementById('tOptA4').textContent = (lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='fr'?'Alerte 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4'))))));
+  if(document.getElementById('tOptZ1')) document.getElementById('tOptZ1').textContent = t.sAzan + ' 1';
+  if(document.getElementById('tOptSabah')) document.getElementById('tOptSabah').textContent = (lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':(lang==='fr'?'Adhan Fajr':'أذان الفجر'))))));
+  if(document.getElementById('tOptOgle')) document.getElementById('tOptOgle').textContent = (lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':(lang==='fr'?'Adhan Dhuhr':'أذان الظهر'))))));
+  if(document.getElementById('tOptIkindi')) document.getElementById('tOptIkindi').textContent = (lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':(lang==='fr'?'Adhan Asr':'أذان العصر'))))));
+  if(document.getElementById('tOptAksam')) document.getElementById('tOptAksam').textContent = (lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':(lang==='fr'?'Adhan Maghrib':'أذان المغرب'))))));
+  if(document.getElementById('tOptYatsi')) document.getElementById('tOptYatsi').textContent = (lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':(lang==='fr'?'Adhan Isha':'أذان العشاء'))))));
+  if(document.getElementById('tOptOgle2')) document.getElementById('tOptOgle2').textContent = (lang==='tr'?'Öğle Ezanı v2':(lang==='en'?'Dhuhr Adhan v2':(lang==='de'?'Dhuhr Adhan v2':(lang==='ru'?'Зухр Азан v2':(lang==='pl'?'Adhan Zuhr v2':(lang==='fr'?'Adhan Dhuhr v2':'أذان الظهر v2'))))));
+  if(document.getElementById('tOptIkindi2')) document.getElementById('tOptIkindi2').textContent = (lang==='tr'?'İkindi Ezanı v2':(lang==='en'?'Asr Adhan v2':(lang==='de'?'Asr Adhan v2':(lang==='ru'?'Аср Азан v2':(lang==='pl'?'Adhan Asr v2':(lang==='fr'?'Adhan Asr v2':'أذان العصر v2'))))));
+  if(document.getElementById('tOptYatsi2')) document.getElementById('tOptYatsi2').textContent = (lang==='tr'?'Yatsı Ezanı v2':(lang==='en'?'Isha Adhan v2':(lang==='de'?'Ischa Adhan v2':(lang==='ru'?'Иша Азан v2':(lang==='pl'?'Adhan Isza v2':(lang==='fr'?'Adhan Isha v2':'أذان العشاء v2'))))));
   
   // Temkin bölümü çevirileri
   if(document.getElementById('tmkMainLbl')) {
@@ -2203,7 +2260,8 @@ async function useGPS(){
           const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pLa}&lon=${pLo}&format=json&addressdetails=1`,{headers:{'Accept-Language':lang}});
           const d=await r.json(); const a=d.address||{};
           pCity=a.city||a.town||a.village||a.county||d.display_name.split(',')[0];
-      } catch(e) { pCity = "GPS Konumu"; }
+          window.pCountry = a.country_code || a.country; // YENİ: Ülkeyi geçici hafızaya al
+      } catch(e) { pCity = "GPS Konumu"; window.pCountry = ""; }
 
       pAutoGPS = true; 
       stat.textContent=`📍 Dinamik GPS (${pCity})`;
@@ -2249,7 +2307,7 @@ function onInput() {
     if (localMatches.length > 0) {
         stat.innerHTML = `<span style="color:var(--teal)">${m.s2}</span>`;
         resDiv.innerHTML = localMatches.map(match => 
-            `<div class="sr-item" onclick="selAndApply(${match.la}, ${match.lo}, '${match.n}')">
+            `<div class="sr-item" onclick="selAndApply(${match.la}, ${match.lo}, '${match.n}', '${match.cc || ''}')">
                 <div class="sr-n">📍 ${match.n}</div>
             </div>`
         ).join('');
@@ -2272,7 +2330,7 @@ function onInput() {
                     const safeName = item.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     const safeDesc = desc.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     
-                    return `<div class="sr-item" onclick="selAndApply(${item.latitude}, ${item.longitude}, '${item.name.replace(/'/g, "\\'")}')">
+                    return `<div class="sr-item" onclick="selAndApply(${item.latitude}, ${item.longitude}, '${item.name.replace(/'/g, "\\'")}', '${item.country_code || ''}')">
                         <div class="sr-n">📍 ${safeName}</div>
                         <div class="sr-d">${safeDesc}</div>
                     </div>`;
@@ -2287,12 +2345,14 @@ function onInput() {
 }
 
 // Listeden bir sonuca TIKLANDIĞINDA çalışacak fonksiyon
-async function selAndApply(la, lo, name) {
+async function selAndApply(la, lo, name, countryCode = '') {
     uLa = la; uLo = lo; uCity = name;
     isAutoGPS = false;
 
     await setPref('bLa', uLa); await setPref('bLo', uLo); await setPref('bCity', uCity);
     await setPref('bAutoGPS', 'false');
+    
+    await autoSetDiyanetIfTurkey(countryCode); // YENİ: Seçilen yer Türkiye ise Diyanet'i zorla
 
     // HAFIZAYI VE EKRANI ANINDA SIFIRLA
     globalMonthData = null;
@@ -2320,6 +2380,7 @@ async function applyLoc(){
       isAutoGPS = true;
       await setPref('bLa', uLa); await setPref('bLo', uLo); await setPref('bCity', uCity);
       await setPref('bAutoGPS', 'true');
+      await autoSetDiyanetIfTurkey(window.pCountry); // YENİ: GPS ile bulunan yer Türkiye ise
       closeModal(); 
       await loadAll();
       return;
@@ -2333,7 +2394,7 @@ async function applyLoc(){
       
       // Şehri tanıdıysa, sanki listeden seçilmiş gibi doğrudan uygula ve kapat
       if (match) {
-          await selAndApply(match.la, match.lo, match.n);
+          await selAndApply(match.la, match.lo, match.n, match.cc || '');
           return;
       }
   }
@@ -2726,13 +2787,17 @@ function renderAlarmsUI() {
         <option value="alert1" ${soundPrefs[k]==='alert1'?'selected':''}>${t.sA1}</option>
         <option value="alert2" ${soundPrefs[k]==='alert2'?'selected':''}>${t.sA2}</option>
         <option value="alert3" ${soundPrefs[k]==='alert3'?'selected':''}>${t.sA3}</option>
-<option value="alert4" ${soundPrefs[k]==='alert4'?'selected':''}>${(lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':'صوت 4')))))}</option>
-<option value="azan1" ${soundPrefs[k]==='azan1'?'selected':''}>${t.sAzan} 1</option>
-        <option value="sabah" ${soundPrefs[k]==='sabah'?'selected':''}>${(lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':'أذان الفجر')))))}</option>
-        <option value="ogle" ${soundPrefs[k]==='ogle'?'selected':''}>${(lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':'أذان الظهر')))))}</option>
-        <option value="ikindi" ${soundPrefs[k]==='ikindi'?'selected':''}>${(lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':'أذان العصر')))))}</option>
-        <option value="aksam" ${soundPrefs[k]==='aksam'?'selected':''}>${(lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':'أذان المغرب')))))}</option>
-        <option value="yatsi" ${soundPrefs[k]==='yatsi'?'selected':''}>${(lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':'أذان العشاء')))))}</option>      </select>
+        <option value="alert4" ${soundPrefs[k]==='alert4'?'selected':''}>${(lang==='tr'?'Uyarı 4':(lang==='en'?'Alert 4':(lang==='de'?'Ton 4':(lang==='ru'?'Звук 4':(lang==='pl'?'Dźwięk 4':(lang==='fr'?'Alerte 4':'صوت 4'))))))}</option>
+        <option value="azan1" ${soundPrefs[k]==='azan1'?'selected':''}>${t.sAzan} 1</option>
+        <option value="sabah" ${soundPrefs[k]==='sabah'?'selected':''}>${(lang==='tr'?'Sabah Ezanı':(lang==='en'?'Fajr Adhan':(lang==='de'?'Fadschr Adhan':(lang==='ru'?'Фаджр Азан':(lang==='pl'?'Adhan Fajr':(lang==='fr'?'Adhan Fajr':'أذان الفجر'))))))}</option>
+        <option value="ogle" ${soundPrefs[k]==='ogle'?'selected':''}>${(lang==='tr'?'Öğle Ezanı':(lang==='en'?'Dhuhr Adhan':(lang==='de'?'Dhuhr Adhan':(lang==='ru'?'Зухр Азан':(lang==='pl'?'Adhan Zuhr':(lang==='fr'?'Adhan Dhuhr':'أذان الظهر'))))))}</option>
+        <option value="ikindi" ${soundPrefs[k]==='ikindi'?'selected':''}>${(lang==='tr'?'İkindi Ezanı':(lang==='en'?'Asr Adhan':(lang==='de'?'Asr Adhan':(lang==='ru'?'Аср Азан':(lang==='pl'?'Adhan Asr':(lang==='fr'?'Adhan Asr':'أذان العصر'))))))}</option>
+        <option value="aksam" ${soundPrefs[k]==='aksam'?'selected':''}>${(lang==='tr'?'Akşam Ezanı':(lang==='en'?'Maghrib Adhan':(lang==='de'?'Maghrib Adhan':(lang==='ru'?'Магриб Азан':(lang==='pl'?'Adhan Maghrib':(lang==='fr'?'Adhan Maghrib':'أذان المغرب'))))))}</option>
+        <option value="yatsi" ${soundPrefs[k]==='yatsi'?'selected':''}>${(lang==='tr'?'Yatsı Ezanı':(lang==='en'?'Isha Adhan':(lang==='de'?'Ischa Adhan':(lang==='ru'?'Иша Азан':(lang==='pl'?'Adhan Isza':(lang==='fr'?'Adhan Isha':'أذان العشاء'))))))}</option>
+        <option value="ogle_v2" ${soundPrefs[k]==='ogle_v2'?'selected':''}>${(lang==='tr'?'Öğle Ezanı v2':(lang==='en'?'Dhuhr Adhan v2':(lang==='de'?'Dhuhr Adhan v2':(lang==='ru'?'Зухр Азан v2':(lang==='pl'?'Adhan Zuhr v2':(lang==='fr'?'Adhan Dhuhr v2':'أذان الظهر v2'))))))}</option>
+        <option value="ikindi_v2" ${soundPrefs[k]==='ikindi_v2'?'selected':''}>${(lang==='tr'?'İkindi Ezanı v2':(lang==='en'?'Asr Adhan v2':(lang==='de'?'Asr Adhan v2':(lang==='ru'?'Аср Азан v2':(lang==='pl'?'Adhan Asr v2':(lang==='fr'?'Adhan Asr v2':'أذان العصر v2'))))))}</option>
+        <option value="yatsi_v2" ${soundPrefs[k]==='yatsi_v2'?'selected':''}>${(lang==='tr'?'Yatsı Ezanı v2':(lang==='en'?'Isha Adhan v2':(lang==='de'?'Ischa Adhan v2':(lang==='ru'?'Иша Азан v2':(lang==='pl'?'Adhan Isza v2':(lang==='fr'?'Adhan Isha v2':'أذان العشاء v2'))))))}</option>
+      </select>
     </div>`;
   });
   document.getElementById('alarmsContainer').innerHTML = html;
@@ -3227,6 +3292,9 @@ const AZAN_URLS = {
   'ikindi': ['sounds/ikindi.mp3', 'https://goksay.com/ikindi.mp3'],
   'aksam': ['sounds/aksam.mp3', 'https://goksay.com/aksam.mp3'],
   'yatsi': ['sounds/yatsi.mp3', 'https://goksay.com/yatsi.mp3'],
+  'ogle_v2': ['sounds/ogle_v2.mp3', 'https://goksay.com/ogle_v2.mp3'],
+  'ikindi_v2': ['sounds/ikindi_v2.mp3', 'https://goksay.com/ikindi_v2.mp3'],
+  'yatsi_v2': ['sounds/yatsi_v2.mp3', 'https://goksay.com/yatsi_v2.mp3'],
   'alert1': ['sounds/kus.mp3', 'https://goksay.com/kus.mp3'],
   'alert2': ['sounds/ucgenzil.mp3', 'https://goksay.com/ucgenzil.mp3'],
   'alert3': ['sounds/piano.mp3', 'https://goksay.com/piano.mp3'],
